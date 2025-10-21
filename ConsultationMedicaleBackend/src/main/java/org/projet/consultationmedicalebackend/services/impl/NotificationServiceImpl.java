@@ -1,13 +1,14 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
-import org.projet.consultationmedicalebackend.modeles.Notification;
-import org.projet.consultationmedicalebackend.modeles.Utilisateur;
+import org.projet.consultationmedicalebackend.models.Notification;
+import org.projet.consultationmedicalebackend.models.Utilisateur;
 import org.projet.consultationmedicalebackend.repositories.NotificationRepository;
 import org.projet.consultationmedicalebackend.repositories.UtilisateurRepository;
 import org.projet.consultationmedicalebackend.services.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -28,6 +29,11 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public List<Notification> findAll() {
         return notificationRepository.findAll();
+    }
+
+    @Override
+    public Optional<Notification> findById(Long utilisateurId) {
+        return notificationRepository.findById(utilisateurId);
     }
 
     @Override

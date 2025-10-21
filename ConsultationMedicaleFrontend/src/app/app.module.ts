@@ -19,12 +19,24 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatMenuModule } from '@angular/material/menu';
+
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
+
+import { LoginComponent } from './components/login/login.component';
+import { RegisterPatientComponent } from './components/register-patient/register-patient.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    RegisterPatientComponent,
+    NavbarComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +58,8 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatButtonToggleModule,
+    MatMenuModule,
     ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [

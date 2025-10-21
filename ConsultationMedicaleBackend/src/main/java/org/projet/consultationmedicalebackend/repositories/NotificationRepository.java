@@ -1,7 +1,7 @@
 package org.projet.consultationmedicalebackend.repositories;
 
-import org.projet.consultationmedicalebackend.modeles.Notification;
-import org.projet.consultationmedicalebackend.modeles.Utilisateur;
+import org.projet.consultationmedicalebackend.models.Notification;
+import org.projet.consultationmedicalebackend.models.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

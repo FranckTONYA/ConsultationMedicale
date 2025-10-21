@@ -1,7 +1,7 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
-import org.projet.consultationmedicalebackend.modeles.Paiement;
-import org.projet.consultationmedicalebackend.modeles.Patient;
+import org.projet.consultationmedicalebackend.models.Paiement;
+import org.projet.consultationmedicalebackend.models.Patient;
 import org.projet.consultationmedicalebackend.repositories.PaiementRepository;
 import org.projet.consultationmedicalebackend.repositories.PatientRepository;
 import org.projet.consultationmedicalebackend.services.PaiementService;

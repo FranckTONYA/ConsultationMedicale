@@ -1,7 +1,7 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
-import org.projet.consultationmedicalebackend.modeles.Message;
-import org.projet.consultationmedicalebackend.modeles.Utilisateur;
+import org.projet.consultationmedicalebackend.models.Message;
+import org.projet.consultationmedicalebackend.models.Utilisateur;
 import org.projet.consultationmedicalebackend.repositories.MessageRepository;
 import org.projet.consultationmedicalebackend.repositories.UtilisateurRepository;
 import org.projet.consultationmedicalebackend.services.MessageService;
@@ -46,6 +46,13 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> findByDestinataire(Long destinataireId) {
         Utilisateur destinataire = utilisateurRepository.findById(destinataireId).orElse(null);
         return messageRepository.findByRecepteur(destinataire);
+    }
+
+    @Override
+    public List<Message> findConversation(Long expediteurId, Long destinataireId) {
+        Utilisateur expediteur = utilisateurRepository.findById(expediteurId).orElse(null);
+        Utilisateur destinataire = utilisateurRepository.findById(destinataireId).orElse(null);
+        return messageRepository.findConversation(expediteur, destinataire);
     }
 
     @Override

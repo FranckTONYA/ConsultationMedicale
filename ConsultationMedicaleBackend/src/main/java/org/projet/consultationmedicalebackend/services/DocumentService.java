@@ -1,6 +1,6 @@
 package org.projet.consultationmedicalebackend.services;
 
-import org.projet.consultationmedicalebackend.modeles.Document;
+import org.projet.consultationmedicalebackend.models.Document;
 
 import java.util.List;
 import java.util.Optional;

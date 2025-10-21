@@ -1,7 +1,7 @@
 package org.projet.consultationmedicalebackend.security;
 
-import org.projet.consultationmedicalebackend.modeles.RoleUtilisateur;
-import org.projet.consultationmedicalebackend.modeles.Utilisateur;
+import org.projet.consultationmedicalebackend.models.RoleUtilisateur;
+import org.projet.consultationmedicalebackend.models.Utilisateur;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

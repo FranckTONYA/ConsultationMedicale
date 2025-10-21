@@ -1,0 +1,39 @@
+<div class="login-container">
+
+    <!-- Titre principal -->
+    <div class="app-title">
+      <mat-icon>local_hospital</mat-icon> 
+      MediConsult</div>
+    <mat-card class="login-card">
+
+    <h2 class="form-title">Connexion</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="motDePasse"
+        />
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="btn-login" type="submit">
+        Se connecter
+      </button>
+    </form>
+
+    <p class="register-link">
+      Pas encore de compte ?
+      <a routerLink="/register">Inscrivez-vous ici</a>
+    </p>
+  </mat-card>
+</div>

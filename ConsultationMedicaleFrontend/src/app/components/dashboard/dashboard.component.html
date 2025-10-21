@@ -1,0 +1,20 @@
+<main class="dashboard-main">
+  <h2>Bienvenue sur votre espace patient</h2>
+
+  <div class="cards-container">
+    <mat-card *ngFor="let stat of stats" class="stat-card">
+      <mat-icon>{{ stat.icon }}</mat-icon>
+      <div class="card-content">
+        <h3>{{ stat.value }}</h3>
+        <p>{{ stat.title }}</p>
+      </div>
+    </mat-card>
+  </div>
+
+  <section class="info-section">
+    <mat-card>
+      <h3>Dernières notifications</h3>
+      <p>Vous avez 2 nouveaux messages de votre médecin.</p>
+    </mat-card>
+  </section>
+</main>

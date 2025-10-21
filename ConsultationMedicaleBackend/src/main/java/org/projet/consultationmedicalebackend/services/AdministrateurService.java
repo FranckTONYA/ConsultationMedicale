@@ -1,6 +1,6 @@
 package org.projet.consultationmedicalebackend.services;
 
-import org.projet.consultationmedicalebackend.modeles.Administrateur;
+import org.projet.consultationmedicalebackend.models.Administrateur;
 
 import java.util.List;
 import java.util.Optional;

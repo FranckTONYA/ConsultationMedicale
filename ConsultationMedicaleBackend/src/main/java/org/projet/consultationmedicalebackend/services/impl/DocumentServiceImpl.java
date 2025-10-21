@@ -1,11 +1,9 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
-import org.projet.consultationmedicalebackend.modeles.Consultation;
-import org.projet.consultationmedicalebackend.modeles.Document;
-import org.projet.consultationmedicalebackend.modeles.Patient;
+import org.projet.consultationmedicalebackend.models.Consultation;
+import org.projet.consultationmedicalebackend.models.Document;
 import org.projet.consultationmedicalebackend.repositories.ConsultationRepository;
 import org.projet.consultationmedicalebackend.repositories.DocumentRepository;
-import org.projet.consultationmedicalebackend.repositories.PatientRepository;
 import org.projet.consultationmedicalebackend.services.DocumentService;
 import org.springframework.stereotype.Service;
 

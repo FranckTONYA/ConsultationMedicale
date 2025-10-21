@@ -1,0 +1,56 @@
+.dashboard-main {
+  padding: 2rem;
+  margin-top: 64px; /* espace pour navbar */
+  background: #f5f5f5;
+  min-height: calc(100vh - 64px);
+}
+
+.cards-container {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  flex: 1 1 200px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.stat-card mat-icon {
+  font-size: 40px;
+  color: #1976d2;
+}
+
+.card-content h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.card-content p {
+  margin: 0;
+  color: #555;
+}
+
+/* Info section */
+.info-section {
+  margin-top: 2rem;
+}
+
+.info-section mat-card {
+  padding: 1rem;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 768px) {
+  .cards-container {
+    flex-direction: column;
+  }
+
+  .dashboard-main {
+    padding: 1rem;
+  }
+}

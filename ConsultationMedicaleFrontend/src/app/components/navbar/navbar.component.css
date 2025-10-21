@@ -1,0 +1,120 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0 1.5rem;
+  height: 64px;
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+
+/* ----- Logo ----- */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.logo mat-icon {
+  font-size: 26px;
+}
+
+/* ----- Liens ----- */
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+/* Effet soulignement */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -4px;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;
+}
+
+/* ----- Menu utilisateur ----- */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-btn {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-weight: 500;
+  text-transform: none;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 8px;
+  border: 2px solid #fff;
+}
+
+/* ----- Menu burger ----- */
+.menu-button {
+  display: none;
+  color: white;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 900px) {
+  .menu-button {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 64px;
+    right: 0;
+    width: 220px;
+    height: calc(100vh - 64px);
+    background: #1565c0;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    transform: translateX(100%);
+  }
+
+  .nav-links.open {
+    transform: translateX(0);
+  }
+
+  .user-menu {
+    display: none;
+  }
+}

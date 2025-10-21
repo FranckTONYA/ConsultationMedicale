@@ -1,0 +1,56 @@
+<mat-toolbar class="navbar">
+    <!-- Logo -->
+    <!-- <div class="logo" routerLink="/">
+        <mat-icon>local_hospital</mat-icon>
+        <span class="app-name">MediConsult</span>
+    </div> -->
+    <div class="logo" routerLink="/dashboard">
+        <img src="logo_all.jpg" width="140" style="border-radius: 0%;">
+    </div>
+
+  <!-- Liens (Desktop) -->
+  <nav class="nav-links" [class.open]="menuOpen">
+    
+    <ng-container *ngIf="!isLoggedIn">
+        <a routerLink="/login" routerLinkActive="active" (click)="menuOpen = false">Connexion</a>
+        <a routerLink="/register" routerLinkActive="active" (click)="menuOpen = false">Inscription</a>
+    </ng-container>
+
+    <ng-container *ngIf="isLoggedIn">
+        <a routerLink="/dashboard" routerLinkActive="active" (click)=" menuOpen = false "><mat-icon>home</mat-icon>Accueil</a>
+        <!-- <a routerLink="/rendezvous" routerLinkActive="active" (click)="menuOpen = false">Rendez-vous</a>
+        <a routerLink="/dossiers" routerLinkActive="active" (click)="menuOpen = false">Mes Dossiers</a>
+        <a routerLink="/contact" routerLinkActive="active" (click)="menuOpen = false">Contact</a> -->
+
+        <a routerLink="/rendezvous" routerLinkActive="active"><mat-icon>event</mat-icon> Rendez-vous</a>
+        <a routerLink="/dossiers" routerLinkActive="active"><mat-icon>folder</mat-icon> Dossiers médicaux</a>
+        <!-- <a routerLink="/profil" routerLinkActive="active"><mat-icon>account_circle</mat-icon> Profil</a> -->
+        <a routerLink="/contact" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Contact</a>
+    </ng-container>
+  </nav>
+
+  <!-- Menu utilisateur (si connecté) -->
+  <div *ngIf="isLoggedIn" class="user-menu">
+    <button mat-button [matMenuTriggerFor]="menu" class="user-btn">
+      <img src="assets/img/user-avatar.png" alt="Profil" class="avatar" />
+      <span class="username">{{ username }}</span>
+      <mat-icon>expand_more</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/profil">
+        <mat-icon>account_circle</mat-icon>
+        Mon Profil
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Déconnexion
+      </button>
+    </mat-menu>
+  </div>
+
+  <!-- Menu burger -->
+  <button mat-icon-button class="menu-button" (click)="toggleMenu()">
+    <mat-icon>{{ menuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
+</mat-toolbar>

@@ -1,6 +1,6 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
-import org.projet.consultationmedicalebackend.modeles.Medecin;
+import org.projet.consultationmedicalebackend.models.Medecin;
 import org.projet.consultationmedicalebackend.repositories.MedecinRepository;
 import org.projet.consultationmedicalebackend.services.MedecinService;
 import org.springframework.stereotype.Service;
@@ -35,6 +35,11 @@ public class MedecinServiceImpl implements MedecinService {
     @Override
     public Optional<Medecin> findByEmail(String email) {
         return medecinRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<Medecin> findBySpecialite(String specialite) {
+        return medecinRepository.findBySpecialite(specialite);
     }
 
     @Override

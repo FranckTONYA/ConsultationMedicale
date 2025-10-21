@@ -1,8 +1,8 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
-import org.projet.consultationmedicalebackend.modeles.Consultation;
-import org.projet.consultationmedicalebackend.modeles.Medecin;
-import org.projet.consultationmedicalebackend.modeles.Patient;
+import org.projet.consultationmedicalebackend.models.Consultation;
+import org.projet.consultationmedicalebackend.models.Medecin;
+import org.projet.consultationmedicalebackend.models.Patient;
 import org.projet.consultationmedicalebackend.repositories.ConsultationRepository;
 import org.projet.consultationmedicalebackend.repositories.MedecinRepository;
 import org.projet.consultationmedicalebackend.repositories.PatientRepository;

@@ -1,6 +1,6 @@
 package org.projet.consultationmedicalebackend.services;
 
-import org.projet.consultationmedicalebackend.modeles.Utilisateur;
+import org.projet.consultationmedicalebackend.models.Utilisateur;
 import org.projet.consultationmedicalebackend.repositories.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;

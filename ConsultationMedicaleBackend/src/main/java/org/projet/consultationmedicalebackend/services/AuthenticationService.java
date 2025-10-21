@@ -1,6 +1,6 @@
 package org.projet.consultationmedicalebackend.services;
 
-import org.projet.consultationmedicalebackend.modeles.*;
+import org.projet.consultationmedicalebackend.models.*;
 import org.projet.consultationmedicalebackend.repositories.*;
 import org.projet.consultationmedicalebackend.security.CustomUserDetails;
 import org.projet.consultationmedicalebackend.security.jwt.JwtService;

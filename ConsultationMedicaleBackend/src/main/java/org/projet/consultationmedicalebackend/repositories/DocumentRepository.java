@@ -1,8 +1,7 @@
 package org.projet.consultationmedicalebackend.repositories;
 
-import org.projet.consultationmedicalebackend.modeles.Document;
-import org.projet.consultationmedicalebackend.modeles.Consultation;
-import org.projet.consultationmedicalebackend.modeles.Patient;
+import org.projet.consultationmedicalebackend.models.Document;
+import org.projet.consultationmedicalebackend.models.Consultation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
