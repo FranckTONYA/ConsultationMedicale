@@ -33,11 +33,6 @@ public class PatientController {
         return patientService.findByEmail(email);
     }
 
-    @PostMapping
-    public Patient create(@RequestBody Patient patient) {
-        return patientService.save(patient);
-    }
-
     @PutMapping("/{id}")
     public Patient update(@PathVariable Long id, @RequestBody Patient patient) {
         patient.setId(id);

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { text } from 'node:stream/consumers';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-patient',
@@ -14,7 +14,7 @@ export class RegisterPatientComponent {
    registerForm!: FormGroup;
   hidePassword = true;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       nom: ['', Validators.required],
       prenom: ['', Validators.required],
@@ -47,6 +47,7 @@ export class RegisterPatientComponent {
           showConfirmButton: false
         });
         this.registerForm.reset();
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         Swal.fire({

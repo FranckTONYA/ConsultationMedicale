@@ -1,6 +1,9 @@
 package org.projet.consultationmedicalebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "DOSSIER_MEDICAL")
@@ -10,25 +13,29 @@ public class DossierMedical {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String groupeSanguin;
 
-    private String allergies;
+    @ElementCollection
+    private List<String> allergies;
 
-    private String vaccinations;
+    @ElementCollection
+    private List<String> vaccinations;
 
-    private String antecedentsMedicaux;
+    @ElementCollection
+    private List<String> antecedentsMedicaux;
 
-    private String remarques;
+    @ElementCollection
+    private List<String> remarques;
 
     @OneToOne
     @JoinColumn(name = "patient_id")
+    @JsonBackReference
     private Patient patient;
 
     public DossierMedical() {
     }
 
-    public DossierMedical(String groupeSanguin, String allergies, String vaccinations, String antecedentsMedicaux, String remarques, Patient patient) {
+    public DossierMedical(String groupeSanguin, List<String> allergies, List<String> vaccinations, List<String> antecedentsMedicaux, List<String> remarques, Patient patient) {
         this.groupeSanguin = groupeSanguin;
         this.allergies = allergies;
         this.vaccinations = vaccinations;
@@ -53,35 +60,35 @@ public class DossierMedical {
         this.groupeSanguin = groupeSanguin;
     }
 
-    public String getAllergies() {
+    public List<String> getAllergies() {
         return allergies;
     }
 
-    public void setAllergies(String allergies) {
+    public void setAllergies(List<String> allergies) {
         this.allergies = allergies;
     }
 
-    public String getVaccinations() {
+    public List<String> getVaccinations() {
         return vaccinations;
     }
 
-    public void setVaccinations(String vaccinations) {
+    public void setVaccinations(List<String> vaccinations) {
         this.vaccinations = vaccinations;
     }
 
-    public String getAntecedentsMedicaux() {
+    public List<String> getAntecedentsMedicaux() {
         return antecedentsMedicaux;
     }
 
-    public void setAntecedentsMedicaux(String antecedentsMedicaux) {
+    public void setAntecedentsMedicaux(List<String> antecedentsMedicaux) {
         this.antecedentsMedicaux = antecedentsMedicaux;
     }
 
-    public String getRemarques() {
+    public List<String> getRemarques() {
         return remarques;
     }
 
-    public void setRemarques(String remarques) {
+    public void setRemarques(List<String> remarques) {
         this.remarques = remarques;
     }
 

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
+import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 
 @Component({
   selector: 'app-navbar',
@@ -13,15 +14,14 @@ import { AuthService } from '../../core/services/auth.service';
 export class NavbarComponent implements OnInit{
   menuOpen = false;
   isLoggedIn = false;
-  username = 'Patient';
-  user: { username: string; email: string } | null = null;
+  username = "";
+  role = "";
+  user = new Utilisateur();
 
   constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object, private authService: AuthService) {
     // Vérifie que le code s’exécute bien dans un navigateur
     if (isPlatformBrowser(this.platformId)) {
       this.isLoggedIn = !!localStorage.getItem('token');
-      console.log(localStorage.getItem('username'));
-      this.username = localStorage.getItem('username') || 'Patient';
     }
   }
 
@@ -30,8 +30,14 @@ export class NavbarComponent implements OnInit{
       this.isLoggedIn = status;
     });
     this.authService.userInfo$.subscribe(info => {
-      this.user = info;
-      console.log(this.user);
+      if(info){
+        console.log(info);
+        this.user = info;
+        console.log(this.user);
+        this.username = this.user.prenom + " " + this.user.nom;
+        this.role = (this.user && this.user.role) ? this.user.role.toString() : "" ;
+      }
+     
     });
   }
 

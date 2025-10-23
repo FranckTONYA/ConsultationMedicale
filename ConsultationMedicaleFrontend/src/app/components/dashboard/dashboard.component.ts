@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PatientService } from '../../core/services/patient.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,4 +14,7 @@ export class DashboardComponent {
     { title: 'Dossiers médicaux', value: 5, icon: 'folder' },
     { title: 'Messages', value: 2, icon: 'mail' }
   ];
+
+  constructor(private patientService:  PatientService){
+  }
 }

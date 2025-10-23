@@ -15,6 +15,7 @@ public class AuthenticationService {
     private final UtilisateurRepository utilisateurRepository;
     private final PatientRepository patientRepository;
     private final MedecinRepository medecinRepository;
+    private final DossierMedicalRepository dossierMedicalRepository;
     private final AdministrateurRepository administrateurRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -22,12 +23,14 @@ public class AuthenticationService {
     public AuthenticationService(UtilisateurRepository utilisateurRepository,
                                  PatientRepository patientRepository,
                                  MedecinRepository medecinRepository,
+                                 DossierMedicalRepository dossierMedicalRepository,
                                  AdministrateurRepository administrateurRepository,
                                  PasswordEncoder passwordEncoder,
                                  JwtService jwtService) {
         this.utilisateurRepository = utilisateurRepository;
         this.patientRepository = patientRepository;
         this.medecinRepository = medecinRepository;
+        this.dossierMedicalRepository = dossierMedicalRepository;
         this.administrateurRepository = administrateurRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -36,8 +39,18 @@ public class AuthenticationService {
     public String registerPatient(Patient patient) {
         patient.setMotDePasse(passwordEncoder.encode(patient.getMotDePasse()));
         patient.setRole(RoleUtilisateur.PATIENT);
-        patientRepository.save(patient);
-        CustomUserDetails userDetails = new CustomUserDetails(patient);
+        Patient patientSaved = patientRepository.save(patient);
+
+        // Créer le dossier médical associé au patient
+        DossierMedical dossierMedical = new DossierMedical();
+        dossierMedical.setPatient(patientSaved);
+        dossierMedicalRepository.save(dossierMedical);
+
+        // Associer le dossier medical au patient
+        patientSaved.setDossierMedical(dossierMedical);
+        patientRepository.save(patientSaved);
+
+        CustomUserDetails userDetails = new CustomUserDetails(patientSaved);
         return jwtService.generateToken(userDetails);
     }
 

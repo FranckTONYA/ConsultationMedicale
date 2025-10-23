@@ -30,7 +30,7 @@ public class Consultation {
     @JoinColumn(name = "medecin_id")
     private Medecin medecin;
 
-    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Document> documents;
 
     public Consultation() {

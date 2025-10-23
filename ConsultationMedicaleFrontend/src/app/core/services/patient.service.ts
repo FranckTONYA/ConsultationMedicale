@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Utilisateur } from '../../models/utilisateur';
 
 @Injectable({ providedIn: 'root' })
 export class PatientService {
@@ -9,11 +10,11 @@ export class PatientService {
   constructor(private http: HttpClient) {}
 
   getByEmail(email: string) {
-    return this.http.get(`${this.apiUrl}/find-by-email/${email}`);
+    return this.http.get<Utilisateur>(`${this.apiUrl}/find-by-email/${email}`);
   }
 
 
-  getProfile(id: number) {
+  getById(id: number) {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 

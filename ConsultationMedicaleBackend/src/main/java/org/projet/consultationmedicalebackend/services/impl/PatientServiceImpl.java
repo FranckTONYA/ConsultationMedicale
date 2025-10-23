@@ -1,6 +1,8 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
+import org.projet.consultationmedicalebackend.models.DossierMedical;
 import org.projet.consultationmedicalebackend.models.Patient;
+import org.projet.consultationmedicalebackend.repositories.DossierMedicalRepository;
 import org.projet.consultationmedicalebackend.repositories.PatientRepository;
 import org.projet.consultationmedicalebackend.services.PatientService;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,12 @@ import java.util.Optional;
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
+    private final DossierMedicalRepository dossierMedicalRepository;
 
-    public PatientServiceImpl(PatientRepository patientRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository,
+                              DossierMedicalRepository dossierMedicalRepository) {
         this.patientRepository = patientRepository;
+        this.dossierMedicalRepository = dossierMedicalRepository;
     }
 
     @Override
@@ -30,6 +35,11 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Optional<Patient> findById(Long id) {
         return patientRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Patient> findByEmail(String email) {
+        return patientRepository.findByEmail(email);
     }
 
     @Override

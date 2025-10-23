@@ -14,7 +14,7 @@ public class Medecin extends Utilisateur {
     @Column(nullable = false, unique = true)
     private String numINAMI;
 
-    @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations;
 
     public Medecin() {

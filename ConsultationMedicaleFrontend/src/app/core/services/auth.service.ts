@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { PatientService } from './patient.service';
+import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -11,10 +13,10 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedIn.asObservable();
 
-  private userInfoSubject = new BehaviorSubject<{ username: string; email: string } | null>(null);
+  private userInfoSubject = new BehaviorSubject<any>(null);
   userInfo$ = this.userInfoSubject.asObservable();
 
-  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object, private patientService: PatientService) {
     // Vérifie si on est dans le navigateur
     if (isPlatformBrowser(this.platformId)) {
       this.loggedIn.next(!!localStorage.getItem('jwtToken'));
@@ -35,10 +37,18 @@ export class AuthService {
         tap(response => {
           if (isPlatformBrowser(this.platformId)) {
             localStorage.setItem('jwtToken', response.token);
+            this.patientService.getByEmail(email).subscribe({
+              next: (response) => {
+                this.userInfoSubject.next(response);
+              },
+              error: (err) => {
+                console.error(err);
+              }
+            });
+
             // localStorage.setItem('username', response.username);
             // localStorage.setItem('email', response.email);
             // this.userInfoSubject.next({ username: response.username, email: response.email });
-            this.userInfoSubject.next({ username: response.token, email: response.token });
             this.loggedIn.next(true);
           }
         })
@@ -56,6 +66,10 @@ export class AuthService {
       return localStorage.getItem('jwtToken');
     }
     return null;
+  }
+
+  get currentUser():Utilisateur {
+    return this.userInfoSubject.value;
   }
 
   logout() {

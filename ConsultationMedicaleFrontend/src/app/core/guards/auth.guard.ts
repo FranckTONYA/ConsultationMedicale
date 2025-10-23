@@ -21,12 +21,21 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     const token = this.authService.getToken();
+    const expectedRole = route.data['roles'];
+    console.log(expectedRole);
+    const user = this.authService.currentUser;
+    console.log(user);
 
-    if (token) {
-      return true;
-    } else {
+    if (!token || !user) {
       this.router.navigate(['/login']);
       return false;
+    } 
+
+    if (expectedRole && user.role !== expectedRole) {
+      this.router.navigate(['/unauthorized']);
+      return false;
     }
+
+    return true;
   }
 }

@@ -1,7 +1,9 @@
 package org.projet.consultationmedicalebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -11,20 +13,21 @@ public class Patient extends Utilisateur{
     private String niss;
 
     @Column(nullable = false)
-    private String dateNaissance;
+    private Date dateNaissance;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "dossier_id")
+    @JsonManagedReference
     private DossierMedical dossierMedical;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations;
 
     public Patient() {
         super();
     }
 
-    public Patient(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String niss, String dateNaissance, DossierMedical dossierMedical, List<Consultation> consultations) {
+    public Patient(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String niss, Date dateNaissance, DossierMedical dossierMedical, List<Consultation> consultations) {
         super(nom, prenom, adresse, telephone, email, motDePasse, RoleUtilisateur.PATIENT);
         this.niss = niss;
         this.dateNaissance = dateNaissance;
@@ -40,11 +43,11 @@ public class Patient extends Utilisateur{
         this.niss = niss;
     }
 
-    public String getDateNaissance() {
+    public Date getDateNaissance() {
         return dateNaissance;
     }
 
-    public void setDateNaissance(String dateNaissance) {
+    public void setDateNaissance(Date dateNaissance) {
         this.dateNaissance = dateNaissance;
     }
 
