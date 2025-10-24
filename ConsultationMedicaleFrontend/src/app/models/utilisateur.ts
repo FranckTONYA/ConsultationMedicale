@@ -19,7 +19,7 @@ export class Utilisateur{
 }
 
 export enum RoleUtilisateur {
-    PATIENT,
-    MEDECIN,
-    ADMINISTRATEUR
+    PATIENT = 'PATIENT',
+    MEDECIN = 'MEDECIN',
+    ADMINISTRATEUR = 'ADMINISTRATEUR'
 }

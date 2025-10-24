@@ -3,6 +3,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,8 @@ import Swal from 'sweetalert2';
 export class LoginComponent {
   loginForm!: FormGroup;
   hidePassword = true;
+  user : Utilisateur = new Utilisateur(); 
+  role = "";
 
   constructor(
     private fb: FormBuilder,
@@ -41,11 +44,25 @@ export class LoginComponent {
         Swal.fire({
           icon: 'success',
           title: 'Connexion réussie',
-          text: 'Bienvenue sur MediConnect !',
+          text: 'Bienvenue sur MediConsult !',
           timer: 1500,
           showConfirmButton: false
         });
-        this.router.navigate(['/dashboard']);
+        this.authService.userInfo$.subscribe(info => {
+          if(info){
+            this.user = info;
+            this.role = (this.user && this.user.role) ? this.user.role: "" ;
+          }
+        });
+        
+        if(this.role.length !== 0){
+          if(this.role.localeCompare(RoleUtilisateur.ADMINISTRATEUR))
+             this.router.navigate(['/dashboard-admin']);
+          if(this.role.localeCompare(RoleUtilisateur.MEDECIN))
+             this.router.navigate(['/dashboard-medecin']);
+          if(this.role.localeCompare(RoleUtilisateur.PATIENT))
+             this.router.navigate(['/dashboard-patient']);
+        }
       },
       error: (err) => {
         Swal.fire({

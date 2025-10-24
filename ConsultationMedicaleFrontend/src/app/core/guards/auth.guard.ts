@@ -21,21 +21,25 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     const token = this.authService.getToken();
-    const expectedRole = route.data['roles'];
-    console.log(expectedRole);
+    const expectedRoles = route.data['roles'];
     const user = this.authService.currentUser;
-    console.log(user);
 
     if (!token || !user) {
       this.router.navigate(['/login']);
       return false;
     } 
 
-    if (expectedRole && user.role !== expectedRole) {
+  // Vérifie si la route a une restriction de rôle
+  if (expectedRoles && expectedRoles.length > 0) {
+    // Vérifie si le rôle utilisateur est inclus dans la liste autorisée
+    const hasAccess = expectedRoles.includes(user.role);
+
+    if (!hasAccess) {
+      console.warn(`⛔ Accès refusé : ${user.role} n'est pas dans ${expectedRoles.join(', ')}`);
       this.router.navigate(['/unauthorized']);
       return false;
     }
-
+  }
     return true;
   }
 }

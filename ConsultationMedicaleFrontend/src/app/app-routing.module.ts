@@ -3,29 +3,24 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterPatientComponent } from './components/register-patient/register-patient.component';
 import { AuthGuard } from './core/guards/auth.guard';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardPatientComponent } from './components/dashboard-patient/dashboard-patient.component';
 import { RoleUtilisateur } from './models/utilisateur';
+import { DashboardAdminComponent } from './components/dashboard-admin/dashboard-admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterPatientComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], 
-    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  { path: 'dashboard-patient', component: DashboardPatientComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.PATIENT } 
   },
-  // {
-  //   path: 'patient',
-  //   canActivate: [AuthGuard],
-  //   // component: Patien
+  { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.ADMINISTRATEUR } 
+  },
+  // { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard], 
+  //   data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   // },
   // {
-  //   path: 'medecin',
-  //   canActivate: [AuthGuard],
-  // },
-  // {
-  //   path: 'admin',
-  //   canActivate: [AuthGuard],
-  // },
 ];
 
 @NgModule({

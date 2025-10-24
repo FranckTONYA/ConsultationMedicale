@@ -1,7 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, switchMap, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { PatientService } from './patient.service';
 import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
@@ -33,26 +33,17 @@ export class AuthService {
 
   login(email: string, motDePasse: string) {
     return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, motDePasse })
-      .pipe(
-        tap(response => {
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('jwtToken', response.token);
-            this.patientService.getByEmail(email).subscribe({
-              next: (response) => {
-                this.userInfoSubject.next(response);
-              },
-              error: (err) => {
-                console.error(err);
-              }
-            });
-
-            // localStorage.setItem('username', response.username);
-            // localStorage.setItem('email', response.email);
-            // this.userInfoSubject.next({ username: response.username, email: response.email });
-            this.loggedIn.next(true);
-          }
-        })
-      );
+    .pipe(
+      tap(response => {
+        localStorage.setItem('jwtToken', response.token);
+      }),
+      switchMap(() => this.patientService.getByEmail(email)),
+      tap(user => {
+        this.userInfoSubject.next(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.loggedIn.next(true);
+      })
+    );
   }
 
   saveResponse(response: any) {
@@ -68,8 +59,21 @@ export class AuthService {
     return null;
   }
 
-  get currentUser():Utilisateur {
+  get currentUser():Utilisateur | null {
+    if (this.userInfoSubject.value) {
     return this.userInfoSubject.value;
+  }
+
+  if (isPlatformBrowser(this.platformId)) {
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      this.userInfoSubject.next(user);
+      return user;
+    }
+  }
+
+  return null;
   }
 
   logout() {

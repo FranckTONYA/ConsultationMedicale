@@ -31,13 +31,10 @@ export class NavbarComponent implements OnInit{
     });
     this.authService.userInfo$.subscribe(info => {
       if(info){
-        console.log(info);
         this.user = info;
-        console.log(this.user);
         this.username = this.user.prenom + " " + this.user.nom;
         this.role = (this.user && this.user.role) ? this.user.role.toString() : "" ;
       }
-     
     });
   }
 
