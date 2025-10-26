@@ -56,11 +56,11 @@ export class LoginComponent {
         });
         
         if(this.role.length !== 0){
-          if(this.role.localeCompare(RoleUtilisateur.ADMINISTRATEUR))
+          if(this.role === RoleUtilisateur.ADMINISTRATEUR)
              this.router.navigate(['/dashboard-admin']);
-          if(this.role.localeCompare(RoleUtilisateur.MEDECIN))
+          if(this.role === RoleUtilisateur.MEDECIN)
              this.router.navigate(['/dashboard-medecin']);
-          if(this.role.localeCompare(RoleUtilisateur.PATIENT))
+          if(this.role === RoleUtilisateur.PATIENT)
              this.router.navigate(['/dashboard-patient']);
         }
       },

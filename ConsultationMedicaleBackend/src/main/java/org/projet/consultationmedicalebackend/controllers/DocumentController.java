@@ -18,7 +18,7 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Document> getAll() {
         return documentService.findAll();
     }

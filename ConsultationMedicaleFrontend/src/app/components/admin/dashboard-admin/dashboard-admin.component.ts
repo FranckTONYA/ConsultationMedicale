@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,7 +14,7 @@ export class DashboardAdminComponent {
 
   users: any[] = [];
   displayedColumns: string[] = ['id', 'nom', 'prenom', 'email', 'role', 'actions'];
-  apiUrl = environment.apiUrl + '/users';
+  apiUrl = environment.apiUrl + '/utilisateur';
 
   constructor(private http: HttpClient, private dialog: MatDialog) {}
 
@@ -23,10 +23,10 @@ export class DashboardAdminComponent {
   }
 
   loadUsers() {
-    this.http.get<any[]>(this.apiUrl).subscribe({
-      next: (data) => (this.users = data),
-      error: (err) => console.error('Erreur chargement utilisateurs', err)
-    });
+    // this.http.get<any[]>(this.apiUrl).subscribe({
+    //   next: (data) => (this.users = data),
+    //   error: (err) => console.error('Erreur chargement utilisateurs', err)
+    // });
   }
 
   addUser(role: 'admin' | 'medecin') {

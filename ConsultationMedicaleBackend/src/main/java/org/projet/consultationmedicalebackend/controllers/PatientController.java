@@ -18,7 +18,7 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Patient> getAll() {
         return patientService.findAll();
     }
@@ -33,7 +33,7 @@ public class PatientController {
         return patientService.findByEmail(email);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Patient update(@PathVariable Long id, @RequestBody Patient patient) {
         patient.setId(id);
         return patientService.save(patient);

@@ -18,7 +18,7 @@ public class AnalyseLaboController {
         this.analyseLaboService = analyseLaboService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<AnalyseLabo> getAll() {
         return analyseLaboService.findAll();
     }

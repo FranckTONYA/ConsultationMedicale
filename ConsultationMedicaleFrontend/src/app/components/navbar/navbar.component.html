@@ -17,7 +17,7 @@
     </ng-container>
 
     <ng-container *ngIf="isLoggedIn">
-        <a routerLink="/dashboard" routerLinkActive="active" (click)=" menuOpen = false "><mat-icon>home</mat-icon>Accueil</a>
+        <a routerLinkActive="active" (click)="openDashboard()"><mat-icon>home</mat-icon>Accueil</a>
         <!-- <a routerLink="/rendezvous" routerLinkActive="active" (click)="menuOpen = false">Rendez-vous</a>
         <a routerLink="/dossiers" routerLinkActive="active" (click)="menuOpen = false">Mes Dossiers</a>
         <a routerLink="/contact" routerLinkActive="active" (click)="menuOpen = false">Contact</a> -->
@@ -26,6 +26,7 @@
         <a routerLink="/dossiers" routerLinkActive="active"><mat-icon>folder</mat-icon> Dossiers médicaux</a>
         <!-- <a routerLink="/profil" routerLinkActive="active"><mat-icon>account_circle</mat-icon> Profil</a> -->
         <a routerLink="/contact" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Contact</a>
+        <a routerLink="/manage-patient" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Gestion patient</a>
     </ng-container>
   </nav>
 

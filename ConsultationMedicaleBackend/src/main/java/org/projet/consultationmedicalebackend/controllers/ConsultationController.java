@@ -23,7 +23,7 @@ public class ConsultationController {
         return ResponseEntity.ok(nouvelle);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<Consultation>> getAllConsultations() {
         List<Consultation> consultations = consultationService.findAll();
         return ResponseEntity.ok(consultations);

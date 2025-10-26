@@ -18,7 +18,7 @@ public class MessageController {
         this.messageService = messageService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Message> getAll() {
         return messageService.findAll();
     }

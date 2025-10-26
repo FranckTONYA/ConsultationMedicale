@@ -18,7 +18,7 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Notification> getAll() {
         return notificationService.findAll();
     }

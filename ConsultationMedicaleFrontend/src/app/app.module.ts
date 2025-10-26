@@ -28,8 +28,11 @@ import { RegisterPatientComponent } from './components/register-patient/register
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardPatientComponent } from './components/dashboard-patient/dashboard-patient.component';
-import { DashboardAdminComponent } from './components/dashboard-admin/dashboard-admin.component';
+import { DashboardAdminComponent } from './components/admin/dashboard-admin/dashboard-admin.component';
 import { DashboardMedecinComponent } from './components/dashboard-medecin/dashboard-medecin.component';
+import { ManagePatientComponent } from './components/admin/manage-patient/manage-patient.component';
+import { ManageMedecinComponent } from './components/admin/manage-medecin/manage-medecin.component';
+import { ManageAdminComponent } from './components/admin/manage-admin/manage-admin.component';
 
 
 @NgModule({
@@ -40,7 +43,10 @@ import { DashboardMedecinComponent } from './components/dashboard-medecin/dashbo
     NavbarComponent,
     DashboardPatientComponent,
     DashboardAdminComponent,
-    DashboardMedecinComponent
+    DashboardMedecinComponent,
+    ManagePatientComponent,
+    ManageMedecinComponent,
+    ManageAdminComponent
   ],
   imports: [
     BrowserModule,

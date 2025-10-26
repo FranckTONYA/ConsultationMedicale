@@ -21,14 +21,17 @@ export class NavbarComponent implements OnInit{
   constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object, private authService: AuthService) {
     // Vérifie que le code s’exécute bien dans un navigateur
     if (isPlatformBrowser(this.platformId)) {
-      this.isLoggedIn = !!localStorage.getItem('token');
+      this.isLoggedIn = !!sessionStorage.getItem('jwtToken');
     }
   }
 
    ngOnInit(): void {
+    // Réagit aux changements d’état de connexion
     this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
     });
+
+    // Réagit aux changements d’infos utilisateur
     this.authService.userInfo$.subscribe(info => {
       if(info){
         this.user = info;
@@ -42,6 +45,15 @@ export class NavbarComponent implements OnInit{
     this.menuOpen = !this.menuOpen;
   }
 
+  openDashboard(){
+    if(this.role === RoleUtilisateur.ADMINISTRATEUR)
+      this.router.navigate(['/dashboard-admin']);
+    if(this.role === RoleUtilisateur.MEDECIN)
+      this.router.navigate(['/dashboard-medecin']);
+    if(this.role === RoleUtilisateur.PATIENT)
+      this.router.navigate(['/dashboard-patient']);
+  }
+
   logout() {
     Swal.fire({
       icon: 'warning',
@@ -52,12 +64,13 @@ export class NavbarComponent implements OnInit{
       cancelButtonText: 'Annuler'
     }).then(result => {
       if (result.isConfirmed) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        this.isLoggedIn = false;
         this.authService.logout();
+        this.isLoggedIn = false;
+        this.username = "";
+        this.role = "";
         this.router.navigate(['/login']);
       }
     });
   }
+
 }

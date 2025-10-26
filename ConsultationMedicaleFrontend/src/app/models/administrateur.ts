@@ -1,6 +1,6 @@
 import { Utilisateur } from "./utilisateur";
 
-export class Medecin extends Utilisateur{
+export class Administrateur extends Utilisateur{
     public NiveauAcces?: NiveauAcces;
     
     constructor(){

@@ -23,7 +23,7 @@ public class DossierMedicalController {
         return ResponseEntity.ok(nouveau);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<DossierMedical>> getAllDossiers() {
         List<DossierMedical> dossiers = dossierMedicalService.findAll();
         return ResponseEntity.ok(dossiers);

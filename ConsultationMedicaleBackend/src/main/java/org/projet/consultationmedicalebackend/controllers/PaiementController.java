@@ -18,7 +18,7 @@ public class PaiementController {
         this.paiementService = paiementService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Paiement> getAll() {
         return paiementService.findAll();
     }

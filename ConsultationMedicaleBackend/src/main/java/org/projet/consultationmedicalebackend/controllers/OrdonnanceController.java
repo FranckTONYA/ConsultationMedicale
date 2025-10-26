@@ -18,7 +18,7 @@ public class OrdonnanceController {
         this.ordonnanceService = ordonnanceService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Ordonnance> getAll() {
         return ordonnanceService.findAll();
     }

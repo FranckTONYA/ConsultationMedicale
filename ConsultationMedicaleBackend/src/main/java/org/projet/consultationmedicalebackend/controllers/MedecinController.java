@@ -18,7 +18,7 @@ public class MedecinController {
         this.medecinService = medecinService;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Medecin> getAll() {
         return medecinService.findAll();
     }
