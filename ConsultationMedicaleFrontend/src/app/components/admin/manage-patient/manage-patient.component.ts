@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
 import { Patient } from '../../../models/patient';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-patient',
   standalone: false,
   templateUrl: './manage-patient.component.html',
-  styleUrl: './manage-patient.component.css'
+  styleUrls: ['./manage-patient.component.css']
 })
-export class ManagePatientComponent implements OnInit {
-  patients: Patient[] = [];
+export class ManagePatientComponent implements OnInit, AfterViewInit {
   displayedColumns = ['id', 'nom', 'prenom', 'niss', 'dateNaissance', 'telephone', 'adresse', 'email', 'actions'];
+  dataSource = new MatTableDataSource<Patient>([]);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private patientService: PatientService, private router: Router) {}
 
@@ -20,15 +24,26 @@ export class ManagePatientComponent implements OnInit {
     this.loadPatients();
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   loadPatients() {
     this.patientService.getAll().subscribe({
-      next: (data) => (this.patients = data),
+      next: (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
       error: (err) => console.error(err)
     });
   }
 
   addPatient() {
     this.router.navigate(['/register-patient']);
+  }
+
+  editPatient(id: number) {
+    this.router.navigate(['/edit-patient', id]);
   }
 
   deletePatient(id: number) {
@@ -42,5 +57,11 @@ export class ManagePatientComponent implements OnInit {
         this.patientService.delete(id).subscribe(() => this.loadPatients());
       }
     });
+  }
+
+  /** Filtrage instantané **/
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

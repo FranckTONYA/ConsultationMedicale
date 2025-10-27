@@ -1,1 +1,67 @@
-<p>manage-admin works!</p>
+<div class="page-container">
+  <h2>Gestion des Administrateurs</h2>
+
+  <div class="toolbar">
+    <button mat-raised-button color="primary" (click)="addAdmin()">
+      <mat-icon>person_add</mat-icon> Ajouter un administrateur
+    </button>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher...</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Nom, email, téléphone..." />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let a">{{ numColumns + 1 }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let a">{{ a.nom }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="prenom">
+        <th mat-header-cell *matHeaderCellDef>Prénom</th>
+        <td mat-cell *matCellDef="let a">{{ a.prenom }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let a">{{ a.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="telephone">
+        <th mat-header-cell *matHeaderCellDef>Téléphone</th>
+        <td mat-cell *matCellDef="let a">{{ a.telephone }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="niveauAcces">
+        <th mat-header-cell *matHeaderCellDef>Niveau d’accès</th>
+        <td mat-cell *matCellDef="let a">{{ a.NiveauAcces }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let a">
+          <button mat-icon-button color="primary" (click)="editAdmin(a.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteAdmin(a.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

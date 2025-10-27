@@ -20,6 +20,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { getFrenchPaginatorIntl } from './core/i18n/french-paginator-intl';
 
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
@@ -33,6 +36,8 @@ import { DashboardMedecinComponent } from './components/dashboard-medecin/dashbo
 import { ManagePatientComponent } from './components/admin/manage-patient/manage-patient.component';
 import { ManageMedecinComponent } from './components/admin/manage-medecin/manage-medecin.component';
 import { ManageAdminComponent } from './components/admin/manage-admin/manage-admin.component';
+import { RegisterAdminComponent } from './components/admin/register-admin/register-admin.component';
+import { RegisterMedecinComponent } from './components/admin/register-medecin/register-medecin.component';
 
 
 @NgModule({
@@ -46,7 +51,9 @@ import { ManageAdminComponent } from './components/admin/manage-admin/manage-adm
     DashboardMedecinComponent,
     ManagePatientComponent,
     ManageMedecinComponent,
-    ManageAdminComponent
+    ManageAdminComponent,
+    RegisterAdminComponent,
+    RegisterMedecinComponent
   ],
   imports: [
     BrowserModule,
@@ -70,12 +77,14 @@ import { ManageAdminComponent } from './components/admin/manage-admin/manage-adm
     MatNativeDateModule,
     MatButtonToggleModule,
     MatMenuModule,
+    MatPaginatorModule,
     ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     // provideClientHydration(withEventReplay())
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+       { provide: MatPaginatorIntl, useValue: getFrenchPaginatorIntl() }
   ],
   bootstrap: [AppComponent]
 })

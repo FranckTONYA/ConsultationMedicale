@@ -62,6 +62,14 @@ public class AuthenticationService {
         return jwtService.generateToken(userDetails);
     }
 
+    public String registerAdmin(Administrateur admin) {
+        admin.setMotDePasse(passwordEncoder.encode(admin.getMotDePasse()));
+        admin.setRole(RoleUtilisateur.ADMINISTRATEUR);
+        administrateurRepository.save(admin);
+        CustomUserDetails userDetails = new CustomUserDetails(admin);
+        return jwtService.generateToken(userDetails);
+    }
+
     public Optional<String> login(String email, String motDePasse) {
         Optional<Utilisateur> userOpt = utilisateurRepository.findByEmail(email);
         if (userOpt.isPresent()) {

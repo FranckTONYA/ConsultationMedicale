@@ -90,6 +90,56 @@
   color: black;
 }
 
+/* --- Style cohérent pour les liens de la navbar --- */
+.nav-links a,
+.nav-item a {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-item a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
+
+.nav-links a.active {
+  border-bottom: 2px solid #fff;
+}
+
+/* --- Spécifique au bouton Gestion Utilisateurs --- */
+.nav-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-item .arrow-icon {
+  margin-left: 0.3rem;
+  font-size: 18px;
+}
+
+/* --- Menu déroulant Material --- */
+::ng-deep .mat-mdc-menu-panel.gestion-menu {
+  background-color: #1e88e5;
+  color: white;
+  border-radius: 8px;
+  min-width: 220px;
+}
+
+::ng-deep .mat-mdc-menu-item {
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+
 /* ----- Menu burger ----- */
 .menu-button {
   display: none;

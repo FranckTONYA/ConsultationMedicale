@@ -1,61 +1,81 @@
 <div class="page-container">
   <h2>Gestion des patients</h2>
 
-  <button mat-raised-button color="primary" (click)="addPatient()">
-    <mat-icon>person_add</mat-icon> Ajouter un patient
-  </button>
+  <div class="toolbar">
+    <button mat-raised-button color="primary" (click)="addPatient()">
+      <mat-icon>person_add</mat-icon> Ajouter un patient
+    </button>
 
-  <table mat-table [dataSource]="patients" class="mat-elevation-z8">
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>#</th>
-      <td mat-cell *matCellDef="let p">{{ p.id }}</td>
-    </ng-container>
+    <!-- Barre de recherche -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher...</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Nom, prénom, email..." />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
 
-    <ng-container matColumnDef="nom">
-      <th mat-header-cell *matHeaderCellDef>Nom</th>
-      <td mat-cell *matCellDef="let p">{{ p.nom }}</td>
-    </ng-container>
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="prenom">
-      <th mat-header-cell *matHeaderCellDef>Prénom</th>
-      <td mat-cell *matCellDef="let p">{{ p.prenom }}</td>
-    </ng-container>
+      <!-- Colonnes -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let p">{{ p.id }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="niss">
-      <th mat-header-cell *matHeaderCellDef>NISS</th>
-      <td mat-cell *matCellDef="let p">{{ p.niss }}</td>
-    </ng-container>
+      <ng-container matColumnDef="nom">
+        <th mat-header-cell *matHeaderCellDef>Nom</th>
+        <td mat-cell *matCellDef="let p">{{ p.nom }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="dateNaissance">
-      <th mat-header-cell *matHeaderCellDef>Date de naissance</th>
-      <td mat-cell *matCellDef="let p">{{ p.dateNaissance | date }}</td>
-    </ng-container>
+      <ng-container matColumnDef="prenom">
+        <th mat-header-cell *matHeaderCellDef>Prénom</th>
+        <td mat-cell *matCellDef="let p">{{ p.prenom }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="adresse">
-      <th mat-header-cell *matHeaderCellDef>Adresse</th>
-      <td mat-cell *matCellDef="let p">{{ p.adresse }}</td>
-    </ng-container>
+      <ng-container matColumnDef="niss">
+        <th mat-header-cell *matHeaderCellDef>NISS</th>
+        <td mat-cell *matCellDef="let p">{{ p.niss }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="telephone">
-      <th mat-header-cell *matHeaderCellDef>Téléphone</th>
-      <td mat-cell *matCellDef="let p">{{ p.telephone }}</td>
-    </ng-container>
+      <ng-container matColumnDef="dateNaissance">
+        <th mat-header-cell *matHeaderCellDef>Date de naissance</th>
+        <td mat-cell *matCellDef="let p">{{ p.dateNaissance | date }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>Email</th>
-      <td mat-cell *matCellDef="let p">{{ p.email }}</td>
-    </ng-container>
+      <ng-container matColumnDef="telephone">
+        <th mat-header-cell *matHeaderCellDef>Téléphone</th>
+        <td mat-cell *matCellDef="let p">{{ p.telephone }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let p">
-        <button mat-icon-button color="warn" (click)="deletePatient(p.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="adresse">
+        <th mat-header-cell *matHeaderCellDef>Adresse</th>
+        <td mat-cell *matCellDef="let p">{{ p.adresse }}</td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let p">{{ p.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let p">
+          <button mat-icon-button color="primary" (click)="editPatient(p.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deletePatient(p.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Lignes -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- Pagination -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
 </div>

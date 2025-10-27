@@ -1,12 +1,14 @@
 <div class="register-container">
 
+  <!-- Titre principal de l’application -->
   <div class="app-title"> 
-    <mat-icon>local_hospital</mat-icon> MediConsult
+    <mat-icon>admin_panel_settings</mat-icon> 
+    MediConsult
   </div>
 
   <mat-card class="register-card">
     <h2 class="form-title">
-      {{ isEditMode ? 'Modifier un patient' : 'Inscription Patient' }}
+      {{ isEditMode ? 'Modifier un administrateur' : 'Inscription Administrateur' }}
     </h2>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -27,39 +29,23 @@
       <!-- Ligne 2 -->
       <div class="row">
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label>NISS</mat-label>
-          <input matInput formControlName="niss" maxlength="11" />
+          <mat-label>Téléphone</mat-label>
+          <input matInput formControlName="telephone" maxlength="10" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Date de naissance</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="dateNaissance" />
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse" />
         </mat-form-field>
       </div>
 
       <!-- Ligne 3 -->
-      <div class="row">
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Adresse</mat-label>
-          <input matInput formControlName="adresse" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width">
-          <mat-label>Téléphone</mat-label>
-          <input matInput formControlName="telephone" maxlength="10" />
-        </mat-form-field>
-      </div>
-
-      <!-- Ligne 4 -->
-      <div class="row">
+      <div class="row" *ngIf="!isEditMode">
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" />
         </mat-form-field>
-
-        <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>Mot de passe</mat-label>
           <input
             matInput
@@ -77,12 +63,12 @@
         </mat-form-field>
       </div>
 
+      <!-- Bouton -->
       <div class="btn-container">
         <button mat-raised-button color="primary" type="submit" class="btn-register">
-          {{ isEditMode ? 'Enregistrer les modifications' : "S'inscrire" }}
+          {{ isEditMode ? 'Enregistrer les modifications' : "Créer un administrateur" }}
         </button>
       </div>
-
     </form>
   </mat-card>
 </div>

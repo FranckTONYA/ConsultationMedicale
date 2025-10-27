@@ -13,7 +13,7 @@
     
     <ng-container *ngIf="!isLoggedIn">
         <a routerLink="/login" routerLinkActive="active" (click)="menuOpen = false">Connexion</a>
-        <a routerLink="/register" routerLinkActive="active" (click)="menuOpen = false">Inscription</a>
+        <a routerLink="/register-patient" routerLinkActive="active" (click)="menuOpen = false">Inscription</a>
     </ng-container>
 
     <ng-container *ngIf="isLoggedIn">
@@ -25,8 +25,33 @@
         <a routerLink="/rendezvous" routerLinkActive="active"><mat-icon>event</mat-icon> Rendez-vous</a>
         <a routerLink="/dossiers" routerLinkActive="active"><mat-icon>folder</mat-icon> Dossiers médicaux</a>
         <!-- <a routerLink="/profil" routerLinkActive="active"><mat-icon>account_circle</mat-icon> Profil</a> -->
-        <a routerLink="/contact" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Contact</a>
-        <a routerLink="/manage-patient" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Gestion patient</a>
+        <!-- <a routerLink="/contact" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Contact</a> -->
+        
+        <!-- Gestion Utilisateur -->
+        <div class="nav-item dropdown" [matMenuTriggerFor]="gestionMenu">
+          <a class="nav-link">
+            <mat-icon>group</mat-icon>
+            Gestion Utilisateurs
+            <mat-icon class="arrow-icon">expand_more</mat-icon>
+          </a>
+        </div>
+        <!-- Menu déroulant -->
+        <mat-menu #gestionMenu="matMenu" class="gestion-menu">
+          <button mat-menu-item routerLink="/manage-patient">
+            <mat-icon>person</mat-icon>
+            Gestion Patient
+          </button>
+          <button mat-menu-item routerLink="/manage-medecin">
+            <mat-icon>medical_services</mat-icon>
+            Gestion Médecin
+          </button>
+          <button mat-menu-item routerLink="/manage-admin">
+            <mat-icon>admin_panel_settings</mat-icon>
+            Gestion Administrateur
+          </button>
+        </mat-menu>
+
+
     </ng-container>
   </nav>
 

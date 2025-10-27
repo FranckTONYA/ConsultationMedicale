@@ -1,0 +1,92 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+}
+
+.app-title {
+  color: #fff;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.app-title mat-icon {
+  font-size: 30px;
+}
+
+
+.register-card {
+  width: 600px;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+  transition: width 0.3s ease;
+}
+
+.form-title {
+  text-align: center;
+  color: #1976d2;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.half-width {
+  flex: 1 1 calc(50% - 1rem);
+  min-width: 250px;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.btn-register {
+  width: 100%;
+  max-width: 300px;
+  height: 48px;
+  font-weight: bold;
+  border-radius: 12px;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .register-card {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .half-width {
+    flex: 1 1 100%;
+  }
+
+  .app-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-card {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0;
+  }
+
+  .btn-register {
+    max-width: 100%;
+  }
+}

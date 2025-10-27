@@ -1,8 +1,10 @@
 package org.projet.consultationmedicalebackend.controllers;
 
 
+import org.projet.consultationmedicalebackend.models.Administrateur;
 import org.projet.consultationmedicalebackend.models.Medecin;
 import org.projet.consultationmedicalebackend.models.Patient;
+import org.projet.consultationmedicalebackend.models.RoleUtilisateur;
 import org.projet.consultationmedicalebackend.services.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +25,19 @@ public class AuthenticationController {
     @PostMapping("/register/patient")
     public ResponseEntity<?> registerPatient(@RequestBody Patient patient) {
         String token = authenticationService.registerPatient(patient);
-        return ResponseEntity.ok(Map.of("token", token, "role", "PATIENT"));
+        return ResponseEntity.ok(Map.of("token", token, "role", RoleUtilisateur.PATIENT.name()));
     }
 
     @PostMapping("/register/medecin")
     public ResponseEntity<?> registerMedecin(@RequestBody Medecin medecin) {
         String token = authenticationService.registerMedecin(medecin);
-        return ResponseEntity.ok(Map.of("token", token, "role", "MEDECIN"));
+        return ResponseEntity.ok(Map.of("token", token, "role",  RoleUtilisateur.MEDECIN.name()));
+    }
+
+    @PostMapping("/register/admin")
+    public ResponseEntity<?> registerAdmin(@RequestBody Administrateur administrateur) {
+        String token = authenticationService.registerAdmin(administrateur);
+        return ResponseEntity.ok(Map.of("token", token, "role",  RoleUtilisateur.ADMINISTRATEUR.name()));
     }
 
     @PostMapping("/login")

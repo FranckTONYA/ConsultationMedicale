@@ -143,4 +143,8 @@ export class AuthService {
   registerMedecin(data: any) {
     return this.http.post(`${this.apiUrl}/register/medecin`, data);
   }
+
+  registerAdmin(data: any) {
+    return this.http.post(`${this.apiUrl}/register/admin`, data);
+  }
 }
