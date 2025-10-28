@@ -45,6 +45,10 @@ export class NavbarComponent implements OnInit{
     this.menuOpen = !this.menuOpen;
   }
 
+  closeMenu() {
+    this.menuOpen = false;
+  }
+
   openDashboard(){
     if(this.role === RoleUtilisateur.ADMINISTRATEUR)
       this.router.navigate(['/dashboard-admin']);

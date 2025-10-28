@@ -1,0 +1,45 @@
+<div class="profile-container" *ngIf="!isLoading">
+  <mat-card class="profile-card">
+    <h2 class="profile-title">
+      <mat-icon>account_circle</mat-icon>
+      Mon Profil
+    </h2>
+
+    <div class="info-group">
+      <p><strong>Nom :</strong> {{ user.nom }}</p>
+      <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+      <p><strong>Email :</strong> {{ user.email }}</p>
+      <p><strong>Téléphone :</strong> {{ user.telephone }}</p>
+      <p><strong>Adresse :</strong> {{ user.adresse }}</p>
+
+      <!-- Patient -->
+      <ng-container *ngIf="patient">
+        <p><strong>NISS :</strong> {{ patient.niss }}</p>
+        <p><strong>Date de naissance :</strong> {{ patient.dateNaissance | date }}</p>
+        <!-- <p><strong>Rôle :</strong> Patient</p> -->
+      </ng-container>
+
+      <!-- Médecin -->
+      <ng-container *ngIf="medecin">
+        <p><strong>Spécialité :</strong> {{ medecin.specialite }}</p>
+        <p><strong>Numéro INAMI :</strong> {{ medecin.numINAMI }}</p>
+        <!-- <p><strong>Rôle :</strong> Médecin</p> -->
+      </ng-container>
+
+      <!-- Administrateur -->
+      <ng-container *ngIf="role === 'ADMINISTRATEUR'">
+        <p><strong>Rôle :</strong> Administrateur</p>
+      </ng-container>
+    </div>
+
+    <div class="btn-group">
+      <button mat-raised-button color="primary" (click)="goToEditProfile()">
+        <mat-icon>edit</mat-icon> Modifier le profil
+      </button>
+
+      <button mat-stroked-button color="accent" (click)="goToChangePassword()">
+        <mat-icon>lock</mat-icon> Modifier le mot de passe
+      </button>
+    </div>
+  </mat-card>
+</div>

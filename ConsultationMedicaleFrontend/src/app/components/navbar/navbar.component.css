@@ -77,6 +77,11 @@
   border: 2px solid black;
 }
 
+/* .user-expand{
+    color: black;
+  background: #1565c0;
+} */
+
 .avatar {
   width: 35px;
   height: 35px;
@@ -131,9 +136,9 @@
   min-width: 220px;
 }
 
-::ng-deep .mat-mdc-menu-item {
+/* ::ng-deep .mat-mdc-menu-item {
   color: white !important;
-}
+} */
 
 ::ng-deep .mat-mdc-menu-item:hover {
   background-color: rgba(255, 255, 255, 0.15) !important;

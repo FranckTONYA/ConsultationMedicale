@@ -17,6 +17,7 @@ export class RegisterAdminComponent implements OnInit {
   isEditMode = false;
   adminId?: number;
   hidePassword = true;
+  currentAdmin = new Administrateur();
 
   constructor(
     private fb: FormBuilder,
@@ -53,6 +54,7 @@ export class RegisterAdminComponent implements OnInit {
   loadAdmin(id: number) {
     this.adminService.getById(id).subscribe({
       next: (admin: Administrateur) => {
+        this.currentAdmin = admin;
         this.registerForm.patchValue({
           nom: admin.nom,
           prenom: admin.prenom,

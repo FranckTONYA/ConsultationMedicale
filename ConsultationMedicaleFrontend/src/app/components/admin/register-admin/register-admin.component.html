@@ -8,7 +8,7 @@
 
   <mat-card class="register-card">
     <h2 class="form-title">
-      {{ isEditMode ? 'Modifier un administrateur' : 'Inscription Administrateur' }}
+      {{ isEditMode ? 'Modification Administrateur' : 'Inscription Administrateur' }}
     </h2>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -40,12 +40,16 @@
       </div>
 
       <!-- Ligne 3 -->
-      <div class="row" *ngIf="!isEditMode">
-        <mat-form-field appearance="outline" class="half-width">
+      <div class="row">
+
+        <p *ngIf="isEditMode"><strong>Email :</strong> {{ currentAdmin.email }}</p>
+
+        <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" />
         </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
           <mat-label>Mot de passe</mat-label>
           <input
             matInput

@@ -12,11 +12,19 @@ import { ManageMedecinComponent } from './components/admin/manage-medecin/manage
 import { ManageAdminComponent } from './components/admin/manage-admin/manage-admin.component';
 import { RegisterMedecinComponent } from './components/admin/register-medecin/register-medecin.component';
 import { RegisterAdminComponent } from './components/admin/register-admin/register-admin.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ProfilComponent } from './components/profil/profil.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register-patient', component: RegisterPatientComponent },
+  { path: 'profil', component: ProfilComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
+  { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
 
   // Dashboard PATIENT
   { path: 'dashboard-patient', component: DashboardPatientComponent, canActivate: [AuthGuard], 
@@ -31,7 +39,7 @@ const routes: Routes = [
     data: { role: RoleUtilisateur.ADMINISTRATEUR } 
   },
   { path: 'edit-patient/:id', component: RegisterPatientComponent, canActivate: [AuthGuard], 
-    data: { role: RoleUtilisateur.ADMINISTRATEUR } 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.PATIENT ]} 
   },
 
   { path: 'manage-medecin', component: ManageMedecinComponent, canActivate: [AuthGuard], 
@@ -41,7 +49,7 @@ const routes: Routes = [
     data: { role: RoleUtilisateur.ADMINISTRATEUR } 
   },
   { path: 'edit-medecin/:id', component: RegisterMedecinComponent, canActivate: [AuthGuard], 
-    data: { role: RoleUtilisateur.ADMINISTRATEUR } 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN ]}
   },
 
   { path: 'manage-admin', component: ManageAdminComponent, canActivate: [AuthGuard], 

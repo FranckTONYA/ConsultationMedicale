@@ -17,6 +17,7 @@ export class RegisterPatientComponent implements OnInit {
   hidePassword = true;
   isEditMode = false;
   patientId?: number;
+  currentPatient = new Patient();
 
   constructor(
     private fb: FormBuilder,
@@ -61,6 +62,7 @@ export class RegisterPatientComponent implements OnInit {
   loadPatient(id: number) {
     this.patientService.getById(id).subscribe({
       next: (patient: Patient) => {
+        this.currentPatient = patient;
         this.registerForm.patchValue({
           nom: patient.nom,
           prenom: patient.prenom,

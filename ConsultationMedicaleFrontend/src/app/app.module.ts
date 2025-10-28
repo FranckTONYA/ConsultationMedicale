@@ -38,6 +38,8 @@ import { ManageMedecinComponent } from './components/admin/manage-medecin/manage
 import { ManageAdminComponent } from './components/admin/manage-admin/manage-admin.component';
 import { RegisterAdminComponent } from './components/admin/register-admin/register-admin.component';
 import { RegisterMedecinComponent } from './components/admin/register-medecin/register-medecin.component';
+import { ProfilComponent } from './components/profil/profil.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 
 @NgModule({
@@ -53,7 +55,9 @@ import { RegisterMedecinComponent } from './components/admin/register-medecin/re
     ManageMedecinComponent,
     ManageAdminComponent,
     RegisterAdminComponent,
-    RegisterMedecinComponent
+    RegisterMedecinComponent,
+    ProfilComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

@@ -54,7 +54,16 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
       confirmButtonText: 'Oui',
     }).then(result => {
       if (result.isConfirmed) {
-        this.patientService.delete(id).subscribe(() => this.loadPatients());
+        this.patientService.delete(id).subscribe(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Suppréssion réussie',
+            text: "Le patient a bien été supprimé !",
+            timer: 1500,
+            showConfirmButton: false
+          });
+          this.loadPatients()
+        });
       }
     });
   }

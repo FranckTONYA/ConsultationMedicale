@@ -6,7 +6,7 @@
 
   <mat-card class="register-card">
     <h2 class="form-title">
-      {{ isEditMode ? 'Modifier un médecin' : 'Inscription Médecin' }}
+      {{ isEditMode ? 'Modification Médecin' : 'Inscription Médecin' }}
     </h2>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -54,7 +54,9 @@
         </div>
 
         <div class="row">
-            <mat-form-field appearance="outline" class="half-width">
+            <p *ngIf="isEditMode"><strong>Email :</strong> {{ currentMedecin.email }}</p>
+
+            <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
             <mat-label>Email</mat-label>
             <input matInput formControlName="email" />
             </mat-form-field>
@@ -74,7 +76,7 @@
 
         <div class="btn-container">
             <button mat-raised-button color="primary" type="submit" class="btn-register">
-            {{ isEditMode ? 'Enregistrer les modifications' : "S'inscrire" }}
+            {{ isEditMode ? 'Enregistrer les modifications' : "Inscrire" }}
             </button>
         </div>
     </form>

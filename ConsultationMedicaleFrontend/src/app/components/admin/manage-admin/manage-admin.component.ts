@@ -13,7 +13,8 @@ import { AdminService } from '../../../core/services/admin.service';
   styleUrls: ['./manage-admin.component.css']
 })
 export class ManageAdminComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'nom', 'prenom', 'email', 'telephone', 'niveauAcces', 'actions'];
+  // displayedColumns = ['id', 'nom', 'prenom', 'email', 'telephone', 'niveauAcces', 'actions'];
+  displayedColumns = ['id', 'nom', 'prenom', 'email', 'telephone', 'actions'];
   dataSource = new MatTableDataSource<Administrateur>([]);
   numColumns = 0;
 
@@ -55,6 +56,13 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
       confirmButtonText: 'Oui',
     }).then(result => {
       if (result.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Suppréssion réussie',
+          text: "L'administrateur a bien été supprimé !",
+          timer: 1500,
+          showConfirmButton: false
+        });
         this.adminService.delete(id).subscribe(() => this.loadAdmins());
       }
     });
