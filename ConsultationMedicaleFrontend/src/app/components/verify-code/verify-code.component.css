@@ -1,4 +1,4 @@
-/* 🎯 Conteneur principal */
+/* Conteneur principal */
 :host {
   display: flex;
   justify-content: center;
@@ -42,30 +42,30 @@ input[matInput] {
   font-size: 0.95rem;
 }
 
+/* ❗ Messages d’erreur */
+mat-error {
+  font-size: 0.85rem;
+  color: #d32f2f;
+}
+
 /* 🔘 Boutons */
 button[mat-raised-button] {
   height: 48px;
   border-radius: 10px;
   font-weight: 600;
   letter-spacing: 0.5px;
+  margin-top: 0.5rem;
 }
 
 button[mat-raised-button]:disabled {
   opacity: 0.7;
 }
 
-/* ✅ Message de confirmation */
+/* ✅ Feedback */
 .text-center {
   text-align: center;
-  font-size: 1rem;
   color: #333;
-}
-
-.text-center p {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border-radius: 10px;
-  padding: 1rem;
+  font-size: 1rem;
 }
 
 /* 📱 Responsive Design */

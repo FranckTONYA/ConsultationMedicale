@@ -39,11 +39,11 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
   }
 
   addPatient() {
-    this.router.navigate(['/register-patient']);
+    this.router.navigate(['/register-patient'], { state: { modeAdmin: true }});
   }
 
   editPatient(id: number) {
-    this.router.navigate(['/edit-patient', id]);
+    this.router.navigate(['/edit-patient', id], { state: { modeAdmin: true }});
   }
 
   deletePatient(id: number) {

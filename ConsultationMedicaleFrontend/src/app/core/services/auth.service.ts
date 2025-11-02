@@ -1,7 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { PatientService } from './patient.service';
 import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
@@ -136,6 +136,14 @@ export class AuthService {
     }, expiresInMinutes * 60 * 1000);
   }
 
+  startPatientRegistration(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register/patient-start`, data);
+  }
+
+  verifyPatientRegistCode(token: string, code: string) {
+    return this.http.post(`${this.apiUrl}/register/patient-verify-code`, { token, code });
+  }
+
   registerPatient(data: any) {
     return this.http.post(`${this.apiUrl}/register/patient`, data);
   }
@@ -146,5 +154,13 @@ export class AuthService {
 
   registerAdmin(data: any) {
     return this.http.post(`${this.apiUrl}/register/admin`, data);
+  }
+
+  startPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/password/reset`, { email });
+  }
+
+  verifyPasswordCode(token: string, code: string, newPassword: string) {
+    return this.http.post(`${this.apiUrl}/password/reset-verify-code`, { token, code, newPassword });
   }
 }

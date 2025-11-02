@@ -14,11 +14,13 @@ import { RegisterMedecinComponent } from './components/admin/register-medecin/re
 import { RegisterAdminComponent } from './components/admin/register-admin/register-admin.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ProfilComponent } from './components/profil/profil.component';
+import { VerifyCodeComponent } from './components/verify-code/verify-code.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register-patient', component: RegisterPatientComponent },
+  { path: 'verify-code', component: VerifyCodeComponent },
   { path: 'profil', component: ProfilComponent, canActivate: [AuthGuard], 
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },

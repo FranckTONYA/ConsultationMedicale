@@ -8,6 +8,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class AuthGuard implements CanActivate {
     const user = this.authService.currentUser;
     
     if (!token || !user) {
+      Swal.fire('Connexion réquise', 'Vous devez être connecté pour acceder à ce service.', 'error');
       this.router.navigate(['/login']);
       return false;
     } 

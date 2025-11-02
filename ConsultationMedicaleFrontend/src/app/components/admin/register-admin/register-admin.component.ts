@@ -18,6 +18,7 @@ export class RegisterAdminComponent implements OnInit {
   adminId?: number;
   hidePassword = true;
   currentAdmin = new Administrateur();
+  modeAdmin = false;
 
   constructor(
     private fb: FormBuilder,
@@ -25,7 +26,10 @@ export class RegisterAdminComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    const nav = this.router.getCurrentNavigation();
+    this.modeAdmin = nav?.extras?.state?.['modeAdmin'] || false;
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -48,6 +52,7 @@ export class RegisterAdminComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       motDePasse: ['', [Validators.required, Validators.minLength(6)]],
+      role: [''],
     });
   }
 
@@ -61,7 +66,8 @@ export class RegisterAdminComponent implements OnInit {
           email: admin.email,
           adresse: admin.adresse,
           telephone: admin.telephone,
-          motDePasse: '',
+          motDePasse: admin.motDePasse,
+          role: admin.role,
         });
       },
       error: () => Swal.fire('Erreur', 'Impossible de charger l’administrateur', 'error'),
@@ -80,7 +86,12 @@ export class RegisterAdminComponent implements OnInit {
       this.adminService.update(this.adminId, adminData).subscribe({
         next: () => {
           Swal.fire('Succès', 'Administrateur modifié avec succès.', 'success');
-          this.router.navigate(['/manage-admin']);
+
+          if(this.modeAdmin) // Si modification faite par un administrateur
+            this.router.navigate(['/manage-admin']);
+          else
+            this.router.navigate(['/profil']);
+
         },
         error: () => Swal.fire('Erreur', 'Échec de la mise à jour.', 'error'),
       });

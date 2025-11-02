@@ -41,11 +41,11 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
   }
 
   addAdmin() {
-    this.router.navigate(['/register-admin']);
+    this.router.navigate(['/register-admin'], { state: { modeAdmin: true }});
   }
 
   editAdmin(id: number) {
-    this.router.navigate(['/edit-admin', id]);
+    this.router.navigate(['/edit-admin', id], { state: { modeAdmin: true }});
   }
 
   deleteAdmin(id: number) {

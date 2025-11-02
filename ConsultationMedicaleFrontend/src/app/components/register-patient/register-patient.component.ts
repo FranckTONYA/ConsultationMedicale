@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../core/services/patient.service';
 import { Patient } from '../../models/patient';
+import { RoleUtilisateur } from '../../models/utilisateur';
 
 @Component({
   selector: 'app-register-patient',
@@ -15,9 +16,12 @@ import { Patient } from '../../models/patient';
 export class RegisterPatientComponent implements OnInit {
   registerForm!: FormGroup;
   hidePassword = true;
+  hideConfirmPassword = true;
   isEditMode = false;
   patientId?: number;
   currentPatient = new Patient();
+  verificationToken: string | null = null;
+  modeAdmin = false;
 
   constructor(
     private fb: FormBuilder,
@@ -25,12 +29,14 @@ export class RegisterPatientComponent implements OnInit {
     private patientService: PatientService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    const nav = this.router.getCurrentNavigation();
+    this.modeAdmin = nav?.extras?.state?.['modeAdmin'] || false;
+  }
 
   ngOnInit(): void {
     this.initForm();
 
-    // Vérifie si un ID est passé en paramètre (mode édition)
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -38,44 +44,83 @@ export class RegisterPatientComponent implements OnInit {
         this.patientId = +id;
         this.loadPatient(this.patientId);
 
-        // Supprimer les validateurs du mot de passe en mode édition
+        // Supprime les validations mot de passe en mode édition
         const passwordControl = this.registerForm.get('motDePasse');
+        const confirmControl = this.registerForm.get('confirmPassword');
         passwordControl?.clearValidators();
+        confirmControl?.clearValidators();
         passwordControl?.updateValueAndValidity();
+        confirmControl?.updateValueAndValidity();
+
+         // Supprimer le validateur global
+        this.registerForm.setValidators(null);
+        this.registerForm.updateValueAndValidity();
       }
     });
+
+    // Rafraîchit la validation à chaque frappe sur les deux champs
+    this.registerForm.get('motDePasse')?.valueChanges.subscribe(() => {
+      this.registerForm.get('confirmPassword')?.updateValueAndValidity({ onlySelf: true });
+    });
+
   }
 
   initForm() {
-    this.registerForm = this.fb.group({
-      nom: ['', Validators.required],
-      prenom: ['', Validators.required],
-      niss: ['', [Validators.required, Validators.pattern(/^[0-9]{11}$/)]],
-      dateNaissance: ['', Validators.required],
-      adresse: ['', Validators.required],
-      telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      email: ['', [Validators.required, Validators.email]],
-      motDePasse: ['', [Validators.required, Validators.minLength(6)]],
-    });
+    this.registerForm = this.fb.group(
+      {
+        nom: ['', Validators.required],
+        prenom: ['', Validators.required],
+        niss: ['', [Validators.required, Validators.pattern(/^[0-9]{11}$/)]],
+        dateNaissance: ['', Validators.required],
+        adresse: ['', Validators.required],
+        telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+        email: ['', [Validators.required, Validators.email]],
+        motDePasse: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', Validators.required],
+        role: [RoleUtilisateur.PATIENT],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
+
+  passwordMatchValidator(formGroup: AbstractControl) {
+    const passwordControl = formGroup.get('motDePasse');
+    const confirmControl = formGroup.get('confirmPassword');
+
+    if (!passwordControl || !confirmControl) return null;
+
+    const password = passwordControl.value;
+    const confirm = confirmControl.value;
+
+    if (confirm === '') {
+      confirmControl.setErrors(confirmControl.errors ? { ...confirmControl.errors, required: true } : { required: true });
+      return null;
+    }
+
+    if (password !== confirm) {
+      confirmControl.setErrors({ ...confirmControl.errors, passwordMismatch: true });
+    } else {
+      if (confirmControl.hasError('passwordMismatch')) {
+        delete confirmControl.errors!['passwordMismatch'];
+        if (!Object.keys(confirmControl.errors!).length) {
+          confirmControl.setErrors(null);
+        } else {
+          confirmControl.setErrors(confirmControl.errors);
+        }
+      }
+    }
+
+    return null;
+  }
+
 
   loadPatient(id: number) {
     this.patientService.getById(id).subscribe({
       next: (patient: Patient) => {
         this.currentPatient = patient;
-        this.registerForm.patchValue({
-          nom: patient.nom,
-          prenom: patient.prenom,
-          niss: patient.niss,
-          dateNaissance: patient.dateNaissance,
-          adresse: patient.adresse,
-          telephone: patient.telephone,
-          email: patient.email,
-          motDePasse: '', // On laisse vide pour sécurité
-        });
+        this.registerForm.patchValue(patient);
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         Swal.fire('Erreur', 'Impossible de charger le patient', 'error');
       }
     });
@@ -85,50 +130,51 @@ export class RegisterPatientComponent implements OnInit {
     if (this.registerForm.invalid) {
       Swal.fire({
         icon: 'warning',
-        title: 'Champs manquants',
-        text: 'Merci de remplir correctement tous les champs.',
+        title: 'Champs manquants ou invalides',
+        text: 'Merci de vérifier les informations saisies.',
       });
       return;
     }
 
-    const patientData = this.registerForm.value;
+    const patientData = { ...this.registerForm.value };
+    delete patientData.confirmPassword; // inutile pour le backend
 
     if (this.isEditMode && this.patientId) {
-      // MODE ÉDITION
       this.patientService.update(this.patientId, patientData).subscribe({
         next: () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Modification réussie',
-            text: 'Les informations du patient ont été mises à jour.',
-            timer: 2000,
-            showConfirmButton: false,
-          });
-          this.router.navigate(['/manage-patient']);
+          Swal.fire('Succès', 'Patient mis à jour.', 'success');
+          this.router.navigate([this.modeAdmin ? '/manage-patient' : '/profil']);
         },
-        error: (err) => {
-          Swal.fire('Erreur', 'Impossible de modifier le patient.', 'error');
-          console.error(err);
-        },
+        error: () => Swal.fire('Erreur', 'Impossible de modifier le patient.', 'error')
       });
     } else {
-      // MODE CRÉATION
-      this.authService.registerPatient(patientData).subscribe({
-        next: () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Inscription réussie',
-            text: 'Le patient a été ajouté avec succès.',
-            timer: 2000,
-            showConfirmButton: false,
-          });
-          this.router.navigate(['/manage-patient']);
-        },
-        error: (err) => {
-          Swal.fire('Erreur', 'Une erreur est survenue lors de l’inscription.', 'error');
-          console.error(err);
-        },
-      });
+      if (this.modeAdmin) {
+        this.authService.registerPatient(patientData).subscribe({
+          next: () => {
+            Swal.fire('Succès', 'Patient ajouté.', 'success');
+            this.router.navigate(['/manage-patient']);
+          },
+          error: (err) => Swal.fire('Erreur', err.error?.error ?? 'Échec lors de l’inscription.', 'error'),
+        });
+      } else {
+        this.authService.startPatientRegistration(patientData).subscribe({
+          next: (res) => {
+            this.verificationToken = res.verificationToken;
+            sessionStorage.setItem('verificationToken', this.verificationToken!);
+            Swal.fire({
+              icon: 'info',
+              title: 'Vérification requise',
+              text: 'Un code vous a été envoyé par e-mail.',
+            });
+            this.router.navigate(['/verify-code'], {
+              state: { verificationToken: this.verificationToken },
+            });
+          },
+          error: (err) =>{
+            Swal.fire('Erreur', err.error?.error ?? 'Échec lors de l’inscription.', 'error');
+          } 
+        });
+      }
     }
   }
 }

@@ -18,6 +18,7 @@ export class RegisterMedecinComponent implements OnInit {
   medecinId?: number;
   hidePassword = true;
   currentMedecin = new Medecin();
+  modeAdmin = false;
 
   constructor(
     private fb: FormBuilder,
@@ -25,7 +26,10 @@ export class RegisterMedecinComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    const nav = this.router.getCurrentNavigation();
+    this.modeAdmin = nav?.extras?.state?.['modeAdmin'] || false;
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -56,6 +60,7 @@ export class RegisterMedecinComponent implements OnInit {
       telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       email: ['', [Validators.required, Validators.email]],
       motDePasse: ['', [Validators.required, Validators.minLength(6)]],
+      role: [''],
     });
   }
 
@@ -71,7 +76,8 @@ export class RegisterMedecinComponent implements OnInit {
           adresse: medecin.adresse,
           telephone: medecin.telephone,
           email: medecin.email,
-          motDePasse: '',
+          motDePasse: medecin.motDePasse,
+          role: medecin.role,
         });
       },
       error: () => Swal.fire('Erreur', 'Impossible de charger le médecin', 'error'),
@@ -90,7 +96,12 @@ export class RegisterMedecinComponent implements OnInit {
       this.medecinService.update(this.medecinId, medecinData).subscribe({
         next: () => {
           Swal.fire('Succès', 'Médecin mis à jour avec succès.', 'success');
-          this.router.navigate(['/manage-medecin']);
+
+          if(this.modeAdmin) // Si modofication faite par un administrateur
+            this.router.navigate(['/manage-medecin']);
+          else
+            this.router.navigate(['/profil']);
+
         },
         error: () => Swal.fire('Erreur', 'Échec de la mise à jour du médecin.', 'error'),
       });

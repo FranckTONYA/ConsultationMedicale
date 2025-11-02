@@ -40,6 +40,8 @@ import { RegisterAdminComponent } from './components/admin/register-admin/regist
 import { RegisterMedecinComponent } from './components/admin/register-medecin/register-medecin.component';
 import { ProfilComponent } from './components/profil/profil.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { VerifyCodeComponent } from './components/verify-code/verify-code.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 
 @NgModule({
@@ -57,7 +59,9 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     RegisterAdminComponent,
     RegisterMedecinComponent,
     ProfilComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    VerifyCodeComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

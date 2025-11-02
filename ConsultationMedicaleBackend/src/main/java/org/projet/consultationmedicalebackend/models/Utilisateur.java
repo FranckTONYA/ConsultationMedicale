@@ -29,6 +29,7 @@ public abstract class Utilisateur {
     private String motDePasse;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private RoleUtilisateur role;
 
     public Utilisateur() {
