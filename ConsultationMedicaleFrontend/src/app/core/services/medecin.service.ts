@@ -29,6 +29,6 @@ export class MedecinService {
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/delete-by-id/${id}`);
   }
 }

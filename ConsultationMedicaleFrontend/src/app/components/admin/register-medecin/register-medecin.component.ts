@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MedecinService } from '../../../core/services/medecin.service';
 import { Medecin } from '../../../models/medecin';
 import { AuthService } from '../../../core/services/auth.service';
+import { RoleUtilisateur } from '../../../models/utilisateur';
 
 @Component({
   selector: 'app-register-medecin',
@@ -14,9 +15,10 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class RegisterMedecinComponent implements OnInit {
   registerForm!: FormGroup;
+  hidePassword = true;
+  hideConfirmPassword = true;
   isEditMode = false;
   medecinId?: number;
-  hidePassword = true;
   currentMedecin = new Medecin();
   modeAdmin = false;
 
@@ -41,44 +43,55 @@ export class RegisterMedecinComponent implements OnInit {
         this.medecinId = +id;
         this.loadMedecin(this.medecinId);
 
-        // Désactiver le validateur mot de passe en édition
-        const pwdCtrl = this.registerForm.get('motDePasse');
-        pwdCtrl?.clearValidators();
-        pwdCtrl?.updateValueAndValidity();
+        // ✅ En mode édition → retirer les validations mot de passe
+        this.registerForm.get('motDePasse')?.clearValidators();
+        this.registerForm.get('confirmPassword')?.clearValidators();
+        this.registerForm.setValidators(null);
+        this.registerForm.updateValueAndValidity();
       }
+    });
+
+    // ✅ mise à jour auto de la validation
+    this.registerForm.get('motDePasse')?.valueChanges.subscribe(() => {
+      this.registerForm.get('confirmPassword')?.updateValueAndValidity();
     });
   }
 
   initForm() {
-    this.registerForm = this.fb.group({
-      nom: ['', Validators.required],
-      prenom: ['', Validators.required],
-      specialite: ['', Validators.required],
-      // inami: ['', [Validators.required, inamiValidator()]],
-      numINAMI: ['', [Validators.required, Validators.pattern(/^[0-9]{11}$/)]],
-      adresse: ['', Validators.required],
-      telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-      email: ['', [Validators.required, Validators.email]],
-      motDePasse: ['', [Validators.required, Validators.minLength(6)]],
-      role: [''],
-    });
+    this.registerForm = this.fb.group(
+      {
+        nom: ['', Validators.required],
+        prenom: ['', Validators.required],
+        specialite: ['', Validators.required],
+        numINAMI: ['', [Validators.required, Validators.pattern(/^[0-9]{11}$/)]],
+        adresse: ['', Validators.required],
+        telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+        email: ['', [Validators.required, Validators.email]],
+        motDePasse: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', Validators.required],
+        role: [RoleUtilisateur.MEDECIN],
+      },
+      { validators: this.passwordMatchValidator }
+    );
+  }
+
+  passwordMatchValidator(formGroup: AbstractControl) {
+    const password = formGroup.get('motDePasse')?.value;
+    const confirm = formGroup.get('confirmPassword')?.value;
+
+    if (confirm === '') return null;
+
+    if (password !== confirm) {
+      formGroup.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+    }
+    return null;
   }
 
   loadMedecin(id: number) {
     this.medecinService.getById(id).subscribe({
-      next: (medecin: Medecin) => {
-        this.currentMedecin = medecin;
-        this.registerForm.patchValue({
-          nom: medecin.nom,
-          prenom: medecin.prenom,
-          specialite: medecin.specialite,
-          numINAMI: medecin.numINAMI,
-          adresse: medecin.adresse,
-          telephone: medecin.telephone,
-          email: medecin.email,
-          motDePasse: medecin.motDePasse,
-          role: medecin.role,
-        });
+      next: (m: Medecin) => {
+        this.currentMedecin = m;
+        this.registerForm.patchValue(m);
       },
       error: () => Swal.fire('Erreur', 'Impossible de charger le médecin', 'error'),
     });
@@ -86,32 +99,28 @@ export class RegisterMedecinComponent implements OnInit {
 
   onSubmit() {
     if (this.registerForm.invalid) {
-      Swal.fire('Champs manquants', 'Merci de remplir tous les champs correctement.', 'warning');
+      Swal.fire('Champs manquants ou invalides', 'Merci de vérifier les informations.', 'warning');
       return;
     }
 
-    const medecinData = this.registerForm.value;
+    const medecinData = { ...this.registerForm.value };
+    delete medecinData.confirmPassword;
 
     if (this.isEditMode && this.medecinId) {
       this.medecinService.update(this.medecinId, medecinData).subscribe({
         next: () => {
-          Swal.fire('Succès', 'Médecin mis à jour avec succès.', 'success');
-
-          if(this.modeAdmin) // Si modofication faite par un administrateur
-            this.router.navigate(['/manage-medecin']);
-          else
-            this.router.navigate(['/profil']);
-
+          Swal.fire('Succès', 'Médecin mis à jour.', 'success');
+          this.router.navigate([this.modeAdmin ? '/manage-medecin' : '/profil']);
         },
-        error: () => Swal.fire('Erreur', 'Échec de la mise à jour du médecin.', 'error'),
+        error: () => Swal.fire('Erreur', 'Impossible de modifier.', 'error'),
       });
     } else {
       this.authService.registerMedecin(medecinData).subscribe({
         next: () => {
-          Swal.fire('Succès', 'Médecin enregistré avec succès.', 'success');
+          Swal.fire('Succès', 'Médecin ajouté.', 'success');
           this.router.navigate(['/manage-medecin']);
         },
-        error: () => Swal.fire('Erreur', 'Échec de l’enregistrement du médecin.', 'error'),
+        error: (err) => Swal.fire('Erreur', err.error?.error ?? 'Échec.', 'error'),
       });
     }
   }

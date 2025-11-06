@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Patient } from '../../models/patient';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PatientService {
@@ -13,7 +14,7 @@ export class PatientService {
     return this.http.get<Patient>(`${this.apiUrl}/find-by-email/${email}`);
   }
 
-  getById(id: number) {
+  getById(id: number): Observable<Patient> {
     return this.http.get<Patient>(`${this.apiUrl}/${id}`);
   }
 

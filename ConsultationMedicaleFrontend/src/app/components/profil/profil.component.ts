@@ -6,6 +6,7 @@ import { Patient } from '../../models/patient';
 import { Medecin } from '../../models/medecin';
 import Swal from 'sweetalert2';
 import { Administrateur } from '../../models/administrateur';
+import { UtilisateurService } from '../../core/services/utilisateur.service';
 
 @Component({
   selector: 'app-profil',
@@ -19,7 +20,7 @@ export class ProfilComponent implements OnInit {
   isLoading = true;
   currentUser = new Utilisateur();
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private userService: UtilisateurService) {}
 
   ngOnInit(): void {
 
@@ -34,9 +35,16 @@ export class ProfilComponent implements OnInit {
       return;
     }
 
-    this.user = this.currentUser;
-    this.role = this.user.role ?? '';
-    this.isLoading = false;
+    this.userService.getById(this.currentUser.id!).subscribe({
+      next: (response: Utilisateur) => {
+        this.user = response;
+        this.role = this.user.role ?? '';
+        this.isLoading = false;
+      },
+      error: () => {
+        Swal.fire('Erreur', "Impossible de charger l'utilisateur", 'error');
+      }
+    });
   }
 
   // Getters sécurisés pour l’affichage
@@ -64,4 +72,5 @@ export class ProfilComponent implements OnInit {
   goToChangePassword() {
     this.router.navigate(['/change-password']);
   }
+
 }

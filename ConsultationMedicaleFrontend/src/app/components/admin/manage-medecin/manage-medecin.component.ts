@@ -54,17 +54,30 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
       confirmButtonText: 'Oui',
     }).then(result => {
       if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Suppréssion réussie',
-          text: "Le médecin a bien été supprimé !",
-          timer: 1500,
-          showConfirmButton: false
+        this.medecinService.delete(id).subscribe({
+          next: () => {
+            Swal.fire({
+            icon: 'success',
+            title: 'Suppréssion réussie',
+            text: "Le médecin a bien été supprimé !",
+            timer: 1500,
+            showConfirmButton: false
+          });
+          this.loadMedecins()
+          },
+          error: () =>{
+            Swal.fire({
+              icon: 'error',
+              title: "Erreur de suppression",
+              text: 'La suppression du médecin a rencontré un erreur.',
+              showConfirmButton: true,
+            });
+          } 
         });
-        this.medecinService.delete(id).subscribe(() => this.loadMedecins());
       }
     });
   }
+  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

@@ -1,9 +1,6 @@
 <div class="register-container">
-
-  <!-- Titre principal de l’application -->
-  <div class="app-title"> 
-    <mat-icon>admin_panel_settings</mat-icon> 
-    MediConsult
+  <div class="app-title">
+    <mat-icon>admin_panel_settings</mat-icon> MediConsult
   </div>
 
   <mat-card class="register-card">
@@ -13,61 +10,85 @@
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
-      <!-- Ligne 1 -->
       <div class="row">
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Nom</mat-label>
           <input matInput formControlName="nom" />
+          <mat-error *ngIf="registerForm.get('nom')?.hasError('required')">
+            Le nom est obligatoire.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Prénom</mat-label>
           <input matInput formControlName="prenom" />
+          <mat-error *ngIf="registerForm.get('prenom')?.hasError('required')">
+            Le prénom est obligatoire.
+          </mat-error>
         </mat-form-field>
       </div>
 
-      <!-- Ligne 2 -->
       <div class="row">
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Téléphone</mat-label>
           <input matInput formControlName="telephone" maxlength="10" />
+          <mat-error *ngIf="registerForm.get('telephone')?.hasError('required')">
+            Le téléphone est obligatoire.
+          </mat-error>
+          <mat-error *ngIf="registerForm.get('telephone')?.hasError('pattern')">
+            Le téléphone doit contenir 10 chiffres.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Adresse</mat-label>
-            <input matInput formControlName="adresse" />
+          <mat-label>Adresse</mat-label>
+          <input matInput formControlName="adresse" />
+          <mat-error *ngIf="registerForm.get('adresse')?.hasError('required')">
+            L'adresse est obligatoire.
+          </mat-error>
         </mat-form-field>
       </div>
 
-      <!-- Ligne 3 -->
       <div class="row">
-
         <p *ngIf="isEditMode"><strong>Email :</strong> {{ currentAdmin.email }}</p>
 
         <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" />
+          <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+            L'email est obligatoire.
+          </mat-error>
+          <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
+            Format d'email invalide.
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <!-- Mot de passe visible seulement en création -->
+      <div class="row" *ngIf="!isEditMode">
+        <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="motDePasse"/>
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('required')">Mot de passe obligatoire.</mat-error>
+          <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('minlength')">6 caractères minimum.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width" *ngIf="!isEditMode">
-          <mat-label>Mot de passe</mat-label>
-          <input
-            matInput
-            [type]="hidePassword ? 'password' : 'text'"
-            formControlName="motDePasse"
-          />
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="hidePassword = !hidePassword"
-          >
-            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <mat-label>Confirmer le mot de passe</mat-label>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword"/>
+          <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
+            <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
+          <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Confirmation requise.</mat-error>
+          <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch')">Les mots de passe ne correspondent pas.</mat-error>
         </mat-form-field>
+
       </div>
 
-      <!-- Bouton -->
       <div class="btn-container">
         <button mat-raised-button color="primary" type="submit" class="btn-register">
           {{ isEditMode ? 'Enregistrer les modifications' : "Créer un administrateur" }}

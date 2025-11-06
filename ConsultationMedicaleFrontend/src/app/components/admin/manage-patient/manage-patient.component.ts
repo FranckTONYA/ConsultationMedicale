@@ -54,8 +54,9 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
       confirmButtonText: 'Oui',
     }).then(result => {
       if (result.isConfirmed) {
-        this.patientService.delete(id).subscribe(() => {
-          Swal.fire({
+        this.patientService.delete(id).subscribe({
+          next: () => {
+            Swal.fire({
             icon: 'success',
             title: 'Suppréssion réussie',
             text: "Le patient a bien été supprimé !",
@@ -63,6 +64,15 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
             showConfirmButton: false
           });
           this.loadPatients()
+          },
+          error: () =>{
+            Swal.fire({
+              icon: 'error',
+              title: "Erreur de suppression",
+              text: "La suppression du patient a rencontré un erreur.",
+              showConfirmButton: true,
+            });
+          } 
         });
       }
     });

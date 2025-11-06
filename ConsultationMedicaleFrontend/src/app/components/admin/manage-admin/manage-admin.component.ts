@@ -48,7 +48,8 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/edit-admin', id], { state: { modeAdmin: true }});
   }
 
-  deleteAdmin(id: number) {
+
+deleteAdmin(id: number) {
     Swal.fire({
       title: 'Supprimer cet administrateur ?',
       icon: 'warning',
@@ -56,14 +57,26 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
       confirmButtonText: 'Oui',
     }).then(result => {
       if (result.isConfirmed) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Suppréssion réussie',
-          text: "L'administrateur a bien été supprimé !",
-          timer: 1500,
-          showConfirmButton: false
+        this.adminService.delete(id).subscribe({
+          next: () => {
+            Swal.fire({
+            icon: 'success',
+            title: 'Suppréssion réussie',
+            text: "L'administrateur a bien été supprimé !",
+            timer: 1500,
+            showConfirmButton: false
+          });
+          this.loadAdmins()
+          },
+          error: () =>{
+            Swal.fire({
+              icon: 'error',
+              title: "Erreur de suppression",
+              text: "La suppression de l'administrateur a rencontré un erreur.",
+              showConfirmButton: true,
+            });
+          } 
         });
-        this.adminService.delete(id).subscribe(() => this.loadAdmins());
       }
     });
   }

@@ -28,6 +28,6 @@ export class AdminService {
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/delete-by-id/${id}`);
   }
 }

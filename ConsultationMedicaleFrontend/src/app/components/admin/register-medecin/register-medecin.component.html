@@ -12,13 +12,19 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="row">
             <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Nom</mat-label>
-            <input matInput formControlName="nom" />
+                <mat-label>Nom</mat-label>
+                <input matInput formControlName="nom" />
+                <mat-error *ngIf="registerForm.get('nom')?.hasError('required')">
+                    Le nom est obligatoire.
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Prénom</mat-label>
-            <input matInput formControlName="prenom" />
+                <mat-label>Prénom</mat-label>
+                <input matInput formControlName="prenom" />
+                <mat-error *ngIf="registerForm.get('prenom')?.hasError('required')">
+                    Le prénom est obligatoire.
+                </mat-error>
             </mat-form-field>
         </div>
 
@@ -26,51 +32,94 @@
             <mat-form-field appearance="outline" class="half-width">
                 <mat-label>Adresse</mat-label>
                 <input matInput formControlName="adresse" />
+                <mat-error *ngIf="registerForm.get('adresse')?.hasError('required')">
+                    L'adresse est obligatoire.
+                </mat-error>
             </mat-form-field>
+
             <mat-form-field appearance="outline" class="half-width">
                 <mat-label>Téléphone</mat-label>
-                <input matInput formControlName="telephone" maxlength="10" />
+                <input matInput maxlength="10" formControlName="telephone" />
+                <mat-error *ngIf="registerForm.get('telephone')?.hasError('required')">
+                    Le téléphone est obligatoire.
+                </mat-error>
+                <mat-error *ngIf="registerForm.get('telephone')?.hasError('pattern')">
+                    Le téléphone doit contenir 10 chiffres.
+                </mat-error>
             </mat-form-field>
+
         </div>
         
         <div class="row">
             <mat-form-field appearance="outline" class="half-width">
                 <mat-label>Spécialité</mat-label>
                 <input matInput formControlName="specialite" />
+                <mat-error *ngIf="registerForm.get('specialite')?.hasError('required')">
+                    La spécialité est obligatoire.
+                </mat-error>
             </mat-form-field>
+
             <mat-form-field appearance="outline" class="half-width">
                 <mat-label>Numéro INAMI</mat-label>
-                <input matInput formControlName="numINAMI" maxlength="11" />
+                <input matInput maxlength="11" formControlName="numINAMI" />
+
                 <mat-error *ngIf="registerForm.get('numINAMI')?.hasError('required')">
-                Le numéro INAMI est requis.
+                    Le numéro INAMI est obligatoire.
                 </mat-error>
-                <mat-error *ngIf="registerForm.get('numINAMI')?.hasError('inamiLength')">
-                Le numéro INAMI doit contenir 11 chiffres.
-                </mat-error>
-                <mat-error *ngIf="registerForm.get('numINAMI')?.hasError('inamiInvalid')">
-                Numéro INAMI invalide.
+
+                <mat-error *ngIf="registerForm.get('numINAMI')?.hasError('pattern')">
+                    Le numéro INAMI doit contenir 11 chiffres.
                 </mat-error>
             </mat-form-field>
+
         </div>
 
         <div class="row">
             <p *ngIf="isEditMode"><strong>Email :</strong> {{ currentMedecin.email }}</p>
 
             <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" />
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" />
+                <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+                    L'email est obligatoire.
+                </mat-error>
+                <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
+                    Format d'email invalide.
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        
+        <div class="row">
+            <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
+                <mat-label>Mot de passe</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="motDePasse" />
+                <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                    <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+
+                <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('required')">
+                    Le mot de passe est obligatoire.
+                </mat-error>
+                <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('minlength')">
+                    Le mot de passe doit contenir au moins 6 caractères.
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
-            <mat-label>Mot de passe</mat-label>
-            <input
-                matInput
-                [type]="hidePassword ? 'password' : 'text'"
-                formControlName="motDePasse"
-            />
-            <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
-                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
+                <mat-label>Confirmer le mot de passe</mat-label>
+                <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" />
+                <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
+                    <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+
+                <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">
+                    La confirmation du mot de passe est obligatoire.
+                </mat-error>
+                <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch')">
+                    Les mots de passe ne correspondent pas.
+                </mat-error>
             </mat-form-field>
         </div>
 
