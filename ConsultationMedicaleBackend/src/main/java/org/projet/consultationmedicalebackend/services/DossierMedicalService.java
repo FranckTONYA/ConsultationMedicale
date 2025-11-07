@@ -10,5 +10,6 @@ public interface DossierMedicalService {
     List<DossierMedical> findAll();
     Optional<DossierMedical> findById(Long id);
     Optional<DossierMedical> findByPatient(Long patientId);
+    List<DossierMedical> findByMedecin(Long medecinId);
     void delete(Long id);
 }

@@ -1,5 +1,6 @@
 package org.projet.consultationmedicalebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -17,8 +18,12 @@ public class Patient extends Utilisateur{
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "dossier_id")
-    @JsonManagedReference
+    @JsonBackReference
     private DossierMedical dossierMedical;
+
+    @ManyToOne
+    @JoinColumn(name = "medecin_id")
+    private Medecin medecin;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations;
@@ -27,11 +32,12 @@ public class Patient extends Utilisateur{
         super();
     }
 
-    public Patient(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String niss, Date dateNaissance, DossierMedical dossierMedical, List<Consultation> consultations) {
+    public Patient(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String niss, Date dateNaissance, DossierMedical dossierMedical, Medecin medecin, List<Consultation> consultations) {
         super(nom, prenom, adresse, telephone, email, motDePasse, RoleUtilisateur.PATIENT);
         this.niss = niss;
         this.dateNaissance = dateNaissance;
         this.dossierMedical = dossierMedical;
+        this.medecin = medecin;
         this.consultations = consultations;
     }
 
@@ -51,13 +57,20 @@ public class Patient extends Utilisateur{
         this.dateNaissance = dateNaissance;
     }
 
-
     public DossierMedical getDossierMedical() {
         return dossierMedical;
     }
 
     public void setDossierMedical(DossierMedical dossierMedical) {
         this.dossierMedical = dossierMedical;
+    }
+
+    public Medecin getMedecin() {
+        return medecin;
+    }
+
+    public void setMedecin(Medecin medecin) {
+        this.medecin = medecin;
     }
 
     public List<Consultation> getConsultations() {

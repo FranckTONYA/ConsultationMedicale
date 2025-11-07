@@ -163,7 +163,10 @@ public class AuthenticationService {
         String body = "Bonjour " + patient.getPrenom() + ",\n\n" +
                 "Votre code de vérification est : " + code + "\n" +
                 "Il expire dans quelques minutes.\n\n" +
-                "Si vous n'avez pas demandé cette inscription, ignorez ce message.";
+                "Si vous n'avez pas demandé cette action, ignorez ce message.\n\n" +
+                "Bien cordialement, \n" +
+                "L'équipe Medi Consult ";
+
         emailService.envoyerEmail(patient.getEmail(), subject, body);
 
         // 6. Retourner le JWT au frontend (frontend doit le garder temporairement)
@@ -241,7 +244,9 @@ public class AuthenticationService {
         String body = "Bonjour " + opt.get().getPrenom() + ",\n\n" +
                 "Votre code de vérification est : " + code + "\n" +
                 "Ce code expirera dans quelques minutes.\n\n" +
-                "Si vous n'avez pas demandé cette inscription, ignorez ce message.";
+                "Si vous n'avez pas demandé cette action, ignorez ce message.\n\n" +
+                "Bien cordialement, \n" +
+                "L'équipe Medi Consult ";
 
         emailService.envoyerEmail(email, subject, body);
 

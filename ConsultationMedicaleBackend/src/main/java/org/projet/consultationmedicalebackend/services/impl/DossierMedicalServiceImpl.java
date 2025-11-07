@@ -43,6 +43,11 @@ public class DossierMedicalServiceImpl implements DossierMedicalService {
     }
 
     @Override
+    public List<DossierMedical> findByMedecin(Long medecinId) {
+        return dossierMedicalRepository.findbyMedecin(medecinId);
+    }
+
+    @Override
     public void delete(Long id) {
         dossierMedicalRepository.deleteById(id);
     }

@@ -1,0 +1,49 @@
+.page-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.mat-form-field {
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+button[mat-raised-button] {
+  margin-bottom: 15px;
+}
+
+/* Boutons d'action */
+.action-btns button {
+  margin-right: 6px;
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 10px;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  .mat-form-field {
+    max-width: 100%;
+  }
+}

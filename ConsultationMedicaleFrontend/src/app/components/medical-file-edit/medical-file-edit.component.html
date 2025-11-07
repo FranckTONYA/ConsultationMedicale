@@ -1,0 +1,65 @@
+<mat-card *ngIf="form">
+  <h2>Modifier le dossier médical</h2>
+
+  <form [formGroup]="form">
+
+    <mat-form-field class="w-full" appearance="outline">
+      <mat-label>Groupe sanguin</mat-label>
+      <input matInput formControlName="groupeSanguin">
+    </mat-form-field>
+
+    <h3>Allergies</h3>
+    <div formArrayName="allergies">
+      <div *ngFor="let a of allergies.controls; let i = index;">
+        <mat-form-field class="w-full" appearance="outline">
+          <input matInput [formControlName]="i">
+          <button mat-icon-button color="warn" (click)="removeItem(allergies, i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <button mat-button (click)="addItem(allergies)">Ajouter une allergie</button>
+    </div>
+
+    <h3>Vaccinations</h3>
+    <div formArrayName="vaccinations">
+      <div *ngFor="let v of vaccinations.controls; let i = index;">
+        <mat-form-field class="w-full" appearance="outline">
+          <input matInput [formControlName]="i">
+          <button mat-icon-button color="warn" (click)="removeItem(vaccinations, i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <button mat-button (click)="addItem(vaccinations)">Ajouter une vaccination</button>
+    </div>
+
+    <h3>Antécédents médicaux</h3>
+    <div formArrayName="antecedentsMedicaux">
+      <div *ngFor="let m of antecedentsMedicaux.controls; let i = index;">
+        <mat-form-field class="w-full" appearance="outline">
+          <input matInput [formControlName]="i">
+          <button mat-icon-button color="warn" (click)="removeItem(antecedentsMedicaux, i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <button mat-button (click)="addItem(antecedentsMedicaux)">Ajouter un antécédent</button>
+    </div>
+
+    <h3>Remarques</h3>
+    <div formArrayName="remarques">
+      <div *ngFor="let r of remarques.controls; let i = index;">
+        <mat-form-field class="w-full" appearance="outline">
+          <textarea matInput [formControlName]="i"></textarea>
+          <button mat-icon-button color="warn" (click)="removeItem(remarques, i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <button mat-button (click)="addItem(remarques)">Ajouter une remarque</button>
+    </div>
+
+    <button mat-raised-button color="primary" class="w-full mt-3" (click)="save()">Sauvegarder</button>
+  </form>
+</mat-card>

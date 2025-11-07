@@ -1,0 +1,22 @@
+<mat-card *ngIf="dossier">
+  <h2>Dossier Médical de {{ dossier.patient.prenom }} {{ dossier.patient.nom }}</h2>
+
+  <p><strong>NISS :</strong> {{ dossier.patient.niss }}</p>
+  <p><strong>Groupe sanguin :</strong> {{ dossier.groupeSanguin }}</p>
+
+  <h3>Allergies</h3>
+  <p>{{ dossier.allergies.length ? dossier.allergies.join(', ') : 'Aucune' }}</p>
+
+  <h3>Vaccinations</h3>
+  <p>{{ dossier.vaccinations.length ? dossier.vaccinations.join(', ') : 'Aucune' }}</p>
+
+  <h3>Antécédents médicaux</h3>
+  <p>{{ dossier.antecedentsMedicaux.length ? dossier.antecedentsMedicaux.join(', ') : 'Aucun' }}</p>
+
+  <h3>Remarques</h3>
+  <ul>
+    <li *ngFor="let r of dossier.remarques">{{ r }}</li>
+  </ul>
+
+  <button mat-stroked-button color="primary" routerLink="/dossiers-medicaux">Retour</button>
+</mat-card>

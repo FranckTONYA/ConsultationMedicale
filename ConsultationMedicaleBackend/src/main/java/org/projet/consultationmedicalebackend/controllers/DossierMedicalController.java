@@ -41,6 +41,12 @@ public class DossierMedicalController {
         return dossierMedicalService.findByPatient(idPatient);
     }
 
+    @GetMapping("/find-by-medecin/{idMedecin}")
+    public ResponseEntity<List<DossierMedical>>getDossierByMedecin(@PathVariable Long idMedecin) {
+        List<DossierMedical> dossierMedicals = dossierMedicalService.findByMedecin(idMedecin);
+        return ResponseEntity.ok(dossierMedicals);
+    }
+
     @PutMapping("/update/{id}")
     public DossierMedical updateDossier(@PathVariable Long id, @RequestBody DossierMedical dossierMedical) {
         dossierMedical.setId(id);

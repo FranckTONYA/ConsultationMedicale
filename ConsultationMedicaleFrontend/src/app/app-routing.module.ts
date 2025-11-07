@@ -15,6 +15,9 @@ import { RegisterAdminComponent } from './components/admin/register-admin/regist
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ProfilComponent } from './components/profil/profil.component';
 import { VerifyCodeComponent } from './components/verify-code/verify-code.component';
+import { MedicalFileComponent } from './components/medical-file/medical-file.component';
+import { MedicalFileDetailsComponent } from './components/medical-file-details/medical-file-details.component';
+import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,6 +28,19 @@ const routes: Routes = [
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },
   { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
+
+  // Dossiers médicaux
+  { path: 'dossiers-medicaux', component: MedicalFileComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN ]} 
+  },
+
+  { path: 'dossier-medical/details/:id', component: MedicalFileDetailsComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
+
+  { path: 'dossier-medical/edit/:id', component: MedicalFileEditComponent, canActivate: [AuthGuard], 
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },
 
@@ -72,6 +88,7 @@ const routes: Routes = [
   //   data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   // },
   // {
+
 ];
 
 @NgModule({

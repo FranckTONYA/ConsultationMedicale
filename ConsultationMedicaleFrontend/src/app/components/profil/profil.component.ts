@@ -23,7 +23,6 @@ export class ProfilComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router, private userService: UtilisateurService) {}
 
   ngOnInit(): void {
-
     // Réagit aux changements d’infos de l'utilisateur couramment connecté
     this.authService.userInfo$.subscribe(info => {
       this.currentUser = info;
@@ -70,7 +69,16 @@ export class ProfilComponent implements OnInit {
   }
 
   goToChangePassword() {
-    this.router.navigate(['/change-password']);
+    Swal.fire({
+      title: 'Confirmez-vous la modification du mot de passe ?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui',
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.router.navigate(['/change-password']);
+      }
+    });
   }
 
 }

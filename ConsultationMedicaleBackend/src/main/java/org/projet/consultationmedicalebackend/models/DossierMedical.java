@@ -1,6 +1,7 @@
 package org.projet.consultationmedicalebackend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class DossierMedical {
 
     @OneToOne
     @JoinColumn(name = "patient_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Patient patient;
 
     public DossierMedical() {

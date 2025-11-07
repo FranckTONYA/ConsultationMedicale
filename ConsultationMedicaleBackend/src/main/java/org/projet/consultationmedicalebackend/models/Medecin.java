@@ -17,15 +17,19 @@ public class Medecin extends Utilisateur {
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations;
 
+    @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Patient> patients;
+
     public Medecin() {
         super();
     }
 
-    public Medecin(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String specialite, String numINAMI, List<Consultation> consultations) {
+    public Medecin(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String specialite, String numINAMI, List<Consultation> consultations, List<Patient> patients) {
         super(nom, prenom, adresse, telephone, email, motDePasse, RoleUtilisateur.MEDECIN);
         this.specialite = specialite;
         this.numINAMI = numINAMI;
         this.consultations = consultations;
+        this.patients = patients;
     }
 
     public String getSpecialite() {
@@ -50,5 +54,13 @@ public class Medecin extends Utilisateur {
 
     public void setConsultations(List<Consultation> consultations) {
         this.consultations = consultations;
+    }
+
+    public List<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
     }
 }

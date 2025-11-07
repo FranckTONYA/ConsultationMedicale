@@ -19,6 +19,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatPaginatorIntl } from '@angular/material/paginator';
@@ -42,6 +44,9 @@ import { ProfilComponent } from './components/profil/profil.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { VerifyCodeComponent } from './components/verify-code/verify-code.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { MedicalFileComponent } from './components/medical-file/medical-file.component';
+import { MedicalFileDetailsComponent } from './components/medical-file-details/medical-file-details.component';
+import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
 
 
 @NgModule({
@@ -61,7 +66,10 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     ProfilComponent,
     ChangePasswordComponent,
     VerifyCodeComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    MedicalFileComponent,
+    MedicalFileDetailsComponent,
+    MedicalFileEditComponent
   ],
   imports: [
     BrowserModule,
@@ -86,6 +94,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     MatButtonToggleModule,
     MatMenuModule,
     MatPaginatorModule,
+    MatProgressBarModule,
     ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [
