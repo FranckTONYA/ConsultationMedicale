@@ -17,6 +17,7 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
   displayedColumns = ['id', 'nom', 'prenom', 'email', 'telephone', 'actions'];
   dataSource = new MatTableDataSource<Administrateur>([]);
   numColumns = 0;
+  isLoading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -35,8 +36,12 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
       next: (data) => {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
+        this.isLoading = false;
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        this.isLoading = false;
+        console.error(err);
+      }
     });
   }
 

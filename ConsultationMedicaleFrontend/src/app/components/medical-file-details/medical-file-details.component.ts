@@ -12,6 +12,7 @@ import { DossierMedicalService } from '../../core/services/dossier-medical.servi
 export class MedicalFileDetailsComponent implements OnInit {
 
   dossier!: DossierMedical;
+  isLoading = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -20,6 +21,12 @@ export class MedicalFileDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
-    this.dossierService.getById(id).subscribe(d => this.dossier = d);
+    this.dossierService.getById(id).subscribe({
+      next: (data) => {
+        this.dossier = data;
+        this.isLoading = false
+      },
+      error: () => this.isLoading = false
+    });
   }
 }

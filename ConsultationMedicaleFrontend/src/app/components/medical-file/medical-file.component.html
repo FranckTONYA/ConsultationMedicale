@@ -1,56 +1,63 @@
-<mat-card>
-
-  <h2>Dossiers Médicaux des Patients</h2>
+<div class="page-container">
+  <h2>Dossiers médicaux des patients</h2>
 
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
-  <table mat-table [dataSource]="dossiers" class="mat-elevation-z3" *ngIf="!isLoading">
+  <div class="toolbar">
+    <!-- Barre de recherche -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher...</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Patient, NISS, groupe sanguin..." />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
 
-    <!-- Patient -->
-    <ng-container matColumnDef="patient">
-      <th mat-header-cell *matHeaderCellDef> Patient </th>
-      <td mat-cell *matCellDef="let d"> {{ d.patient.prenom }} {{ d.patient.nom }} </td>
-    </ng-container>
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <!-- NISS -->
-    <ng-container matColumnDef="niss">
-      <th mat-header-cell *matHeaderCellDef> NISS </th>
-      <td mat-cell *matCellDef="let d"> {{ d.patient.niss }} </td>
-    </ng-container>
+      <!-- Patient -->
+      <ng-container matColumnDef="patient">
+        <th mat-header-cell *matHeaderCellDef> Patient </th>
+        <td mat-cell *matCellDef="let d"> {{ d.patient.prenom }} {{ d.patient.nom }} </td>
+      </ng-container>
 
-    <!-- Groupe sanguin -->
-    <ng-container matColumnDef="groupeSanguin">
-      <th mat-header-cell *matHeaderCellDef> Groupe sanguin </th>
-      <td mat-cell *matCellDef="let d"> {{ d.groupeSanguin }} </td>
-    </ng-container>
+      <!-- NISS -->
+      <ng-container matColumnDef="niss">
+        <th mat-header-cell *matHeaderCellDef> NISS </th>
+        <td mat-cell *matCellDef="let d"> {{ d.patient.niss }} </td>
+      </ng-container>
 
-    <!-- Allergies -->
-    <ng-container matColumnDef="allergies">
-      <th mat-header-cell *matHeaderCellDef> Allergies </th>
-      <td mat-cell *matCellDef="let d"> 
-        <span *ngIf="d.allergies.length; else none">
-          {{ d.allergies.join(', ') }}
-        </span>
-        <ng-template #none>Aucune</ng-template>
-      </td>
-    </ng-container>
+      <!-- Groupe sanguin -->
+      <ng-container matColumnDef="groupeSanguin">
+        <th mat-header-cell *matHeaderCellDef> Groupe sanguin </th>
+        <td mat-cell *matCellDef="let d"> {{ d.groupeSanguin }} </td>
+      </ng-container>
 
-    <!-- Actions -->
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
-      <td mat-cell *matCellDef="let d">
-        <button mat-icon-button color="primary" (click)="voir(d)">
-          <mat-icon>visibility</mat-icon>
-        </button>
+      <!-- Allergies -->
+      <ng-container matColumnDef="allergies">
+        <th mat-header-cell *matHeaderCellDef> Allergies </th>
+        <td mat-cell *matCellDef="let d">
+          {{ d.allergies.length ? d.allergies.join(', ') : 'Aucune' }}
+        </td>
+      </ng-container>
 
-        <button mat-icon-button color="accent" (click)="modifier(d)">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <!-- Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let d">
+          <button mat-icon-button color="primary" (click)="voir(d)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" (click)="modifier(d)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 
-</mat-card>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

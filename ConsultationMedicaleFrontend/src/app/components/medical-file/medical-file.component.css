@@ -1,49 +1,62 @@
 .page-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: auto;
+  padding: 2rem;
 }
 
 h2 {
-  margin-bottom: 20px;
-  font-weight: 600;
-  text-align: center;
+  color: #1976d2;
+  margin-bottom: 1.5rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-field {
+  width: 600px;
+}
+
+.table-container {
+  margin-top: 1rem;
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
-  overflow-x: auto;
-  display: block;
-  border-radius: 8px;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
-.mat-form-field {
-  width: 100%;
-  max-width: 350px;
-  margin-bottom: 15px;
-  display: block;
+th{
+  background-color: #469ef7 !important;
+  color: white !important;
+  font-weight: bold !important; /* Augmente l'épaisseur */
+  font-size: 15px; /* légère augmentation de taille */
+  text-transform: uppercase; /* donne plus de présence visuelle */
 }
 
-button[mat-raised-button] {
-  margin-bottom: 15px;
+button[mat-icon-button] {
+  margin: 0 4px;
 }
 
-/* Boutons d'action */
-.action-btns button {
-  margin-right: 6px;
-}
-
-/* Responsivité */
+/* Responsive */
 @media (max-width: 768px) {
   .page-container {
-    padding: 10px;
+    padding: 1rem;
   }
 
-  table {
-    font-size: 13px;
+  .toolbar {
+    justify-content: center;
   }
 
-  .mat-form-field {
-    max-width: 100%;
+  .search-field {
+    width: 100%;
+  }
+
+  h2 {
+    text-align: center;
   }
 }

@@ -1,5 +1,7 @@
 <div class="page-container">
   <h2>Gestion des Administrateurs</h2>
+  
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
   <div class="toolbar">
     <button mat-raised-button color="primary" (click)="addAdmin()">

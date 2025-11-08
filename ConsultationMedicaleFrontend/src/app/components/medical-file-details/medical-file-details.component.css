@@ -7,11 +7,33 @@
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
-h2.title {
+.title {
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 50px;
   font-weight: 600;
   color: #1976d2;
+}
+
+/* Grille 2 colonnes */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 30px;
+  margin-bottom: 25px;
+}
+
+.field-row {
+  font-size: 1rem;
+}
+
+.field-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.field-value {
+  margin-left: 6px;
+  color: #222;
 }
 
 .section {
@@ -47,38 +69,15 @@ h2.title {
   border: 1px solid #bbdefb;
 }
 
-/* Boutons */
 .action-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 25px;
+  margin-top: 30px;
 }
 
-button[mat-raised-button] {
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-weight: 500;
-}
-
-.field-row {
-  margin-bottom: 12px;
-  font-size: 1rem;
-}
-
-.field-label {
-  font-weight: 600;
-  color: #555;
-}
-
-.field-value {
-  color: #222;
-}
-
-
-/* --- Responsive --- */
 @media (max-width: 768px) {
-  .page-wrapper {
-    padding: 20px;
+  .info-grid {
+    grid-template-columns: 1fr;
   }
 
   .action-buttons {

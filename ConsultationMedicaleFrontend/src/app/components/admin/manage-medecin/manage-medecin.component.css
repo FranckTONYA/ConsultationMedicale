@@ -17,7 +17,7 @@ h2 {
 }
 
 .search-field {
-  width: 300px;
+  width: 600px;
 }
 
 .table-container {
@@ -31,10 +31,12 @@ table {
   background-color: #fff;
 }
 
-.mat-header-cell {
-  background-color: #1976d2;
-  color: white;
-  font-weight: 600;
+th{
+  background-color: #469ef7 !important;
+  color: white !important;
+  font-weight: bold !important; /* Augmente l'épaisseur */
+  font-size: 15px; /* légère augmentation de taille */
+  text-transform: uppercase; /* donne plus de présence visuelle */
 }
 
 button[mat-icon-button] {

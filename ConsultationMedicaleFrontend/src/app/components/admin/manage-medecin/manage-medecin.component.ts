@@ -15,6 +15,7 @@ import { Medecin } from '../../../models/medecin';
 export class ManageMedecinComponent implements OnInit, AfterViewInit {
   displayedColumns = ['id', 'nom', 'prenom', 'specialite', 'numINAMI', 'telephone', 'email', 'actions'];
   dataSource = new MatTableDataSource<Medecin>([]);
+  isLoading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -33,8 +34,12 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
       next: (data) => {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
+        this.isLoading = false;
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        this.isLoading = false;
+        console.error(err);
+      }
     });
   }
 

@@ -1,65 +1,105 @@
-<mat-card *ngIf="form">
-  <h2>Modifier le dossier médical</h2>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 20px;"></mat-progress-bar>
+
+<div class="page-wrapper" *ngIf="form">
+
+  <h2 class="title">Modifier dossier Médical — {{ dossier.patient.prenom }} {{ dossier.patient.nom }} </h2>
 
   <form [formGroup]="form">
 
-    <mat-form-field class="w-full" appearance="outline">
-      <mat-label>Groupe sanguin</mat-label>
-      <input matInput formControlName="groupeSanguin">
-    </mat-form-field>
+    <!-- Groupe sanguin -->
+    <!-- <div class="section">
+      <div class="section-title">Groupe sanguin</div>
+      <mat-form-field appearance="outline">
+        <mat-label>Groupe sanguin</mat-label>
+        <input matInput formControlName="groupeSanguin">
+      </mat-form-field>
+      <div class="field-row">
+        <span class="field-label">NISS :</span>
+        <span class="field-value">{{ dossier.patient.niss }}</span>
+      </div>
+    </div> -->
+      
+    <div class="info-grid">
+      <div class="section-title">Infos de base</div>
+      <div class="field-row">
+        <span class="field-label">NISS :</span>
+        <span class="field-value">{{ dossier.patient.niss }}</span>
+      </div>
 
-    <h3>Allergies</h3>
-    <div formArrayName="allergies">
-      <div *ngFor="let a of allergies.controls; let i = index;">
-        <mat-form-field class="w-full" appearance="outline">
-          <input matInput [formControlName]="i">
+      <mat-form-field appearance="outline">
+        <mat-label>Groupe sanguin</mat-label>
+        <input matInput formControlName="groupeSanguin">
+      </mat-form-field>
+    </div>
+
+    <!-- Allergies -->
+    <div class="section">
+      <div class="section-title">Allergies</div>
+      <div formArrayName="allergies">
+        <div *ngFor="let a of allergies.controls; let i = index" class="dynamic-row">
+          <mat-form-field appearance="outline" class="flex-grow">
+            <input matInput [formControlName]="i">
+          </mat-form-field>
           <button mat-icon-button color="warn" (click)="removeItem(allergies, i)">
             <mat-icon>delete</mat-icon>
           </button>
-        </mat-form-field>
+        </div>
+        <div class="add-row-btn" (click)="addItem(allergies)">+ Ajouter une allergie</div>
       </div>
-      <button mat-button (click)="addItem(allergies)">Ajouter une allergie</button>
     </div>
 
-    <h3>Vaccinations</h3>
-    <div formArrayName="vaccinations">
-      <div *ngFor="let v of vaccinations.controls; let i = index;">
-        <mat-form-field class="w-full" appearance="outline">
-          <input matInput [formControlName]="i">
+    <!-- Vaccinations -->
+    <div class="section">
+      <div class="section-title">Vaccinations</div>
+      <div formArrayName="vaccinations">
+        <div *ngFor="let v of vaccinations.controls; let i = index" class="dynamic-row">
+          <mat-form-field appearance="outline" class="flex-grow">
+            <input matInput [formControlName]="i">
+          </mat-form-field>
           <button mat-icon-button color="warn" (click)="removeItem(vaccinations, i)">
             <mat-icon>delete</mat-icon>
           </button>
-        </mat-form-field>
+        </div>
+        <div class="add-row-btn" (click)="addItem(vaccinations)">+ Ajouter une vaccination</div>
       </div>
-      <button mat-button (click)="addItem(vaccinations)">Ajouter une vaccination</button>
     </div>
 
-    <h3>Antécédents médicaux</h3>
-    <div formArrayName="antecedentsMedicaux">
-      <div *ngFor="let m of antecedentsMedicaux.controls; let i = index;">
-        <mat-form-field class="w-full" appearance="outline">
-          <input matInput [formControlName]="i">
+    <!-- Antécédents -->
+    <div class="section">
+      <div class="section-title">Antécédents médicaux</div>
+      <div formArrayName="antecedentsMedicaux">
+        <div *ngFor="let m of antecedentsMedicaux.controls; let i = index" class="dynamic-row">
+          <mat-form-field appearance="outline" class="flex-grow">
+            <input matInput [formControlName]="i">
+          </mat-form-field>
           <button mat-icon-button color="warn" (click)="removeItem(antecedentsMedicaux, i)">
             <mat-icon>delete</mat-icon>
           </button>
-        </mat-form-field>
+        </div>
+        <div class="add-row-btn" (click)="addItem(antecedentsMedicaux)">+ Ajouter un antécédent</div>
       </div>
-      <button mat-button (click)="addItem(antecedentsMedicaux)">Ajouter un antécédent</button>
     </div>
 
-    <h3>Remarques</h3>
-    <div formArrayName="remarques">
-      <div *ngFor="let r of remarques.controls; let i = index;">
-        <mat-form-field class="w-full" appearance="outline">
-          <textarea matInput [formControlName]="i"></textarea>
+    <!-- Remarques -->
+    <div class="section">
+      <div class="section-title">Remarques</div>
+      <div formArrayName="remarques">
+        <div *ngFor="let r of remarques.controls; let i = index" class="dynamic-row">
+          <mat-form-field appearance="outline" class="flex-grow">
+            <textarea matInput [formControlName]="i"></textarea>
+          </mat-form-field>
           <button mat-icon-button color="warn" (click)="removeItem(remarques, i)">
             <mat-icon>delete</mat-icon>
           </button>
-        </mat-form-field>
+        </div>
+        <div class="add-row-btn" (click)="addItem(remarques)">+ Ajouter une remarque</div>
       </div>
-      <button mat-button (click)="addItem(remarques)">Ajouter une remarque</button>
     </div>
 
-    <button mat-raised-button color="primary" class="w-full mt-3" (click)="save()">Sauvegarder</button>
+    <div class="action-buttons">
+      <button mat-stroked-button color="primary" routerLink="/dossiers-medicaux">Annuler</button>
+      <button mat-raised-button color="accent" (click)="save()">Sauvegarder</button>
+    </div>
   </form>
-</mat-card>
+
+</div>

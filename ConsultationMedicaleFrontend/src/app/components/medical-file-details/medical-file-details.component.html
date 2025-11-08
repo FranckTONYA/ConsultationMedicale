@@ -1,22 +1,64 @@
-<mat-card *ngIf="dossier">
-  <h2>Dossier Médical de {{ dossier.patient.prenom }} {{ dossier.patient.nom }}</h2>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 20px;"></mat-progress-bar>
 
-  <p><strong>NISS :</strong> {{ dossier.patient.niss }}</p>
-  <p><strong>Groupe sanguin :</strong> {{ dossier.groupeSanguin }}</p>
+<div class="page-wrapper" *ngIf="dossier">
 
-  <h3>Allergies</h3>
-  <p>{{ dossier.allergies.length ? dossier.allergies.join(', ') : 'Aucune' }}</p>
+  <h2 class="title">
+    Dossier Médical — {{ dossier.patient.prenom }} {{ dossier.patient.nom }}
+  </h2>
 
-  <h3>Vaccinations</h3>
-  <p>{{ dossier.vaccinations.length ? dossier.vaccinations.join(', ') : 'Aucune' }}</p>
+  <!-- Informations principales -->
+  <div class="info-grid">
+    <div class="field-row">
+      <span class="field-label">NISS :</span>
+      <span class="field-value">{{ dossier.patient.niss }}</span>
+    </div>
 
-  <h3>Antécédents médicaux</h3>
-  <p>{{ dossier.antecedentsMedicaux.length ? dossier.antecedentsMedicaux.join(', ') : 'Aucun' }}</p>
+    <div class="field-row">
+      <span class="field-label">Groupe sanguin :</span>
+      <span class="field-value">{{ dossier.groupeSanguin }}</span>
+    </div>
+  </div>
 
-  <h3>Remarques</h3>
-  <ul>
-    <li *ngFor="let r of dossier.remarques">{{ r }}</li>
-  </ul>
+  <!-- Allergies -->
+  <div class="section">
+    <div class="section-title">Allergies</div>
+    <div class="info-box list-tags">
+      <span *ngIf="!dossier.allergies.length">Aucune</span>
+      <span *ngFor="let a of dossier.allergies" class="tag">{{ a }}</span>
+    </div>
+  </div>
 
-  <button mat-stroked-button color="primary" routerLink="/dossiers-medicaux">Retour</button>
-</mat-card>
+  <!-- Vaccinations -->
+  <div class="section">
+    <div class="section-title">Vaccinations</div>
+    <div class="info-box list-tags">
+      <span *ngIf="!dossier.vaccinations.length">Aucune</span>
+      <span *ngFor="let v of dossier.vaccinations" class="tag">{{ v }}</span>
+    </div>
+  </div>
+
+  <!-- Antécédents -->
+  <div class="section">
+    <div class="section-title">Antécédents Médicaux</div>
+    <div class="info-box list-tags">
+      <span *ngIf="!dossier.antecedentsMedicaux.length">Aucun</span>
+      <span *ngFor="let ant of dossier.antecedentsMedicaux" class="tag">{{ ant }}</span>
+    </div>
+  </div>
+
+  <!-- Remarques -->
+  <div class="section">
+    <div class="section-title">Remarques</div>
+    <div class="info-box list-tags">
+      <span *ngIf="!dossier.remarques.length">Aucune</span>
+      <span *ngFor="let r of dossier.remarques" class="tag">{{ r }}</span>
+    </div>
+  </div>
+
+  <div class="action-buttons">
+    <button mat-stroked-button color="primary" routerLink="/dossiers-medicaux">Retour</button>
+    <button mat-raised-button color="accent" [routerLink]="['/dossier-medical/edit', dossier.id]">
+      Modifier le dossier
+    </button>
+  </div>
+</div>

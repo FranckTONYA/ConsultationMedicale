@@ -41,6 +41,7 @@ export class ProfilComponent implements OnInit {
         this.isLoading = false;
       },
       error: () => {
+        this.isLoading = false;
         Swal.fire('Erreur', "Impossible de charger l'utilisateur", 'error');
       }
     });

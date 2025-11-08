@@ -17,6 +17,7 @@ export class MedicalFileEditComponent implements OnInit {
 
   form!: FormGroup;
   dossier!: DossierMedical;
+  isLoading = true;
 
   constructor(
     private fb: FormBuilder,
@@ -27,9 +28,16 @@ export class MedicalFileEditComponent implements OnInit {
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
-    this.dossierService.getById(id).subscribe(response => {
-      this.dossier = response;
+    this.dossierService.getById(id).subscribe({
+      next: (data) => {
+      this.dossier = data;
       this.buildForm();
+      this.isLoading = false
+    },
+      error: () => {
+        this.isLoading = false
+        Swal.fire('Erreur', 'Erreur lors du chargement', 'error');
+      }
     });
   }
 
