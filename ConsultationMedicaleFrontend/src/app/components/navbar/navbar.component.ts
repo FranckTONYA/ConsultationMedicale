@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit{
       if(info){
         this.user = info;
         this.username = this.user.prenom + " " + this.user.nom;
-        this.role = (this.user && this.user.role) ? this.user.role.toString() : "" ;
+        this.role = (this.user && this.user.role) ? this.user.role : "" ;
       }
     });
   }
@@ -77,4 +77,26 @@ export class NavbarComponent implements OnInit{
     });
   }
 
+  /**
+   * Retourne true si l'utilisateur connecté peut voir la page dossiers-medicaux.
+   * S'assure que isLoggedIn est vrai et que le rôle est ADMINISTRATEUR ou MEDECIN.
+   */
+  canViewDossiers(): boolean {
+    if (!this.isLoggedIn) return false;
+
+    return this.role === RoleUtilisateur.ADMINISTRATEUR || this.role === RoleUtilisateur.MEDECIN;
+
+    // si user.role est l'enum (ou tu veux vérifier sur user):
+    // return this.user && (this.user.role === RoleUtilisateur.ADMINISTRATEUR || this.user.role === RoleUtilisateur.MEDECIN);
+  }
+
+  canViewUsersManage(): boolean {
+    if (!this.isLoggedIn) return false;
+    return this.role === RoleUtilisateur.ADMINISTRATEUR;
+  }
+
+  canViewConsents(): boolean {
+    if (!this.isLoggedIn) return false;
+    return this.role === RoleUtilisateur.PATIENT;
+  }
 }

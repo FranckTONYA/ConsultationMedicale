@@ -20,6 +20,10 @@ export class MedecinService {
     return this.http.get<Medecin>(`${this.apiUrl}/${id}`);
   }
 
+  getByINAMI(inami: number) {
+    return this.http.get<Medecin>(`${this.apiUrl}/find-by-inami/${inami}`);
+  }
+
   getAll() {
     return this.http.get<Medecin[]>(`${this.apiUrl}/getAll`);
   }
@@ -30,5 +34,13 @@ export class MedecinService {
 
   delete(id: number) {
     return this.http.delete(`${this.apiUrl}/delete-by-id/${id}`);
+  }
+
+  assignPatientToMedecin(medecinId: number, patientId: number) {
+    return this.http.post(`${this.apiUrl}/assign-patient`,{medecinId, patientId});
+  }
+  
+  removePatientFromMedecin(medecinId: number, patientId: number) {
+    return this.http.delete(`${this.apiUrl}/remove-patient/${medecinId}${patientId}`);
   }
 }

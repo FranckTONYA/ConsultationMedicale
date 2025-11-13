@@ -2,6 +2,7 @@ package org.projet.consultationmedicalebackend.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,8 +18,14 @@ public class Medecin extends Utilisateur {
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations;
 
-    @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Patient> patients;
+    @ManyToMany
+    @JoinTable(
+            name = "medecin_patient", // nom de la table de jointure
+            joinColumns = @JoinColumn(name = "medecin_id"),  // clé étrangère vers Medecin
+            inverseJoinColumns = @JoinColumn(name = "patient_id") // clé étrangère vers Patient
+    )
+    private List<Patient> patients = new ArrayList<>();
+
 
     public Medecin() {
         super();
@@ -62,5 +69,16 @@ public class Medecin extends Utilisateur {
 
     public void setPatients(List<Patient> patients) {
         this.patients = patients;
+    }
+
+    // Méthodes utilitaires
+    public void addPatient(Patient patient) {
+        patients.add(patient);
+        patient.getMedecins().add(this);
+    }
+
+    public void removePatient(Patient patient) {
+        patients.remove(patient);
+        patient.getMedecins().remove(this);
     }
 }

@@ -8,7 +8,10 @@ public interface MedecinService {
     Medecin save(Medecin medecin);
     List<Medecin> findAll();
     Optional<Medecin> findById(Long id);
+    Optional<Medecin> findByInami(String inami);
     Optional<Medecin> findByEmail(String email);
     List<Medecin> findBySpecialite(String specialite);
     void delete(Long id);
+    void assignPatientToMedecin(Long medecinId, Long patientId);
+    void removePatientFromMedecin(Long medecinId, Long patientId);
 }

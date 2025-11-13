@@ -18,6 +18,7 @@ import { VerifyCodeComponent } from './components/verify-code/verify-code.compon
 import { MedicalFileComponent } from './components/medical-file/medical-file.component';
 import { MedicalFileDetailsComponent } from './components/medical-file-details/medical-file-details.component';
 import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
+import { ConsentManagementComponent } from './components/consent-management/consent-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -46,6 +47,9 @@ const routes: Routes = [
 
   // Dashboard PATIENT
   { path: 'dashboard-patient', component: DashboardPatientComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.PATIENT } 
+  },
+  { path: 'consent-management', component: ConsentManagementComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.PATIENT } 
   },
 

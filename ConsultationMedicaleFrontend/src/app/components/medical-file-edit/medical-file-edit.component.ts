@@ -4,8 +4,6 @@ import { DossierMedical } from '../../models/dossier-medical';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DossierMedicalService } from '../../core/services/dossier-medical.service';
 import Swal from 'sweetalert2';
-import { Patient } from '../../models/patient';
-import { response } from 'express';
 
 @Component({
   selector: 'app-medical-file-edit',
@@ -19,6 +17,8 @@ export class MedicalFileEditComponent implements OnInit {
   dossier!: DossierMedical;
   isLoading = true;
 
+  groupesSanguins = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -30,24 +30,24 @@ export class MedicalFileEditComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id')!;
     this.dossierService.getById(id).subscribe({
       next: (data) => {
-      this.dossier = data;
-      this.buildForm();
-      this.isLoading = false
-    },
+        this.dossier = data;
+        this.buildForm();
+        this.isLoading = false;
+      },
       error: () => {
-        this.isLoading = false
-        Swal.fire('Erreur', 'Erreur lors du chargement', 'error');
+        this.isLoading = false;
+        Swal.fire('Erreur', 'Erreur lors du chargement du dossier', 'error');
       }
     });
   }
 
   buildForm() {
     this.form = this.fb.group({
-      groupeSanguin: this.dossier.groupeSanguin,
-      allergies: this.fb.array(this.dossier.allergies),
-      vaccinations: this.fb.array(this.dossier.vaccinations),
-      antecedentsMedicaux: this.fb.array(this.dossier.antecedentsMedicaux),
-      remarques: this.fb.array(this.dossier.remarques),
+      groupeSanguin: [this.dossier.groupeSanguin],
+      allergies: this.fb.array(this.dossier.allergies || []),
+      vaccinations: this.fb.array(this.dossier.vaccinations || []),
+      antecedentsMedicaux: this.fb.array(this.dossier.antecedentsMedicaux || []),
+      remarques: this.fb.array(this.dossier.remarques || []),
       patient: this.dossier.patient,
     });
   }
@@ -66,14 +66,31 @@ export class MedicalFileEditComponent implements OnInit {
   }
 
   save() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched(); // Force l’affichage des erreurs
+      Swal.fire('Attention', 'Veuillez remplir tous les champs obligatoires.', 'warning');
+      return;
+    }
 
     this.dossierService.update(this.dossier.id!, this.form.value).subscribe({
       next: () => {
-        Swal.fire('Succès', 'Dossier mis à jour', 'success');
+        Swal.fire('Succès', 'Le dossier a bien été mis à jour.', 'success');
         this.router.navigate(['/dossiers-medicaux']);
       },
-      error: () => Swal.fire('Erreur', 'Impossible de sauvegarder', 'error')
+      error: () => Swal.fire('Erreur', 'Impossible de sauvegarder le dossier.', 'error')
+    });
+  }
+
+  cancel() {
+    Swal.fire({
+      title: 'Annuler les modifications ?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui',
+      cancelButtonText:'Non',
+    }).then(result => {
+      if (result.isConfirmed)
+         this.router.navigate(['/dossiers-medicaux']);
     });
   }
 }

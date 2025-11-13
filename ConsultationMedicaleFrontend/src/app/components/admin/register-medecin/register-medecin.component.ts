@@ -43,7 +43,7 @@ export class RegisterMedecinComponent implements OnInit {
         this.medecinId = +id;
         this.loadMedecin(this.medecinId);
 
-        // ✅ En mode édition → retirer les validations mot de passe
+        // En mode édition → retirer les validations mot de passe
         this.registerForm.get('motDePasse')?.clearValidators();
         this.registerForm.get('confirmPassword')?.clearValidators();
         this.registerForm.setValidators(null);
@@ -51,7 +51,7 @@ export class RegisterMedecinComponent implements OnInit {
       }
     });
 
-    // ✅ mise à jour auto de la validation
+    // mise à jour auto de la validation
     this.registerForm.get('motDePasse')?.valueChanges.subscribe(() => {
       this.registerForm.get('confirmPassword')?.updateValueAndValidity();
     });

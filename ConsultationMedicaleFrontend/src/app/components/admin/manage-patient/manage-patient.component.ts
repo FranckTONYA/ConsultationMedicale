@@ -57,6 +57,7 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui',
+      cancelButtonText:'Non',
     }).then(result => {
       if (result.isConfirmed) {
         this.patientService.delete(id).subscribe({

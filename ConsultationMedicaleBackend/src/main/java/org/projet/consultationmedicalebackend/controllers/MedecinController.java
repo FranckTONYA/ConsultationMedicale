@@ -2,9 +2,11 @@ package org.projet.consultationmedicalebackend.controllers;
 
 import org.projet.consultationmedicalebackend.models.Medecin;
 import org.projet.consultationmedicalebackend.services.MedecinService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -33,6 +35,11 @@ public class MedecinController {
         return medecinService.findByEmail(email);
     }
 
+    @GetMapping("find-by-inami/{inami}")
+    public Optional<Medecin> getInami(@PathVariable String inami) {
+        return medecinService.findByInami(inami);
+    }
+
     @GetMapping("/find-by-specialite/{specialite}")
     public List<Medecin> getBySpecialite(@PathVariable String specialite) {
         return medecinService.findBySpecialite(specialite);
@@ -52,5 +59,19 @@ public class MedecinController {
     @DeleteMapping("/delete-by-id/{id}")
     public void delete(@PathVariable Long id) {
         medecinService.delete(id);
+    }
+
+    @PostMapping("/assign-patient")
+    public ResponseEntity<?> assignPatientToMedecin(@RequestBody Map<String, Long> ids) {
+        Long medecinId = ids.get("medecinId");
+        Long patientId = ids.get("patientId");
+        medecinService.assignPatientToMedecin(medecinId, patientId);
+        return ResponseEntity.ok("Patient assigné au médecin");
+    }
+
+    @DeleteMapping("/remove-patient/{medecinId}/{patientId}")
+    public ResponseEntity<?> removePatientFromMedecin(@PathVariable Long medecinId, @PathVariable Long patientId) {
+        medecinService.removePatientFromMedecin(medecinId, patientId);
+        return ResponseEntity.ok("Patient désassigné du médecin");
     }
 }

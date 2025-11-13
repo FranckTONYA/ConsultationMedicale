@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +22,8 @@ public class Patient extends Utilisateur{
     @JsonBackReference
     private DossierMedical dossierMedical;
 
-    @ManyToOne
-    @JoinColumn(name = "medecin_id")
-    private Medecin medecin;
+    @ManyToMany(mappedBy = "patients") // côté inverse de la relation
+    private List<Medecin> medecins = new ArrayList<>();
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations;
@@ -32,12 +32,12 @@ public class Patient extends Utilisateur{
         super();
     }
 
-    public Patient(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String niss, Date dateNaissance, DossierMedical dossierMedical, Medecin medecin, List<Consultation> consultations) {
+    public Patient(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String niss, Date dateNaissance, DossierMedical dossierMedical, List<Medecin> medecins,  List<Consultation> consultations) {
         super(nom, prenom, adresse, telephone, email, motDePasse, RoleUtilisateur.PATIENT);
         this.niss = niss;
         this.dateNaissance = dateNaissance;
         this.dossierMedical = dossierMedical;
-        this.medecin = medecin;
+        this.medecins = medecins;
         this.consultations = consultations;
     }
 
@@ -65,12 +65,12 @@ public class Patient extends Utilisateur{
         this.dossierMedical = dossierMedical;
     }
 
-    public Medecin getMedecin() {
-        return medecin;
+    public List<Medecin> getMedecins() {
+        return medecins;
     }
 
-    public void setMedecin(Medecin medecin) {
-        this.medecin = medecin;
+    public void setMedecins(List<Medecin> medecins) {
+        this.medecins = medecins;
     }
 
     public List<Consultation> getConsultations() {

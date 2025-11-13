@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
-import { PatientService } from './patient.service';
 import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 import { UtilisateurService } from './utilisateur.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
 
 
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object, 
-  private utisateurService: UtilisateurService) {
+  private utisateurService: UtilisateurService, private router: Router) {
     if (isPlatformBrowser(this.platformId)) {
       // Restaure la session si un token existe
       this.restoreSession();
@@ -54,7 +55,13 @@ export class AuthService {
     clearTimeout(this.inactivityTimer);
     this.inactivityTimer = setTimeout(() => {
       this.logout();
-      alert('Vous avez été déconnecté pour cause d’inactivité.');
+      Swal.fire({
+        icon: 'info',
+        title: 'Déconnexion',
+        text: 'Vous avez été déconnecté pour cause d’inactivité.',
+        showConfirmButton: true,
+      });
+      this.router.navigate(['/login']);
     }, this.inactivityLimit);
   }
 
@@ -67,9 +74,9 @@ export class AuthService {
       this.userInfoSubject.next(user);
       this.loggedIn.next(true);
     }
-}
+  }
 
- saveToken(token: string, expiresInMinutes: number = 30) {
+  saveToken(token: string, expiresInMinutes: number = 30) {
     if (isPlatformBrowser(this.platformId)) {
       sessionStorage.setItem('jwtToken', token);
 

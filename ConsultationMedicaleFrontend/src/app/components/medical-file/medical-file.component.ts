@@ -3,7 +3,7 @@ import { DossierMedical } from '../../models/dossier-medical';
 import { DossierMedicalService } from '../../core/services/dossier-medical.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
-import { Utilisateur } from '../../models/utilisateur';
+import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
@@ -53,7 +53,10 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
 
     this.authService.userInfo$.subscribe(info => {
       this.currentUser = info;
-      this.loadDossiers(this.currentUser.id!);
+      if(info.role == RoleUtilisateur.MEDECIN)
+        this.loadDossiers(this.currentUser.id!, false);
+      else
+        this.loadDossiers(this.currentUser.id!, true);
     });
   }
 
@@ -61,28 +64,32 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  loadDossiers(medecinId: number) {
-    // this.dossierService.getByMedecin(medecinId).subscribe({
-    //   next: (data) => {
-    //     this.dataSource.data = data;
-    //     this.isLoading = false;
-    //   },
-    //   error: () => this.isLoading = false
-    // });
+  loadDossiers(medecinId: number, modeAdmin: boolean) {
+    if(modeAdmin){
+      this.dossierService.getAll().subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+          this.isLoading = false;
+        },
+        error: () => this.isLoading = false
+      });
+    } else{
+        this.dossierService.getByMedecin(medecinId).subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+          this.isLoading = false;
+        },
+        error: () => this.isLoading = false
+      });
+    }
 
-    this.dossierService.getAll().subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-        this.isLoading = false;
-        // si un filtre est actif, forcer le recalcul
-        if (this.dataSource.filter) {
-          const f = this.dataSource.filter;
-          this.dataSource.filter = '';              // reset
-          this.dataSource.filter = f;               // ré-apply
-        }
-      },
-      error: () => this.isLoading = false
-    });
+    // si un filtre est actif, forcer le recalcul
+    if (this.dataSource.filter) {
+      const f = this.dataSource.filter;
+      this.dataSource.filter = '';              // reset
+      this.dataSource.filter = f;               // ré-apply
+    }
+
   }
 
   applyFilter(event: Event) {

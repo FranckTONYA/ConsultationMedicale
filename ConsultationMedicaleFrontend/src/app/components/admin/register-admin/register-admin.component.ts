@@ -43,7 +43,7 @@ export class RegisterAdminComponent implements OnInit {
         this.adminId = +id;
         this.loadAdmin(this.adminId);
 
-        // ✅ En mode édition → enlever validation mot de passe
+        // En mode édition → enlever validation mot de passe
         this.registerForm.get('motDePasse')?.clearValidators();
         this.registerForm.get('confirmPassword')?.clearValidators();
         this.registerForm.setValidators(null);
@@ -51,7 +51,7 @@ export class RegisterAdminComponent implements OnInit {
       }
     });
 
-    // ✅ Mise à jour de la validation confirmPassword
+    // Mise à jour de la validation confirmPassword
     this.registerForm.get('motDePasse')?.valueChanges.subscribe(() => {
       this.registerForm.get('confirmPassword')?.updateValueAndValidity();
     });
@@ -104,7 +104,7 @@ export class RegisterAdminComponent implements OnInit {
     delete adminData.confirmPassword;
 
     if (this.isEditMode && this.adminId) {
-      // ✅ Si motDePasse vide → ne pas l’envoyer du tout → conserve l’ancien
+      // Si motDePasse vide → ne pas l’envoyer du tout → conserve l’ancien
       if (!adminData.motDePasse) {
         delete adminData.motDePasse;
       }

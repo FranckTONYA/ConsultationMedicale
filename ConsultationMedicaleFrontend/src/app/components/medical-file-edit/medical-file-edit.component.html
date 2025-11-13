@@ -26,9 +26,17 @@
         <span class="field-value">{{ dossier.patient.niss }}</span>
       </div>
 
-      <mat-form-field appearance="outline">
+      <!-- Groupe sanguin -->
+      <mat-form-field appearance="outline" class="w-full">
         <mat-label>Groupe sanguin</mat-label>
-        <input matInput formControlName="groupeSanguin">
+        <mat-select formControlName="groupeSanguin">
+          <mat-option *ngFor="let g of groupesSanguins" [value]="g">{{ g }}</mat-option>
+        </mat-select>
+
+        <!-- Message d’erreur -->
+        <!-- <mat-error *ngIf="form.get('groupeSanguin')?.hasError('required') && form.get('groupeSanguin')?.touched">
+          Le groupe sanguin est obligatoire.
+        </mat-error> -->
       </mat-form-field>
     </div>
 
@@ -97,8 +105,8 @@
     </div>
 
     <div class="action-buttons">
-      <button mat-stroked-button color="primary" routerLink="/dossiers-medicaux">Annuler</button>
-      <button mat-raised-button color="accent" (click)="save()">Sauvegarder</button>
+      <button mat-stroked-button color="primary" (click)="cancel()" style="color: white;  background-color: #ea3535;">Annuler</button>
+      <button mat-raised-button color="accent" (click)="save()" style="color: white;  background-color: green;">Sauvegarder</button>
     </div>
   </form>
 

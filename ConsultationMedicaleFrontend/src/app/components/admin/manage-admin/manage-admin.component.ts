@@ -60,6 +60,7 @@ deleteAdmin(id: number) {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui',
+      cancelButtonText:'Non',
     }).then(result => {
       if (result.isConfirmed) {
         this.adminService.delete(id).subscribe({

@@ -1,7 +1,9 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
 import org.projet.consultationmedicalebackend.models.Medecin;
+import org.projet.consultationmedicalebackend.models.Patient;
 import org.projet.consultationmedicalebackend.repositories.MedecinRepository;
+import org.projet.consultationmedicalebackend.repositories.PatientRepository;
 import org.projet.consultationmedicalebackend.services.MedecinService;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +14,11 @@ import java.util.Optional;
 public class MedecinServiceImpl implements MedecinService {
 
     private final MedecinRepository medecinRepository;
+    private final PatientRepository patientRepository;
 
-    public MedecinServiceImpl(MedecinRepository medecinRepository) {
+    public MedecinServiceImpl(MedecinRepository medecinRepository, PatientRepository patientRepository ) {
         this.medecinRepository = medecinRepository;
+        this.patientRepository = patientRepository;
     }
 
     @Override
@@ -33,6 +37,11 @@ public class MedecinServiceImpl implements MedecinService {
     }
 
     @Override
+    public Optional<Medecin> findByInami(String inami) {
+        return medecinRepository.findByNumINAMI(inami);
+    }
+
+    @Override
     public Optional<Medecin> findByEmail(String email) {
         return medecinRepository.findByEmail(email);
     }
@@ -45,5 +54,29 @@ public class MedecinServiceImpl implements MedecinService {
     @Override
     public void delete(Long id) {
         medecinRepository.deleteById(id);
+    }
+
+    @Override
+    public void assignPatientToMedecin(Long medecinId, Long patientId) {
+        Medecin medecin = medecinRepository.findById(medecinId)
+                .orElseThrow(() -> new RuntimeException("Médecin non trouvé"));
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient non trouvé"));
+
+        medecin.addPatient(patient);
+        medecinRepository.save(medecin);
+    }
+
+    @Override
+    public void removePatientFromMedecin(Long medecinId, Long patientId) {
+        Medecin medecin = medecinRepository.findById(medecinId)
+                .orElseThrow(() -> new RuntimeException("Médecin non trouvé"));
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient non trouvé"));
+
+        medecin.getPatients().remove(patient);
+        patient.getMedecins().remove(medecin); // pour maintenir la cohérence bidirectionnelle
+        medecinRepository.save(medecin);
+        patientRepository.save(patient); // optionnel mais conseillé
     }
 }

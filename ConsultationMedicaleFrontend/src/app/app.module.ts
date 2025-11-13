@@ -18,8 +18,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatList, MatListModule } from '@angular/material/list';
 
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -47,6 +49,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { MedicalFileComponent } from './components/medical-file/medical-file.component';
 import { MedicalFileDetailsComponent } from './components/medical-file-details/medical-file-details.component';
 import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
+import { ConsentManagementComponent } from './components/consent-management/consent-management.component';
 
 
 @NgModule({
@@ -69,7 +72,8 @@ import { MedicalFileEditComponent } from './components/medical-file-edit/medical
     ResetPasswordComponent,
     MedicalFileComponent,
     MedicalFileDetailsComponent,
-    MedicalFileEditComponent
+    MedicalFileEditComponent,
+    ConsentManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -95,6 +99,9 @@ import { MedicalFileEditComponent } from './components/medical-file-edit/medical
     MatMenuModule,
     MatPaginatorModule,
     MatProgressBarModule,
+    MatOption,
+    MatSelectModule,
+    MatListModule,
     ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [
