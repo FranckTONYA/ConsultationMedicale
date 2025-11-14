@@ -1,6 +1,7 @@
 package org.projet.consultationmedicalebackend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -23,7 +24,8 @@ public class Patient extends Utilisateur{
     private DossierMedical dossierMedical;
 
     @ManyToMany(mappedBy = "patients") // côté inverse de la relation
-    @JsonBackReference(value = "medecin-patients")
+//    @JsonBackReference(value = "medecin-patients")
+    @JsonIgnore
     private List<Medecin> medecins = new ArrayList<>();
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)

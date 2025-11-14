@@ -19,24 +19,28 @@ public class Medecin extends Utilisateur {
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations;
 
+    @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PlanningMedecin> plannings = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(
             name = "medecin_patient", // nom de la table de jointure
             joinColumns = @JoinColumn(name = "medecin_id"),  // clé étrangère vers Medecin
             inverseJoinColumns = @JoinColumn(name = "patient_id") // clé étrangère vers Patient
     )
-    @JsonManagedReference(value = "medecin-patients")
+//    @JsonManagedReference(value = "medecin-patients")
     private List<Patient> patients = new ArrayList<>();
 
     public Medecin() {
         super();
     }
 
-    public Medecin(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String specialite, String numINAMI, List<Consultation> consultations, List<Patient> patients) {
+    public Medecin(String nom, String prenom, String adresse, String telephone, String email, String motDePasse, String specialite, String numINAMI, List<Consultation> consultations, List<PlanningMedecin> plannings, List<Patient> patients) {
         super(nom, prenom, adresse, telephone, email, motDePasse, RoleUtilisateur.MEDECIN);
         this.specialite = specialite;
         this.numINAMI = numINAMI;
         this.consultations = consultations;
+        this.plannings = plannings;
         this.patients = patients;
     }
 
@@ -62,6 +66,14 @@ public class Medecin extends Utilisateur {
 
     public void setConsultations(List<Consultation> consultations) {
         this.consultations = consultations;
+    }
+
+    public List<PlanningMedecin> getPlannings() {
+        return plannings;
+    }
+
+    public void setPlannings(List<PlanningMedecin> plannings) {
+        this.plannings = plannings;
     }
 
     public List<Patient> getPatients() {

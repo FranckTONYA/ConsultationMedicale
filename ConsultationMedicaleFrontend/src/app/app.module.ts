@@ -22,6 +22,7 @@ import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatList, MatListModule } from '@angular/material/list';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -50,6 +51,7 @@ import { MedicalFileComponent } from './components/medical-file/medical-file.com
 import { MedicalFileDetailsComponent } from './components/medical-file-details/medical-file-details.component';
 import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
 import { ConsentManagementComponent } from './components/consent-management/consent-management.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
 
 
 @NgModule({
@@ -73,7 +75,8 @@ import { ConsentManagementComponent } from './components/consent-management/cons
     MedicalFileComponent,
     MedicalFileDetailsComponent,
     MedicalFileEditComponent,
-    ConsentManagementComponent
+    ConsentManagementComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,
@@ -102,6 +105,7 @@ import { ConsentManagementComponent } from './components/consent-management/cons
     MatOption,
     MatSelectModule,
     MatListModule,
+    FullCalendarModule,
     ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [

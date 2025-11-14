@@ -99,4 +99,9 @@ export class NavbarComponent implements OnInit{
     if (!this.isLoggedIn) return false;
     return this.role === RoleUtilisateur.PATIENT;
   }
+
+  canViewSchedule(): boolean {
+    if (!this.isLoggedIn) return false;
+    return this.role === RoleUtilisateur.MEDECIN;
+  }
 }

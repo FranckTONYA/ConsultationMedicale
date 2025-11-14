@@ -28,6 +28,28 @@
         <!-- <a routerLink="/profil" routerLinkActive="active"><mat-icon>account_circle</mat-icon> Profil</a> -->
         <!-- <a routerLink="/contact" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Contact</a> -->
         
+
+        <!-- Plannification Médecin -->
+        <div *ngIf="canViewSchedule()" class="nav-item dropdown" [matMenuTriggerFor]="gestionplanning">
+          <a class="nav-link">
+            <mat-icon>event</mat-icon>
+            Plannification
+            <mat-icon class="arrow-icon">expand_more</mat-icon>
+          </a>
+        </div>
+        <!-- Menu déroulant -->
+        <mat-menu #gestionplanning="matMenu" class="gestion-menu">
+          <button mat-menu-item routerLink="/schedule-medecin">
+            <mat-icon>event</mat-icon>
+            Calendrier
+          </button>
+          <button mat-menu-item routerLink="/consultation-medecin">
+            <mat-icon>medical_services</mat-icon>
+            Consultations
+          </button>
+        </mat-menu>
+
+
         <!-- Gestion Utilisateur -->
         <div *ngIf="canViewUsersManage()" class="nav-item dropdown" [matMenuTriggerFor]="gestionMenu">
           <a class="nav-link">
