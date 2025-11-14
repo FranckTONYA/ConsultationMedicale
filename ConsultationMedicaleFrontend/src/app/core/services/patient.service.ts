@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Patient } from '../../models/patient';
 import { Observable } from 'rxjs';
+import { Medecin } from '../../models/medecin';
 
 @Injectable({ providedIn: 'root' })
 export class PatientService {
@@ -28,5 +29,9 @@ export class PatientService {
 
   delete(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  getMedecinsOfPatient(patientId: number) {
+    return this.http.get<Medecin[]>(`${this.apiUrl}/get-medecins-of-patient/${patientId}`);
   }
 }

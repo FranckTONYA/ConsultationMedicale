@@ -1,5 +1,6 @@
 package org.projet.consultationmedicalebackend.controllers;
 
+import org.projet.consultationmedicalebackend.models.Medecin;
 import org.projet.consultationmedicalebackend.models.Patient;
 import org.projet.consultationmedicalebackend.services.PatientService;
 import org.springframework.web.bind.annotation.*;
@@ -43,4 +44,13 @@ public class PatientController {
     public void delete(@PathVariable Long id) {
         patientService.delete(id);
     }
+
+    @GetMapping("/get-medecins-of-patient/{patientId}")
+    public List<Medecin> getMedecinsOfPatient(@PathVariable Long patientId) {
+        Patient patient = patientService.findById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient non trouvé"));
+
+        return patient.getMedecins();
+    }
+
 }

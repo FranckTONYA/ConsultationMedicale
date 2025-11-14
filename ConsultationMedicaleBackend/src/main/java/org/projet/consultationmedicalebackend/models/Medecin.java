@@ -1,5 +1,6 @@
 package org.projet.consultationmedicalebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class Medecin extends Utilisateur {
             joinColumns = @JoinColumn(name = "medecin_id"),  // clé étrangère vers Medecin
             inverseJoinColumns = @JoinColumn(name = "patient_id") // clé étrangère vers Patient
     )
+    @JsonManagedReference(value = "medecin-patients")
     private List<Patient> patients = new ArrayList<>();
-
 
     public Medecin() {
         super();

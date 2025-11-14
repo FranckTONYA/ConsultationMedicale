@@ -1,6 +1,8 @@
 package org.projet.consultationmedicalebackend.services;
 
 import org.projet.consultationmedicalebackend.models.Medecin;
+import org.projet.consultationmedicalebackend.utils.CustomResponse;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +14,6 @@ public interface MedecinService {
     Optional<Medecin> findByEmail(String email);
     List<Medecin> findBySpecialite(String specialite);
     void delete(Long id);
-    void assignPatientToMedecin(Long medecinId, Long patientId);
-    void removePatientFromMedecin(Long medecinId, Long patientId);
+    CustomResponse assignPatientToMedecin(Long medecinId, Long patientId);
+    CustomResponse removePatientFromMedecin(Long medecinId, Long patientId);
 }

@@ -5,6 +5,7 @@ import org.projet.consultationmedicalebackend.models.Patient;
 import org.projet.consultationmedicalebackend.repositories.MedecinRepository;
 import org.projet.consultationmedicalebackend.repositories.PatientRepository;
 import org.projet.consultationmedicalebackend.services.MedecinService;
+import org.projet.consultationmedicalebackend.utils.CustomResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,26 +58,65 @@ public class MedecinServiceImpl implements MedecinService {
     }
 
     @Override
-    public void assignPatientToMedecin(Long medecinId, Long patientId) {
-        Medecin medecin = medecinRepository.findById(medecinId)
-                .orElseThrow(() -> new RuntimeException("Médecin non trouvé"));
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Patient non trouvé"));
+    public CustomResponse assignPatientToMedecin(Long medecinId, Long patientId) {
+        CustomResponse customResponse = new CustomResponse();
+        Optional<Medecin> medecinOpt = medecinRepository.findById(medecinId);
+        Optional<Patient> patientOpt = patientRepository.findById(patientId);
+        if (medecinOpt.isEmpty()) {
+            customResponse.status = false;
+            customResponse.message = "Médecin non trouvé";
+            return customResponse;
+        }
+        if (patientOpt.isEmpty()) {
+            customResponse.status = false;
+            customResponse.message = "Patient non trouvé";
+            return customResponse;
+        }
+
+        Medecin medecin = medecinOpt.get();
+        Patient patient = patientOpt.get();
+
+        // Vérifier si le patient est déjà assigné
+        if (medecin.getPatients().contains(patient)) {
+            customResponse.status = false;
+            customResponse.message = "Ce Médecin a déjà été autorisé d'accès ";
+            return customResponse;
+        }
 
         medecin.addPatient(patient);
         medecinRepository.save(medecin);
+
+        customResponse.status = true;
+        customResponse.message = "Médecin autorisé avec succès";
+        return customResponse;
     }
 
     @Override
-    public void removePatientFromMedecin(Long medecinId, Long patientId) {
-        Medecin medecin = medecinRepository.findById(medecinId)
-                .orElseThrow(() -> new RuntimeException("Médecin non trouvé"));
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Patient non trouvé"));
+    public CustomResponse removePatientFromMedecin(Long medecinId, Long patientId) {
+        CustomResponse customResponse = new CustomResponse();
+        Optional<Medecin> medecinOpt = medecinRepository.findById(medecinId);
+        Optional<Patient> patientOpt = patientRepository.findById(patientId);
+        if (medecinOpt.isEmpty()) {
+            customResponse.status = false;
+            customResponse.message = "Médecin non trouvé";
+            return customResponse;
+        }
+        if (patientOpt.isEmpty()) {
+            customResponse.status = false;
+            customResponse.message = "Patient non trouvé";
+            return customResponse;
+        }
+
+        Medecin medecin = medecinOpt.get();
+        Patient patient = patientOpt.get();
 
         medecin.getPatients().remove(patient);
         patient.getMedecins().remove(medecin); // pour maintenir la cohérence bidirectionnelle
         medecinRepository.save(medecin);
         patientRepository.save(patient); // optionnel mais conseillé
+
+        customResponse.status = true;
+        customResponse.message = "Médecin désassigné avec succès";
+        return customResponse;
     }
 }

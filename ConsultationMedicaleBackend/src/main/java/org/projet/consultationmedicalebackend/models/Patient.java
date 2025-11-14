@@ -23,6 +23,7 @@ public class Patient extends Utilisateur{
     private DossierMedical dossierMedical;
 
     @ManyToMany(mappedBy = "patients") // côté inverse de la relation
+    @JsonBackReference(value = "medecin-patients")
     private List<Medecin> medecins = new ArrayList<>();
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
