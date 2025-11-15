@@ -29,6 +29,7 @@ public class Patient extends Utilisateur{
     private List<Medecin> medecins = new ArrayList<>();
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Consultation> consultations;
 
     public Patient() {

@@ -1,5 +1,7 @@
 package org.projet.consultationmedicalebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -17,9 +19,12 @@ public class Medecin extends Utilisateur {
     private String numINAMI;
 
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Consultation> consultations;
 
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+    @JsonIgnore
     private List<PlanningMedecin> plannings = new ArrayList<>();
 
     @ManyToMany
@@ -29,6 +34,7 @@ public class Medecin extends Utilisateur {
             inverseJoinColumns = @JoinColumn(name = "patient_id") // clé étrangère vers Patient
     )
 //    @JsonManagedReference(value = "medecin-patients")
+    @JsonIgnore
     private List<Patient> patients = new ArrayList<>();
 
     public Medecin() {

@@ -3,17 +3,15 @@ import { Medecin } from "./medecin";
 export class PlanningMedecin {
   id?: number;
   medecin?: Medecin;
-  start: string;
-  end: string;
+  startDate!: Date;
+  endDate!: Date;
   statut?: StatutPlanning;
 
   constructor() {
-    this.start = "";
-    this.end = "";
   }
 }
 
 export enum StatutPlanning {
-    DISPONIBLE,
-    INDISPONIBLE
+    DISPONIBLE = "DISPONIBLE" ,
+    INDISPONIBLE = "INDISPONIBLE"
 }

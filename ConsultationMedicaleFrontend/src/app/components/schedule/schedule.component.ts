@@ -7,6 +7,7 @@ import { PlanningMedecin, StatutPlanning } from '../../models/planning-medecin';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import frLocale from '@fullcalendar/core/locales/fr';
 
 @Component({
   selector: 'app-schedule',
@@ -39,13 +40,17 @@ export class ScheduleComponent implements OnInit {
   initCalendar(): void {
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-      initialView: 'dayGridMonth',
+      initialView: 'timeGridWeek',  // <-- permet la sélection horaire
+      locale: frLocale,
+      slotMinTime: '06:00:00',      // optionnel : début journée
+      // slotMaxTime: '20:00:00',      // optionnel : fin journée
+      slotDuration: '00:30:00',     // durée d'un créneau
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay'
       },
-      events: [], // vide pour l'instant
+      events: [], 
       selectable: true,
       editable: false,
       height: 'auto',
@@ -56,24 +61,46 @@ export class ScheduleComponent implements OnInit {
     this.calendarReady = true; // maintenant on peut afficher le composant
   }
 
-  loadEvents(): void {
-    if (!this.medecinId) return;
+loadEvents(): void {
+  if (!this.medecinId) return;
 
-    this.planningService.getByMedecin(this.medecinId).subscribe(data => {
-      this.events = data.map(item => ({
+  this.planningService.getByMedecin(this.medecinId).subscribe(data => {
+
+    this.events = data.map(item => {
+      const start = new Date(item.startDate);
+      const end = new Date(item.endDate);
+
+      // Détecte si c'est un événement "allDay" (heure à minuit)
+      const allDay = start.getHours() === 0 && start.getMinutes() === 0 &&
+                     end.getHours() === 0 && end.getMinutes() === 0;
+
+      return {
         id: item.id,
-        title: item.statut === StatutPlanning.DISPONIBLE ? 'Disponible' : 'Indisponible',
-        start: item.start,
-        end: item.end,
-        color: item.statut === StatutPlanning.DISPONIBLE ? '#4CAF50' : '#F44336'
-      }));
-
-      // Mise à jour des events dans le calendrier
-      if (this.calendarOptions) {
-        this.calendarOptions = { ...this.calendarOptions, events: this.events };
-      }
+        title: item.statut === 'DISPONIBLE' ? 'Disponible' : 'Indisponible',
+        start,
+        end,
+        color: item.statut === 'DISPONIBLE' ? '#4CAF50' : '#F44336',
+        allDay
+      };
     });
-  }
+
+      // this.events = data.map(item => ({
+      //   id: item.id,
+      //   title: item.statut === StatutPlanning.DISPONIBLE ? 'Disponible' : 'Indisponible',
+      //   start: new Date(item.startDate),
+      //   end: new Date(item.endDate),
+      //   color: item.statut === StatutPlanning.DISPONIBLE ? '#4CAF50' : '#F44336',
+      //   allDay: false
+      // }));
+
+    // Mise à jour des events dans le calendrier
+    if (this.calendarOptions) {
+      this.calendarOptions = { ...this.calendarOptions, events: this.events };
+    }
+
+  });
+}
+
 
   askSlotType(start: string, end: string) {
     Swal.fire({
@@ -93,13 +120,12 @@ export class ScheduleComponent implements OnInit {
   }
 
   addSlot(start: string, end: string, type: string) {
-    console.log(type);
     const statut = type === 'DISPONIBLE' ? StatutPlanning.DISPONIBLE : StatutPlanning.INDISPONIBLE;
     const slot: PlanningMedecin = new PlanningMedecin();
-    slot.start = start;
-    slot.end = end;
+    slot.startDate = new Date(start);
+    slot.endDate = new Date(end);
     slot.statut = statut;
-    console.log(slot);
+
     this.planningService.add(this.medecinId, slot).subscribe(() => {
       Swal.fire('Ajouté', 'Créneau ajouté avec succès', 'success');
       this.loadEvents();

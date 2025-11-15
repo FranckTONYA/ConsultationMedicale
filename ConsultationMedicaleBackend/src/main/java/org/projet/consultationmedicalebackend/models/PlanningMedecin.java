@@ -1,5 +1,10 @@
 package org.projet.consultationmedicalebackend.models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PLANNING_MEDECIN")
@@ -9,21 +14,23 @@ public class PlanningMedecin {
     private Long id;
 
     @Column(nullable = false)
-    private String startDate;
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    private String endDate;
+    private LocalDateTime endDate;
 
     @Column(nullable = false)
     private StatutPlanning statut;
 
     @ManyToOne
     @JoinColumn(name = "medecin_id")
+//    @JsonBackReference
+    @JsonIgnore
     private Medecin medecin;
 
     public PlanningMedecin() {}
 
-    public PlanningMedecin(String startDate, String endDate, StatutPlanning statut, Medecin medecin) {
+    public PlanningMedecin(LocalDateTime startDate, LocalDateTime endDate, StatutPlanning statut, Medecin medecin) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.statut = statut;
@@ -38,19 +45,19 @@ public class PlanningMedecin {
         this.id = id;
     }
 
-    public String getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
