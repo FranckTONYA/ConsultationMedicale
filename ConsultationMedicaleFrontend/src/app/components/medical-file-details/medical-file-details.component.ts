@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DossierMedical } from '../../models/dossier-medical';
 import { ActivatedRoute } from '@angular/router';
 import { DossierMedicalService } from '../../core/services/dossier-medical.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-medical-file-details',
@@ -26,7 +27,10 @@ export class MedicalFileDetailsComponent implements OnInit {
         this.dossier = data;
         this.isLoading = false
       },
-      error: () => this.isLoading = false
+      error: (err) =>{
+        Swal.fire('Erreur', "Erreur rencontrée lors de l'opération", 'error')
+        this.isLoading = false;
+      } 
     });
   }
 }

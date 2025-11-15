@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-medical-file',
@@ -71,7 +72,10 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
           this.dataSource.data = data;
           this.isLoading = false;
         },
-        error: () => this.isLoading = false
+        error: (err) =>{
+          Swal.fire('Erreur', "Erreur rencontrée lors de l'opération", 'error')
+          this.isLoading = false;
+        } 
       });
     } else{
         this.dossierService.getByMedecin(medecinId).subscribe({

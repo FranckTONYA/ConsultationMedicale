@@ -66,6 +66,7 @@ export class MedicalFileEditComponent implements OnInit {
   }
 
   save() {
+    this.isLoading = true;
     if (this.form.invalid) {
       this.form.markAllAsTouched(); // Force l’affichage des erreurs
       Swal.fire('Attention', 'Veuillez remplir tous les champs obligatoires.', 'warning');
@@ -75,9 +76,13 @@ export class MedicalFileEditComponent implements OnInit {
     this.dossierService.update(this.dossier.id!, this.form.value).subscribe({
       next: () => {
         Swal.fire('Succès', 'Le dossier a bien été mis à jour.', 'success');
+        this.isLoading = false;
         this.router.navigate(['/dossiers-medicaux']);
       },
-      error: () => Swal.fire('Erreur', 'Impossible de sauvegarder le dossier.', 'error')
+      error: (err) =>{
+        Swal.fire('Erreur', "Impossible de sauvegarder le dossier", 'error')
+        this.isLoading = false;
+      } 
     });
   }
 

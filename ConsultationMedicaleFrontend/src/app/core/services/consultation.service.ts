@@ -11,6 +11,11 @@ export class ConsultationService {
 
   constructor(private http: HttpClient) {}
 
+  add(data: Consultation) {
+    return this.http.post(`${this.apiUrl}`, data);
+  }
+
+
   getById(id: number) {
     return this.http.get<Consultation>(`${this.apiUrl}/${id}`);
   }

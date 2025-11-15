@@ -21,6 +21,18 @@
   width: 100%;
 }
 
+.calendar-legend {
+  margin-bottom: 10px;
+}
+
+.legend-item {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+
 /* Responsive pour tablettes et mobiles */
 @media screen and (max-width: 768px) {
   .page-title {

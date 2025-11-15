@@ -1,0 +1,42 @@
+<div class="doctors-container">
+    <h2>Liste des Médecins</h2>
+
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <!-- Barre de recherche -->
+    <div class="search-bar">
+        <mat-form-field appearance="fill" class="search-field">
+        <mat-label>Rechercher un médecin</mat-label>
+        <input matInput [(ngModel)]="searchKey" (keyup)="applyFilter()" placeholder="Nom, prénom, spécialité">
+        <button mat-button *ngIf="searchKey" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
+            <mat-icon>close</mat-icon>
+        </button>
+        </mat-form-field>
+    </div>
+
+    <!-- Cartes médecins -->
+    <div class="cards-container">
+        <mat-card *ngFor="let doctor of paginatedDoctors" class="doctor-card">
+        <mat-card-header>
+            <mat-card-title>{{ doctor.nom }} {{ doctor.prenom }}</mat-card-title>
+            <mat-card-subtitle>{{ doctor.specialite }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>Adresse : {{ doctor.adresse }}</p>
+            <p>Téléphone : {{ doctor.telephone }}</p>
+            <p>Email : {{ doctor.email }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="viewDetails(doctor)">Détails</button>
+            <button mat-raised-button color="accent" (click)="viewAgenda(doctor)">Agenda</button>
+        </mat-card-actions>
+        </mat-card>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator [length]="filteredDoctors.length"
+                    [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10, 20]"
+                    (page)="onPageChange($event)">
+    </mat-paginator>
+</div>

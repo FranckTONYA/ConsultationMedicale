@@ -20,6 +20,8 @@ import { MedicalFileDetailsComponent } from './components/medical-file-details/m
 import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
 import { ConsentManagementComponent } from './components/consent-management/consent-management.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
+import { DoctorsListComponent } from './components/doctors-list/doctors-list.component';
+import { ScheduleConsultComponent } from './components/schedule-consult/schedule-consult.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -51,6 +53,12 @@ const routes: Routes = [
     data: { role: RoleUtilisateur.PATIENT } 
   },
   { path: 'consent-management', component: ConsentManagementComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.PATIENT } 
+  },
+  { path: 'doctors-list', component: DoctorsListComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.PATIENT } 
+  },
+  { path: 'schedule-consult/:id', component: ScheduleConsultComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.PATIENT } 
   },
 

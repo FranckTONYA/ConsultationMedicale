@@ -1,0 +1,16 @@
+<div class="schedule-consult-container">
+  <h2>Planning du médecin</h2>
+
+  <mat-card class="calendar-card">
+    <full-calendar *ngIf="calendarReady" [options]="calendarOptions"></full-calendar>
+  </mat-card>
+
+  <div class="calendar-legend">
+    <div class="legend-item">
+      <span class="color-box available"></span> Disponible
+    </div>
+    <div class="legend-item">
+      <span class="color-box unavailable"></span> Indisponible
+    </div>
+  </div>
+</div>

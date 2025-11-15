@@ -52,6 +52,8 @@ import { MedicalFileDetailsComponent } from './components/medical-file-details/m
 import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
 import { ConsentManagementComponent } from './components/consent-management/consent-management.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
+import { ScheduleConsultComponent } from './components/schedule-consult/schedule-consult.component';
+import { DoctorsListComponent } from './components/doctors-list/doctors-list.component';
 
 
 @NgModule({
@@ -76,7 +78,9 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
     MedicalFileDetailsComponent,
     MedicalFileEditComponent,
     ConsentManagementComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    ScheduleConsultComponent,
+    DoctorsListComponent
   ],
   imports: [
     BrowserModule,
