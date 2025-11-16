@@ -13,7 +13,10 @@ public class Consultation {
     private Long id;
 
     @Column(nullable = false)
-    private LocalDateTime dateHeure;
+    private LocalDateTime debut;
+
+    @Column(nullable = false)
+    private LocalDateTime fin;
 
     private String compteRendu;
 
@@ -36,8 +39,9 @@ public class Consultation {
     public Consultation() {
     }
 
-    public Consultation(LocalDateTime dateHeure, String compteRendu, String lienReunion, StatutRDV statut, Patient patient, Medecin medecin, List<Document> documents) {
-        this.dateHeure = dateHeure;
+    public Consultation(LocalDateTime debut, LocalDateTime fin, String compteRendu, String lienReunion, StatutRDV statut, Patient patient, Medecin medecin, List<Document> documents) {
+        this.debut = debut;
+        this.fin = fin;
         this.compteRendu = compteRendu;
         this.lienReunion = lienReunion;
         this.statut = statut;
@@ -54,12 +58,20 @@ public class Consultation {
         this.id = id;
     }
 
-    public LocalDateTime getDateHeure() {
-        return dateHeure;
+    public LocalDateTime getDebut() {
+        return debut;
     }
 
-    public void setDateHeure(LocalDateTime dateHeure) {
-        this.dateHeure = dateHeure;
+    public void setDebut(LocalDateTime debut) {
+        this.debut = debut;
+    }
+
+    public LocalDateTime getFin() {
+        return fin;
+    }
+
+    public void setFin(LocalDateTime fin) {
+        this.fin = fin;
     }
 
     public String getCompteRendu() {

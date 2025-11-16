@@ -1,14 +1,16 @@
 package org.projet.consultationmedicalebackend.services.impl;
 
-import org.projet.consultationmedicalebackend.models.Consultation;
-import org.projet.consultationmedicalebackend.models.Medecin;
-import org.projet.consultationmedicalebackend.models.Patient;
+import jakarta.transaction.Transactional;
+import org.projet.consultationmedicalebackend.models.*;
 import org.projet.consultationmedicalebackend.repositories.ConsultationRepository;
 import org.projet.consultationmedicalebackend.repositories.MedecinRepository;
 import org.projet.consultationmedicalebackend.repositories.PatientRepository;
+import org.projet.consultationmedicalebackend.repositories.PlanningMedecinRepository;
 import org.projet.consultationmedicalebackend.services.ConsultationService;
+import org.projet.consultationmedicalebackend.utils.CustomResponse;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +20,15 @@ public class ConsultationServiceImpl implements ConsultationService {
     private final ConsultationRepository consultationRepository;
     private final PatientRepository patientRepository;
     private final MedecinRepository medecinRepository;
+    private final PlanningMedecinRepository planningMedecinRepo;
 
-    public ConsultationServiceImpl(ConsultationRepository consultationRepository, PatientRepository patientRepository, MedecinRepository medecinRepository) {
+    public ConsultationServiceImpl(ConsultationRepository consultationRepository,
+                                   PatientRepository patientRepository, MedecinRepository medecinRepository,
+                                   PlanningMedecinRepository planningMedecinRepo) {
         this.consultationRepository = consultationRepository;
         this.patientRepository = patientRepository;
         this.medecinRepository = medecinRepository;
+        this.planningMedecinRepo = planningMedecinRepo;
     }
 
     @Override
@@ -56,4 +62,64 @@ public class ConsultationServiceImpl implements ConsultationService {
         Medecin medecin = medecinRepository.findById(medecinId).orElse(null);
         return consultationRepository.findByMedecin(medecin);
     }
+
+    @Transactional
+    @Override
+    public CustomResponse createConsultation(Consultation consultation) {
+        CustomResponse response = new CustomResponse();
+
+        LocalDateTime debut = consultation.getDebut();
+        LocalDateTime fin = consultation.getFin();
+        Long medecinId = consultation.getMedecin().getId();
+
+        Optional<PlanningMedecin> slotOpt = planningMedecinRepo.findSlotContaining(medecinId, debut, fin, StatutPlanning.DISPONIBLE);
+
+        if (slotOpt.isEmpty()) {
+            response.status = false;
+            response.message = "Créneau non valide";
+            return response;
+        }
+
+        PlanningMedecin slot = slotOpt.get();
+
+        // Supprimer le créneau parent (on va le remplacer par des fragments)
+        planningMedecinRepo.delete(slot);
+
+        // Créneau avant
+        if (slot.getStartDate().isBefore(debut)) {
+            PlanningMedecin before = new PlanningMedecin();
+            before.setMedecin(slot.getMedecin());
+            before.setStartDate(slot.getStartDate());
+            before.setEndDate(debut);
+            before.setStatut(StatutPlanning.DISPONIBLE);
+            planningMedecinRepo.save(before);
+        }
+
+        // Créneau après
+        if (slot.getEndDate().isAfter(fin)) {
+            PlanningMedecin after = new PlanningMedecin();
+            after.setMedecin(slot.getMedecin());
+            after.setStartDate(fin);
+            after.setEndDate(slot.getEndDate());
+            after.setStatut(StatutPlanning.DISPONIBLE);
+            planningMedecinRepo.save(after);
+        }
+
+        // Rendre le créneau demandé indisponible
+        PlanningMedecin reserver = new PlanningMedecin();
+        reserver.setMedecin(slot.getMedecin());
+        reserver.setStartDate(consultation.getDebut());
+        reserver.setEndDate(consultation.getFin());
+        reserver.setStatut(StatutPlanning.INDISPONIBLE);
+        planningMedecinRepo.save(reserver);
+
+        // Le RDV devient son propre créneau réservé
+        consultation.setStatut(StatutRDV.EN_ATTENTE);
+        consultationRepository.save(consultation);
+
+        response.status = true;
+        response.message = "Créneau réservé avec succcé";
+        return response;
+    }
+
 }

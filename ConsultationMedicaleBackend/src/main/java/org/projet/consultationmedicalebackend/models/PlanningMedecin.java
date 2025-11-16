@@ -1,7 +1,5 @@
 package org.projet.consultationmedicalebackend.models;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -78,7 +76,3 @@ public class PlanningMedecin {
     }
 }
 
-enum StatutPlanning {
-    DISPONIBLE,
-    INDISPONIBLE
-}

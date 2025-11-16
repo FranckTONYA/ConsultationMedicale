@@ -4,7 +4,8 @@ import { Patient } from "./patient";
 
 export class Consultation {
     public id?: number;
-    public dateHeure: Date;
+    public debut!: Date | string;
+    public fin!: Date | string;
     public compteRendu: string;
     public lienReunion: string;
     public statut?: StatutRDV;
@@ -13,7 +14,6 @@ export class Consultation {
     public documents: Document[];
     
     constructor(){
-        this.dateHeure = new Date();
         this.compteRendu = "";
         this.lienReunion = "";
         this.patient = new Patient();
@@ -23,9 +23,9 @@ export class Consultation {
 }
 
 export enum StatutRDV {
-    EN_ATTENTE,
-    CONFIRMER,
-    REFUSER,
-    ANNULER,
-    TERMINER
+    EN_ATTENTE = "EN_ATTENTE",
+    CONFIRMER = "CONFIRMER",
+    REFUSER = "REFUSER",
+    ANNULER = "ANNULER",
+    TERMINER = "TERMINER"
 }

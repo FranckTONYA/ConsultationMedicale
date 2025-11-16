@@ -2,11 +2,13 @@ package org.projet.consultationmedicalebackend.controllers;
 
 import org.projet.consultationmedicalebackend.models.Consultation;
 import org.projet.consultationmedicalebackend.services.ConsultationService;
+import org.projet.consultationmedicalebackend.utils.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -17,10 +19,19 @@ public class ConsultationController {
     @Autowired
     private ConsultationService consultationService;
 
+//    @PostMapping
+//    public ResponseEntity<Consultation> creerConsultation(@RequestBody Consultation consultation) {
+//        Consultation nouvelle = consultationService.save(consultation);
+//        return ResponseEntity.ok(nouvelle);
+//    }
+
     @PostMapping
-    public ResponseEntity<Consultation> creerConsultation(@RequestBody Consultation consultation) {
-        Consultation nouvelle = consultationService.save(consultation);
-        return ResponseEntity.ok(nouvelle);
+    public ResponseEntity<?> creerConsultation(@RequestBody Consultation consultation) {
+        CustomResponse response = consultationService.createConsultation(consultation);
+        if (response.status)
+            return ResponseEntity.ok(Map.of("message", response.message));
+        else
+            return ResponseEntity.badRequest().body(Map.of("error", response.message));
     }
 
     @GetMapping("/getAll")

@@ -1,5 +1,8 @@
 <div class="schedule-container">
   <h2 class="page-title">Mon Planning</h2>
+  <h3 class="page-instruction">(Veuillez sélectionner un créneau horaire pour indiquer vos disponibilités ou gérer vos rendez-vous)</h3>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 20px;"></mat-progress-bar>
 
   <mat-card class="calendar-card">
     <full-calendar *ngIf="calendarReady" [options]="calendarOptions"></full-calendar>
@@ -9,4 +12,6 @@
 <div class="calendar-legend">
   <span class="legend-item" style="background-color:#4CAF50"></span> Disponible
   <span class="legend-item" style="background-color:#F44336"></span> Indisponible
+  <span class="legend-item" style="background-color:#2196F3"></span> Rendez-vous en attente
+  <span class="legend-item" style="background-color:#1d8585ff"></span> Rendez-vous confirmé
 </div>

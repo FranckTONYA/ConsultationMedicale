@@ -1,16 +1,15 @@
-<div class="schedule-consult-container">
-  <h2>Planning du médecin</h2>
+<div class="schedule-container">
+  <h2 class="page-title">Planning du médecin {{ medecin.prenom }} {{ medecin.nom }}</h2>
+  <h3 class="page-instruction">(Veuillez selectionner un créneau disponible pour demander un rendez-vous)</h3>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 20px;"></mat-progress-bar>
 
   <mat-card class="calendar-card">
     <full-calendar *ngIf="calendarReady" [options]="calendarOptions"></full-calendar>
   </mat-card>
 
-  <div class="calendar-legend">
-    <div class="legend-item">
-      <span class="color-box available"></span> Disponible
-    </div>
-    <div class="legend-item">
-      <span class="color-box unavailable"></span> Indisponible
-    </div>
-  </div>
+<div class="calendar-legend">
+  <span class="legend-item" style="background-color:#4CAF50"></span> Disponible
+  <span class="legend-item" style="background-color:#F44336"></span> Indisponible
+</div>
 </div>

@@ -25,7 +25,7 @@ export class ConsultationService {
   }
 
   update(id: number, data: any) {
-    return this.http.put<Consultation>(`${this.apiUrl}/${id}`, data);
+    return this.http.put<Consultation>(`${this.apiUrl}/update/${id}`, data);
   }
 
   delete(id: number) {

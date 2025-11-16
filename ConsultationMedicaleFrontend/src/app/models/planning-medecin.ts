@@ -3,8 +3,8 @@ import { Medecin } from "./medecin";
 export class PlanningMedecin {
   id?: number;
   medecin?: Medecin;
-  startDate!: Date;
-  endDate!: Date;
+  startDate!: Date | string;
+  endDate!: Date | string;
   statut?: StatutPlanning;
 
   constructor() {
