@@ -11,10 +11,15 @@ export class ConsultationService {
 
   constructor(private http: HttpClient) {}
 
-  add(data: Consultation) {
+  // Sauvegarder une consultation sans contrôle sur les plages horaire disponibles
+  save(data: Consultation) {
     return this.http.post(`${this.apiUrl}`, data);
   }
 
+  // Créer une nouvelle consultation tout en effectuant certains contrôle nécessaire sur les plages horaire
+  add(data: Consultation) {
+    return this.http.post(`${this.apiUrl}/creer-consultation`, data);
+  }
 
   getById(id: number) {
     return this.http.get<Consultation>(`${this.apiUrl}/${id}`);

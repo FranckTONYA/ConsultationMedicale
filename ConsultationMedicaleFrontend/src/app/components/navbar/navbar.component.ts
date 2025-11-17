@@ -90,22 +90,18 @@ export class NavbarComponent implements OnInit{
     // return this.user && (this.user.role === RoleUtilisateur.ADMINISTRATEUR || this.user.role === RoleUtilisateur.MEDECIN);
   }
 
-  canViewUsersManage(): boolean {
+  canViewByAdmin(): boolean {
     if (!this.isLoggedIn) return false;
     return this.role === RoleUtilisateur.ADMINISTRATEUR;
   }
 
-  canViewConsents(): boolean {
+
+  canViewByPatient(): boolean {
     if (!this.isLoggedIn) return false;
     return this.role === RoleUtilisateur.PATIENT;
   }
 
-  canViewDotors(): boolean {
-    if (!this.isLoggedIn) return false;
-    return this.role === RoleUtilisateur.PATIENT;
-  }
-
-  canViewSchedule(): boolean {
+  canViewByMedecin(): boolean {
     if (!this.isLoggedIn) return false;
     return this.role === RoleUtilisateur.MEDECIN;
   }

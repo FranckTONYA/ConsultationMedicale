@@ -34,6 +34,11 @@ public class PatientController {
         return patientService.findByEmail(email);
     }
 
+    @GetMapping("/find-by-niss/{niss}")
+    public Optional<Patient> getByNISS(@PathVariable String niss) {
+        return patientService.findByNiss(niss);
+    }
+
     @PutMapping("/update/{id}")
     public Patient update(@PathVariable Long id, @RequestBody Patient patient) {
         patient.setId(id);

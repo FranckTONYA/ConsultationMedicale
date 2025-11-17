@@ -19,13 +19,13 @@ public class ConsultationController {
     @Autowired
     private ConsultationService consultationService;
 
-//    @PostMapping
-//    public ResponseEntity<Consultation> creerConsultation(@RequestBody Consultation consultation) {
-//        Consultation nouvelle = consultationService.save(consultation);
-//        return ResponseEntity.ok(nouvelle);
-//    }
-
     @PostMapping
+    public ResponseEntity<Consultation> sauvegarderConsultation(@RequestBody Consultation consultation) {
+        Consultation nouvelle = consultationService.save(consultation);
+        return ResponseEntity.ok(nouvelle);
+    }
+
+    @PostMapping("/creer-consultation")
     public ResponseEntity<?> creerConsultation(@RequestBody Consultation consultation) {
         CustomResponse response = consultationService.createConsultation(consultation);
         if (response.status)

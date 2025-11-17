@@ -35,6 +35,7 @@ export class AuthGuard implements CanActivate {
     // Vérifie si la route a une restriction de rôle
     if(expectedRole){ // Cas d'un seul rôle autorisé
       if (user.role !== expectedRole) {
+        Swal.fire('⛔ Accès refusé ', "Vous n'êtes pas autorisé à accéder à ce service.", 'error');
         console.warn(`⛔ Accès refusé : ${user.role} ne correspond pas au rôle  ${expectedRole}`);
         this.router.navigate(['/login']);
         return false;

@@ -1,0 +1,57 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 20px;"></mat-progress-bar>
+
+<div class="page-wrapper" *ngIf="consultation">
+  <h2 class="title">
+    Consultation — {{ currentUser.role === 'MEDECIN' ? consultation.patient.prenom + ' ' + consultation.patient.nom : consultation.medecin.prenom + ' ' + consultation.medecin.nom }}
+  </h2>
+
+  <div class="info-grid">
+    <div class="field-row" *ngIf="currentUser.role === 'MEDECIN'">
+      <span class="field-label">NISS :</span>
+      <span class="field-value">{{ consultation.patient.niss }}</span>
+    </div>
+
+    <div class="field-row" *ngIf="currentUser.role === 'PATIENT'">
+      <span class="field-label">INAMI :</span>
+      <span class="field-value">{{ consultation.medecin.numINAMI }}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Statut :</span>
+      <span class="field-value">{{ consultation.statut }}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Début :</span>
+      <span class="field-value">{{ consultation.debut | date:'short' }}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Fin :</span>
+      <span class="field-value">{{ consultation.fin | date:'short' }}</span>
+    </div>
+
+    <div class="field-row" *ngIf="currentUser.role === 'PATIENT'">
+      <span class="field-label">Spécialité :</span>
+      <span class="field-value">{{ consultation.medecin.specialite }}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Lien réunion :</span>
+      <span class="field-value">
+        <a *ngIf="consultation.lienReunion" [href]="consultation.lienReunion" target="_blank">Rejoindre</a>
+        <span *ngIf="!consultation.lienReunion">Aucun</span>
+      </span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Compte-rendu :</span>
+      <span class="field-value">{{ consultation.compteRendu }}</span>
+    </div>
+
+  </div>
+
+  <div class="action-buttons">
+    <button mat-stroked-button color="primary" (click)="retour()">Retour</button>
+  </div>
+</div>

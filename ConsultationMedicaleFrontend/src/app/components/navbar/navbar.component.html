@@ -25,15 +25,17 @@
         <a routerLink="/rendezvous" routerLinkActive="active"><mat-icon>event</mat-icon> Rendez-vous</a>
         <a *ngIf="canViewDossiers()" routerLink="/dossiers-medicaux" routerLinkActive="active"><mat-icon>folder</mat-icon> Dossiers médicaux</a>
        
-        <a *ngIf="canViewConsents()" routerLink="/consent-management" routerLinkActive="active"><mat-icon>folder</mat-icon> Consentements</a>
+        <a *ngIf="canViewByPatient()" routerLink="/consent-management" routerLinkActive="active"><mat-icon>folder</mat-icon> Consentements</a>
        
-        <a *ngIf="canViewDotors()" routerLink="/doctors-list" routerLinkActive="active"><mat-icon>folder</mat-icon> Médecins</a>
+        <a *ngIf="canViewByPatient()" routerLink="/doctors-list" routerLinkActive="active"><mat-icon>folder</mat-icon> Médecins</a>
+
+        <a *ngIf="canViewByPatient()" routerLink="/consultation/list" routerLinkActive="active"><mat-icon>medical_services</mat-icon> Consultations</a>
         <!-- <a routerLink="/profil" routerLinkActive="active"><mat-icon>account_circle</mat-icon> Profil</a> -->
         <!-- <a routerLink="/contact" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Contact</a> -->
         
 
         <!-- Plannification Médecin -->
-        <div *ngIf="canViewSchedule()" class="nav-item dropdown" [matMenuTriggerFor]="gestionplanning">
+        <div *ngIf="canViewByMedecin()" class="nav-item dropdown" [matMenuTriggerFor]="gestionplanning">
           <a class="nav-link">
             <mat-icon>event</mat-icon>
             Plannification
@@ -46,15 +48,15 @@
             <mat-icon>event</mat-icon>
             Calendrier
           </button>
-          <button mat-menu-item routerLink="/consultation-medecin">
+          <button mat-menu-item routerLink="/consultation/list">
             <mat-icon>medical_services</mat-icon>
             Consultations
           </button>
         </mat-menu>
 
 
-        <!-- Gestion Utilisateur -->
-        <div *ngIf="canViewUsersManage()" class="nav-item dropdown" [matMenuTriggerFor]="gestionMenu">
+        <!-- Gestion Utilisateur par un administrateur-->
+        <div *ngIf="canViewByAdmin()" class="nav-item dropdown" [matMenuTriggerFor]="gestionMenu">
           <a class="nav-link">
             <mat-icon>group</mat-icon>
             Gestion Utilisateurs

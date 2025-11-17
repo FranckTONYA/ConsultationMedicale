@@ -114,7 +114,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         planningMedecinRepo.save(reserver);
 
         // Le RDV devient son propre créneau réservé
-        consultation.setStatut(StatutRDV.EN_ATTENTE);
+//        consultation.setStatut(StatutRDV.EN_ATTENTE);
         consultationRepository.save(consultation);
 
         response.status = true;

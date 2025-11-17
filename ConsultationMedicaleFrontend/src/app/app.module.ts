@@ -1,4 +1,4 @@
-import { NgModule, importProvidersFrom } from '@angular/core';
+import { LOCALE_ID, NgModule, importProvidersFrom } from '@angular/core';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
@@ -29,6 +29,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getFrenchPaginatorIntl } from './core/i18n/french-paginator-intl';
 
+import localeFr from '@angular/common/locales/fr';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeFr);
+
+
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 import { LoginComponent } from './components/login/login.component';
@@ -54,6 +59,8 @@ import { ConsentManagementComponent } from './components/consent-management/cons
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { ScheduleConsultComponent } from './components/schedule-consult/schedule-consult.component';
 import { DoctorsListComponent } from './components/doctors-list/doctors-list.component';
+import { ConsultationListComponent } from './components/consultation-list/consultation-list.component';
+import { ConsultationDetailsComponent } from './components/consultation-details/consultation-details.component';
 
 
 @NgModule({
@@ -80,7 +87,9 @@ import { DoctorsListComponent } from './components/doctors-list/doctors-list.com
     ConsentManagementComponent,
     ScheduleComponent,
     ScheduleConsultComponent,
-    DoctorsListComponent
+    DoctorsListComponent,
+    ConsultationListComponent,
+    ConsultationDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -116,7 +125,8 @@ import { DoctorsListComponent } from './components/doctors-list/doctors-list.com
     provideHttpClient(withInterceptorsFromDi()),
     // provideClientHydration(withEventReplay())
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-       { provide: MatPaginatorIntl, useValue: getFrenchPaginatorIntl() }
+       { provide: MatPaginatorIntl, useValue: getFrenchPaginatorIntl() },
+        { provide: LOCALE_ID, useValue: 'fr-FR' }
   ],
   bootstrap: [AppComponent]
 })

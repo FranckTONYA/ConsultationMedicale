@@ -78,27 +78,16 @@ export class ScheduleComponent implements OnInit {
       height: 'auto',
       select: (info: any) => this.askSlotType(info.startStr, info.endStr),
       eventClick: (info: any) => this.handleEventClick(info.event),
-      // eventDidMount: (info: any) => {
-      //   if (info.event.extendedProps.patientName) {
-      //     info.el.setAttribute(
-      //       'title',
-      //       `${info.event.extendedProps.patientName} (${info.event.extendedProps.statut})`
-      //     );
-      //   }
-      // }
-
-    eventDidMount: (info: any) => {
-      if (info.event.extendedProps.patientName) {
-        tippy(info.el, {
-          content: `${info.event.extendedProps.patientName} (${info.event.extendedProps.statut})`,
-          placement: 'top',
-          arrow: true,
-          theme: 'light',
-        });
+      eventDidMount: (info: any) => {
+        if (info.event.extendedProps.patientName) {
+          tippy(info.el, {
+            content: `${info.event.extendedProps.patientName} (${info.event.extendedProps.statut})`,
+            placement: 'top',
+            arrow: true,
+            theme: 'light',
+          });
+        }
       }
-    }
-
-
     };
     this.calendarReady = true;
   }
@@ -123,9 +112,11 @@ export class ScheduleComponent implements OnInit {
     if (!this.medecinId) return;
     this.consultationService.getByMedecin(this.medecinId).subscribe({
       next: (data) => {
-        // Affiche uniquement les consultations EN_ATTENTE ou CONFIRMER
+        // Inclure EN_ATTENTE, CONFIRMER et TERMINER
         this.consultations = data.filter(c =>
-          c.statut === StatutRDV.EN_ATTENTE || c.statut === StatutRDV.CONFIRMER
+          c.statut === StatutRDV.EN_ATTENTE ||
+          c.statut === StatutRDV.CONFIRMER ||
+          c.statut === StatutRDV.TERMINER
         );
         this.generateEvents();
       },
@@ -136,8 +127,33 @@ export class ScheduleComponent implements OnInit {
   generateEvents(): void {
     this.events = [];
 
-    // Plannings
+    this.consultations.forEach(c => {
+      let color = '#2196F3'; // EN_ATTENTE bleu
+      if (c.statut === StatutRDV.CONFIRMER) color = '#1d8585ff'; // CONFIRMER vert foncé
+      if (c.statut === StatutRDV.TERMINER) color = '#000000'; // TERMINER noir
+
+      this.events.push({
+        id: `consult-${c.id}`,
+        title: 'RDV',
+        start: new Date(c.debut),
+        end: new Date(c.fin),
+        color: color,
+        allDay: false,
+        extendedProps: {
+          statut: c.statut,
+          patientName: `${c.patient?.nom} ${c.patient?.prenom} ${c.patient?.niss}`
+        }
+      });
+    });
+
     this.plannings.forEach(p => {
+      const hasSameConsult = this.consultations.some(c =>
+        new Date(c.debut).getTime() === new Date(p.startDate).getTime() &&
+        new Date(c.fin).getTime() === new Date(p.endDate).getTime()
+      );
+
+      if (p.statut === StatutPlanning.INDISPONIBLE && hasSameConsult) return;
+
       this.events.push({
         id: p.id,
         title: p.statut === StatutPlanning.DISPONIBLE ? 'Disponible' : 'Indisponible',
@@ -146,22 +162,6 @@ export class ScheduleComponent implements OnInit {
         color: p.statut === StatutPlanning.DISPONIBLE ? '#4CAF50' : '#F44336',
         allDay: false,
         extendedProps: { statut: p.statut }
-      });
-    });
-
-    // Consultations
-    this.consultations.forEach(c => {
-      this.events.push({
-        id: `consult-${c.id}`,
-        title: 'RDV',
-        start: new Date(c.debut),
-        end: new Date(c.fin),
-        color: c.statut === StatutRDV.EN_ATTENTE ? '#2196F3' : '#1d8585ff', // clair = en attente, foncé = confirmé
-        allDay: false,
-        extendedProps: {
-          statut: c.statut,
-          patientName: c.patient?.nom + ' ' + c.patient?.prenom + ' ' + c.patient?.niss
-        }
       });
     });
 
@@ -203,34 +203,36 @@ export class ScheduleComponent implements OnInit {
       if (!consultation) return;
 
       if (consultation.statut === StatutRDV.EN_ATTENTE) {
-        // Proposer confirmer ou refuser
         Swal.fire({
-          title: 'Consultation en attente',
+          title: 'Consultation en attente de confirmation. Voulez-vous ?',
           text: `Patient : ${consultation.patient?.nom} ${consultation.patient?.prenom}`,
           icon: 'question',
           showDenyButton: true,
           showCancelButton: true,
-          confirmButtonText: 'Confirmer',
-          denyButtonText: 'Refuser'
+          confirmButtonText: 'La confirmer',
+          denyButtonText: 'La refuser',
+          cancelButtonText: 'Retour'
         }).then(result => {
           if (result.isConfirmed) this.updateConsultationStatus(consultId, StatutRDV.CONFIRMER);
           else if (result.isDenied) this.updateConsultationStatus(consultId, StatutRDV.ANNULER);
         });
       } else if (consultation.statut === StatutRDV.CONFIRMER) {
-        // Proposer annuler
         Swal.fire({
-          title: 'Annuler la consultation ?',
+          title: 'Consultation confirmée. Voulez-vous ?',
           text: `Patient : ${consultation.patient?.nom} ${consultation.patient?.prenom}`,
-          icon: 'warning',
+          icon: 'question',
+          showDenyButton: true,
           showCancelButton: true,
-          confirmButtonText: 'Oui, annuler'
+          confirmButtonText: 'La terminer',
+          denyButtonText: "L'annuler",
+          cancelButtonText: 'Retour'
         }).then(result => {
-          if (result.isConfirmed) this.updateConsultationStatus(consultId, StatutRDV.ANNULER);
+          if (result.isConfirmed) this.updateConsultationStatus(consultId, StatutRDV.TERMINER);
+          else if (result.isDenied) this.updateConsultationStatus(consultId, StatutRDV.ANNULER);
         });
       }
 
     } else {
-      // C'est un créneau classique
       this.confirmDelete(event.id);
     }
   }
@@ -255,7 +257,6 @@ export class ScheduleComponent implements OnInit {
         this.isLoading = false;
       }
     });
-
   }
 
   confirmDelete(eventId: any) {
@@ -276,5 +277,4 @@ export class ScheduleComponent implements OnInit {
       error: () => { this.isLoading = false; Swal.fire('Erreur', "Erreur lors de la suppression du créneau", 'error'); }
     });
   }
-  
 }

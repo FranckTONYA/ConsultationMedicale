@@ -22,6 +22,8 @@ import { ConsentManagementComponent } from './components/consent-management/cons
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { DoctorsListComponent } from './components/doctors-list/doctors-list.component';
 import { ScheduleConsultComponent } from './components/schedule-consult/schedule-consult.component';
+import { ConsultationListComponent } from './components/consultation-list/consultation-list.component';
+import { ConsultationDetailsComponent } from './components/consultation-details/consultation-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -48,6 +50,19 @@ const routes: Routes = [
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },
 
+  // Consultations
+  { path: 'consultation/details/:id', component: ConsultationDetailsComponent, canActivate: [AuthGuard], 
+    data: { roles: [ RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
+
+  { path: 'consultation/list', component: ConsultationListComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN ]} 
+  },
+
+  { path: 'schedule-consult/:id', component: ScheduleConsultComponent, canActivate: [AuthGuard], 
+    data: { roles:  [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN ] } 
+  },
+
   // Dashboard PATIENT
   { path: 'dashboard-patient', component: DashboardPatientComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.PATIENT } 
@@ -56,9 +71,6 @@ const routes: Routes = [
     data: { role: RoleUtilisateur.PATIENT } 
   },
   { path: 'doctors-list', component: DoctorsListComponent, canActivate: [AuthGuard], 
-    data: { role: RoleUtilisateur.PATIENT } 
-  },
-  { path: 'schedule-consult/:id', component: ScheduleConsultComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.PATIENT } 
   },
 

@@ -1,0 +1,100 @@
+<div class="page-container">
+  <h2>Consultations</h2>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+    <div class="toolbar">
+
+    <!-- À gauche -->
+    <button *ngIf="currentUser.role === 'MEDECIN'"
+            mat-raised-button
+            class="add-btn"
+            (click)="creerConsultation()">
+        <mat-icon>add</mat-icon>
+        Créer consultation
+    </button>
+
+    <!-- À droite -->
+    <div class="filters">
+        <mat-form-field appearance="outline" class="status-select">
+        <mat-label>Statut</mat-label>
+        <mat-select [(value)]="selectedStatus" (selectionChange)="onStatusChange()">
+            <mat-option value="">Tous</mat-option>
+            <mat-option *ngFor="let s of statuses" [value]="s">
+            {{ s }}
+            </mat-option>
+        </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher...</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher..." />
+        <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
+
+    </div>
+
+
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- Colonnes pour médecin -->
+      <ng-container *ngIf="currentUser.role === 'MEDECIN'" matColumnDef="patientNom">
+        <th mat-header-cell *matHeaderCellDef> Patient </th>
+        <td mat-cell *matCellDef="let c"> {{c.patient?.prenom}} {{c.patient?.nom}} </td>
+      </ng-container>
+
+      <ng-container *ngIf="currentUser.role === 'MEDECIN'" matColumnDef="patientNiss">
+        <th mat-header-cell *matHeaderCellDef> NISS </th>
+        <td mat-cell *matCellDef="let c"> {{c.patient?.niss}} </td>
+      </ng-container>
+
+      <!-- Colonnes pour patient -->
+      <ng-container *ngIf="currentUser.role === 'PATIENT'" matColumnDef="medecinNom">
+        <th mat-header-cell *matHeaderCellDef> Médecin </th>
+        <td mat-cell *matCellDef="let c"> {{c.medecin?.prenom}} {{c.medecin?.nom}} </td>
+      </ng-container>
+
+      <ng-container *ngIf="currentUser.role === 'PATIENT'" matColumnDef="medecinInami">
+        <th mat-header-cell *matHeaderCellDef> INAMI </th>
+        <td mat-cell *matCellDef="let c"> {{c.medecin?.numINAMI}} </td>
+      </ng-container>
+
+      <ng-container *ngIf="currentUser.role === 'PATIENT'" matColumnDef="specialite">
+        <th mat-header-cell *matHeaderCellDef> Spécialité </th>
+        <td mat-cell *matCellDef="let c"> {{c.medecin?.specialite}} </td>
+      </ng-container>
+
+      <!-- Dates (en Français via pipe avec locale) -->
+      <ng-container matColumnDef="debut">
+        <th mat-header-cell *matHeaderCellDef> Début </th>
+        <td mat-cell *matCellDef="let c"> {{c.debut | date:'short':'':'fr-FR'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fin">
+        <th mat-header-cell *matHeaderCellDef> Fin </th>
+        <td mat-cell *matCellDef="let c"> {{c.fin | date:'short':'':'fr-FR'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="statut">
+        <th mat-header-cell *matHeaderCellDef> Statut </th>
+        <td mat-cell *matCellDef="let c"> {{c.statut}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let c">
+          <button mat-icon-button color="primary" (click)="voirDetails(c)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
