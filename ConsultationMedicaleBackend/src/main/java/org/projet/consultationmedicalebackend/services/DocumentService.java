@@ -1,6 +1,9 @@
 package org.projet.consultationmedicalebackend.services;
 
+import org.projet.consultationmedicalebackend.models.Consultation;
 import org.projet.consultationmedicalebackend.models.Document;
+import org.projet.consultationmedicalebackend.utils.CustomResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,4 +14,5 @@ public interface DocumentService {
     Optional<Document> findById(Long id);
     List<Document> findByConsultation(Long consultationId);
     void delete(Long id);
+    CustomResponse uploadConsultationFiles(List<MultipartFile> file, Consultation consultation);
 }

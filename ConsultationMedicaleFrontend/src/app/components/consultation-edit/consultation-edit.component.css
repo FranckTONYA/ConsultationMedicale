@@ -1,0 +1,82 @@
+.page-wrapper {
+  max-width: 900px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px 30px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.preview-container {
+  margin-top: 10px;
+}
+
+.preview-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.thumb {
+  height: 60px;
+  border-radius: 4px;
+}
+
+.doc-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px;
+  border-bottom: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+.doc-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fa-file-pdf {
+  font-size: 30px;
+  color: red;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+/* Form field pour prendre toute la largeur */
+mat-form-field.full-width {
+  width: 100%;
+}
+
+/* Textarea elle-même */
+.full-width-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 150px;
+  box-sizing: border-box;
+}
+
+
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

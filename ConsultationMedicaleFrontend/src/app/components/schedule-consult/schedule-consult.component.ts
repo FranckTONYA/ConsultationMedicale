@@ -29,10 +29,11 @@ export class ScheduleConsultComponent implements OnInit {
   calendarReady = false;
   patientId!: number;
   currentUser!: any;
-  userRole!: string;
   medecinId!: any;
   medecin: Medecin = new Medecin();
   plannings!: PlanningMedecin[];
+  isPatient = false;
+  isMedecin = false;
 
   isLoading = true;
 
@@ -67,8 +68,9 @@ export class ScheduleConsultComponent implements OnInit {
       next: (info) => {
         if (info) {
           this.currentUser = info;
-          this.userRole = info.role;
           this.patientId = info.id;
+          this.isPatient = info.role === RoleUtilisateur.PATIENT;
+          this.isMedecin = info.role === RoleUtilisateur.MEDECIN;
           this.initCalendar();
           this.loadEvents();
         }
@@ -164,7 +166,7 @@ export class ScheduleConsultComponent implements OnInit {
       return;
     }
 
-    if (this.userRole === RoleUtilisateur.PATIENT) {
+    if (this.isPatient) {
       // Cas patient : demande classique
       Swal.fire({
         title: 'Confirmer la demande de consultation ?',
@@ -197,7 +199,7 @@ export class ScheduleConsultComponent implements OnInit {
           });
         }
       });
-    } else if (this.userRole === RoleUtilisateur.MEDECIN) {
+    } else if (this.isMedecin) {
       // Cas médecin : saisir NISS du patient
       Swal.fire({
         title: 'Créer une consultation',

@@ -61,6 +61,8 @@ import { ScheduleConsultComponent } from './components/schedule-consult/schedule
 import { DoctorsListComponent } from './components/doctors-list/doctors-list.component';
 import { ConsultationListComponent } from './components/consultation-list/consultation-list.component';
 import { ConsultationDetailsComponent } from './components/consultation-details/consultation-details.component';
+import { ConsultationEditComponent } from './components/consultation-edit/consultation-edit.component';
+import { ConsultDocumentsComponent } from './components/consult-documents/consult-documents.component';
 
 
 @NgModule({
@@ -89,7 +91,9 @@ import { ConsultationDetailsComponent } from './components/consultation-details/
     ScheduleConsultComponent,
     DoctorsListComponent,
     ConsultationListComponent,
-    ConsultationDetailsComponent
+    ConsultationDetailsComponent,
+    ConsultationEditComponent,
+    ConsultDocumentsComponent
   ],
   imports: [
     BrowserModule,

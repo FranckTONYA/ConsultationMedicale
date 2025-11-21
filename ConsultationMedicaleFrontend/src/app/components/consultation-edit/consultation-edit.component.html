@@ -1,0 +1,67 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 10px;"></mat-progress-bar>
+
+<div class="page-wrapper" *ngIf="form">
+
+  <h2 class="title">
+    Modifier consultation — {{ consultation.patient.prenom }} {{ consultation.patient.nom }}
+  </h2>
+
+  <form [formGroup]="form" class="form-container">
+
+    <!-- Statut -->
+    <div class="section">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Statut</mat-label>
+        <mat-select formControlName="statut">
+          <mat-option *ngFor="let s of statuses" [value]="s">{{ s }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Compte rendu -->
+    <div class="section">
+      <mat-form-field appearance="outline" class="w-full full-width">
+        <mat-label>Compte rendu</mat-label>
+        <textarea matInput formControlName="compteRendu" rows="6" class="full-width-textarea"></textarea>
+      </mat-form-field>
+    </div>
+
+
+    <!-- ---------------- DOCUMENTS ---------------- -->
+    <div class="section documents-section">
+      <h3>Documents</h3>
+
+      <!-- Upload -->
+      <input type="file" (change)="onFileSelected($event)" multiple class="w-full mb-2">
+      <div class="preview-container mb-2" *ngIf="selectedFiles.length">
+        <div *ngFor="let f of selectedFiles; let i=index" class="preview-item">
+          <span>{{ f.name }}</span>
+          <button type="button" (click)="removeSelectedFile(i)" mat-icon-button color="warn">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <hr>
+
+  <!-- Documents existants -->
+  <div class="existing-docs mt-2">
+    <div *ngFor="let doc of existingDocs" class="doc-item flex justify-between items-center mb-1">
+      <!-- lien pour ouvrir le document dans une nouvelle fenêtre -->
+      <a href="javascript:void(0)" (click)="viewDocument(doc)" class="doc-link">{{ doc.nom }}</a>
+      <button mat-icon-button color="warn" (click)="deleteDoc(doc.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+</div>
+
+    </div>
+    <!-- ---------------- FIN DOCUMENTS ---------------- -->
+
+    <div class="action-buttons">
+      <button mat-stroked-button color="primary" (click)="cancel()" style="background-color:#ea3535; color:white;">Annuler</button>
+      <button mat-raised-button color="accent" (click)="save()" style="background-color:green; color:white;">Sauvegarder</button>
+    </div>
+    
+  </form>
+</div>

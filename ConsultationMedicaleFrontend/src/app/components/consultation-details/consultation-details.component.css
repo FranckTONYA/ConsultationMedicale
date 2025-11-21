@@ -14,16 +14,12 @@
   color: #1976d2;
 }
 
-/* Grille 2 colonnes pour les infos */
+/* Grille 2 colonnes */
 .info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px 30px;
-  margin-bottom: 25px;
-}
-
-.field-row {
-  font-size: 1rem;
+  margin-bottom: 30px;
 }
 
 .field-label {
@@ -36,11 +32,51 @@
   color: #222;
 }
 
+/* Compte rendu pleine largeur */
+.compte-rendu-block {
+  margin-top: 25px;
+  padding: 15px;
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+
+.compte-rendu-block h3 {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.compte-rendu-text {
+  white-space: pre-line;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Documents */
+.thumb {
+  height: 60px;
+  border-radius: 4px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.fa-file-pdf {
+  font-size: 28px;
+  color: red;
+}
+
+/* Boutons */
 .action-buttons {
   display: flex;
   justify-content: flex-start;
   margin-top: 30px;
-  gap: 12px;
+  gap: 15px;
 }
 
 /* Responsive */
@@ -52,15 +88,4 @@
   .action-buttons {
     flex-direction: column;
   }
-}
-
-/* Lien réunion */
-a {
-  color: #1976d2;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-a:hover {
-  text-decoration: underline;
 }

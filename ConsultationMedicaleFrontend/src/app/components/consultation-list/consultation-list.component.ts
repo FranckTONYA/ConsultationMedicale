@@ -22,6 +22,8 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
   searchText: string = '';
   selectedStatus: string = '';
   statuses: string[] = Object.values(StatutRDV);
+  isPatient = false;
+  isMedecin = false;
   isLoading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -60,11 +62,13 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
     // Récupération de l'utilisateur et chargement
     this.authService.userInfo$.subscribe(user => {
       this.currentUser = user;
+      this.isPatient = user.role === RoleUtilisateur.PATIENT;
+      this.isMedecin = user.role === RoleUtilisateur.MEDECIN;
 
-      if (user.role === RoleUtilisateur.MEDECIN) {
+      if (this.isMedecin) {
         this.displayedColumns = ['patientNom', 'patientNiss', 'debut', 'fin', 'statut', 'actions'];
         this.loadConsultationsMedecin(user.id!);
-      } else if (user.role === RoleUtilisateur.PATIENT) {
+      } else if (this.isPatient) {
         this.displayedColumns = ['medecinNom', 'medecinInami', 'specialite', 'debut', 'fin', 'statut', 'actions'];
         this.loadConsultationsPatient(user.id!);
       } else {
@@ -131,5 +135,9 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
 
   voirDetails(consultation: Consultation) {
     this.router.navigate(['/consultation/details', consultation.id]);
+  }
+
+  editConsultation(consultation: Consultation) {
+    this.router.navigate(['/consultation/edit', consultation.id]);
   }
 }

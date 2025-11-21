@@ -1,5 +1,6 @@
 package org.projet.consultationmedicalebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +21,7 @@ public class Document {
 
     @ManyToOne
     @JoinColumn(name = "consultation_id")
+    @JsonBackReference
     private Consultation consultation;
 
     public Document() {

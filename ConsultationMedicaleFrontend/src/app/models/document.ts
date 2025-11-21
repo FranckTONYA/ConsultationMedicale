@@ -6,7 +6,7 @@ export class Document {
     public id?: number;
     public nom: string;
     public urlStockage: string;
-    public type?: TypeDoc;
+    public type?: TypeDoc | string;
     public consultation: Consultation;
     
     constructor(){
@@ -17,7 +17,7 @@ export class Document {
 }
 
 export enum TypeDoc {
-    PDF,
-    IMAGE,
-    VIDEO
+    PDF = 'PDF',
+    IMAGE ='IMAGE',
+    TEXT = 'IMAGE'
 }

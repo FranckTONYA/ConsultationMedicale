@@ -1,6 +1,12 @@
 <div class="schedule-container">
-  <h2 class="page-title">Planning du médecin {{ medecin.prenom }} {{ medecin.nom }}</h2>
-  <h3 class="page-instruction">(Veuillez selectionner un créneau disponible pour demander un rendez-vous)</h3>
+  <h2 class="page-title">
+    {{ isPatient ?  `Planning du médecin ${ medecin.prenom } ${ medecin.nom }` : 'Plannifier mes rendez-vous de consultation' }}
+   
+  </h2>
+  <h3 class="page-instruction">
+    {{ isPatient ?  '(Veuillez selectionner un créneau disponible pour demander un rendez-vous de consultation)' : 
+    '(Veuillez selectionner un créneau disponible pour plannifier une consultation)' }}
+  </h3>
 
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 20px;"></mat-progress-bar>
 

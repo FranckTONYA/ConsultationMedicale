@@ -24,6 +24,7 @@ import { DoctorsListComponent } from './components/doctors-list/doctors-list.com
 import { ScheduleConsultComponent } from './components/schedule-consult/schedule-consult.component';
 import { ConsultationListComponent } from './components/consultation-list/consultation-list.component';
 import { ConsultationDetailsComponent } from './components/consultation-details/consultation-details.component';
+import { ConsultationEditComponent } from './components/consultation-edit/consultation-edit.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -109,7 +110,12 @@ const routes: Routes = [
   { path: 'dashboard-medecin', component: DashboardMedecinComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.MEDECIN } 
   },
+  
   { path: 'schedule-medecin', component: ScheduleComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.MEDECIN } 
+  },
+
+  { path: 'consultation/edit/:id', component: ConsultationEditComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.MEDECIN } 
   },
   // { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard], 

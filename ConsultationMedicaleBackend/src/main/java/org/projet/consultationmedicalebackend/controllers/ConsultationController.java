@@ -1,11 +1,18 @@
 package org.projet.consultationmedicalebackend.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.projet.consultationmedicalebackend.models.Consultation;
+import org.projet.consultationmedicalebackend.models.Document;
+import org.projet.consultationmedicalebackend.models.StatutRDV;
+import org.projet.consultationmedicalebackend.models.TypeDoc;
 import org.projet.consultationmedicalebackend.services.ConsultationService;
+import org.projet.consultationmedicalebackend.services.DocumentService;
+import org.projet.consultationmedicalebackend.services.FileStorageService;
 import org.projet.consultationmedicalebackend.utils.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +25,12 @@ public class ConsultationController {
 
     @Autowired
     private ConsultationService consultationService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @Autowired
+    private DocumentService documentService;
 
     @PostMapping
     public ResponseEntity<Consultation> sauvegarderConsultation(@RequestBody Consultation consultation) {
@@ -71,4 +84,51 @@ public class ConsultationController {
         consultationService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping(value = "/update-with-files/{id}", consumes = "multipart/form-data")
+    public ResponseEntity<?> updateWithFiles(
+            @PathVariable Long id,
+            @RequestPart("consultation") Consultation consultation,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files
+    ) {
+        try {
+            Consultation consultationFound = consultationService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Consultation non trouvée"));
+
+            // Mise à jour
+            consultationFound.setStatut(consultation.getStatut());
+            consultationFound.setCompteRendu(consultation.getCompteRendu());
+
+            consultationService.save(consultationFound);
+
+            // Sauvegarde des fichiers
+            if (files != null) {
+                for (MultipartFile file : files) {
+
+                    String folder = "/uploads-consultations/";
+                    String generatedName = fileStorageService.saveFile(file, folder);
+
+                    TypeDoc type = file.getContentType().contains("image") ? TypeDoc.IMAGE :
+                            file.getContentType().equals("application/pdf") ? TypeDoc.PDF :
+                                    TypeDoc.TEXT;
+
+                    Document doc = new Document(
+                            generatedName,
+                            type,
+                            generatedName,
+                            consultationFound
+                    );
+
+                    documentService.save(doc);
+                }
+            }
+
+            return ResponseEntity.ok(Map.of("message", "Consultation mise à jour avec succès"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body((Map.of("error", "Erreur serveur :" + e.getMessage())));
+        }
+    }
+
 }

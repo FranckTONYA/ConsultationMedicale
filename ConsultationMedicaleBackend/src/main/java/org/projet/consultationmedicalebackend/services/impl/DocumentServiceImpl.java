@@ -2,11 +2,19 @@ package org.projet.consultationmedicalebackend.services.impl;
 
 import org.projet.consultationmedicalebackend.models.Consultation;
 import org.projet.consultationmedicalebackend.models.Document;
+import org.projet.consultationmedicalebackend.models.TypeDoc;
 import org.projet.consultationmedicalebackend.repositories.ConsultationRepository;
 import org.projet.consultationmedicalebackend.repositories.DocumentRepository;
 import org.projet.consultationmedicalebackend.services.DocumentService;
+import org.projet.consultationmedicalebackend.utils.CustomResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,5 +53,39 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public void delete(Long id) {
         documentRepository.deleteById(id);
+    }
+
+    @Override
+    public CustomResponse uploadConsultationFiles(List<MultipartFile> files, Consultation consultation) {
+        CustomResponse response = new CustomResponse();
+        try {
+            // Créer le dossier si inexistant
+            String uploadDir = System.getProperty("user.dir") + "/uploads-consultations/";
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            List<Document> savedDocuments = new ArrayList<>();
+            for (MultipartFile file : files) {
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                Path dest = uploadPath.resolve(fileName);
+                file.transferTo(dest.toFile());
+
+                TypeDoc type = file.getContentType().contains("image") ? TypeDoc.IMAGE : TypeDoc.PDF;
+                Document doc = new Document(fileName, type, fileName, consultation);
+                savedDocuments.add(documentRepository.save(doc));
+            }
+
+            response.status = true;
+            response.message = "Consultation mise à jour";
+            return response;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.status = false;
+            response.message = e.getMessage();
+            return response;
+        }
     }
 }

@@ -1,37 +1,36 @@
 <div class="page-container">
-  <h2>Consultations</h2>
+  <h2>Mes consultations</h2>
 
-  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar><br>
 
     <div class="toolbar">
+      <!-- À gauche -->
+      <button *ngIf="isMedecin"
+              mat-raised-button
+              class="add-btn"
+              (click)="creerConsultation()">
+          <mat-icon>add</mat-icon>
+          Créer consultation
+      </button>
 
-    <!-- À gauche -->
-    <button *ngIf="currentUser.role === 'MEDECIN'"
-            mat-raised-button
-            class="add-btn"
-            (click)="creerConsultation()">
-        <mat-icon>add</mat-icon>
-        Créer consultation
-    </button>
+      <!-- À droite -->
+      <div class="filters">
+          <mat-form-field appearance="outline" class="status-select">
+          <mat-label>Statut</mat-label>
+          <mat-select [(value)]="selectedStatus" (selectionChange)="onStatusChange()">
+              <mat-option value="">Tous</mat-option>
+              <mat-option *ngFor="let s of statuses" [value]="s">
+              {{ s }}
+              </mat-option>
+          </mat-select>
+          </mat-form-field>
 
-    <!-- À droite -->
-    <div class="filters">
-        <mat-form-field appearance="outline" class="status-select">
-        <mat-label>Statut</mat-label>
-        <mat-select [(value)]="selectedStatus" (selectionChange)="onStatusChange()">
-            <mat-option value="">Tous</mat-option>
-            <mat-option *ngFor="let s of statuses" [value]="s">
-            {{ s }}
-            </mat-option>
-        </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="search-field">
-        <mat-label>Rechercher...</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher..." />
-        <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-    </div>
+          <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Rechercher...</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher..." />
+          <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+      </div>
 
     </div>
 
@@ -40,28 +39,28 @@
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
       <!-- Colonnes pour médecin -->
-      <ng-container *ngIf="currentUser.role === 'MEDECIN'" matColumnDef="patientNom">
+      <ng-container *ngIf="isMedecin" matColumnDef="patientNom">
         <th mat-header-cell *matHeaderCellDef> Patient </th>
         <td mat-cell *matCellDef="let c"> {{c.patient?.prenom}} {{c.patient?.nom}} </td>
       </ng-container>
 
-      <ng-container *ngIf="currentUser.role === 'MEDECIN'" matColumnDef="patientNiss">
+      <ng-container *ngIf="isMedecin" matColumnDef="patientNiss">
         <th mat-header-cell *matHeaderCellDef> NISS </th>
         <td mat-cell *matCellDef="let c"> {{c.patient?.niss}} </td>
       </ng-container>
 
       <!-- Colonnes pour patient -->
-      <ng-container *ngIf="currentUser.role === 'PATIENT'" matColumnDef="medecinNom">
+      <ng-container *ngIf="isPatient" matColumnDef="medecinNom">
         <th mat-header-cell *matHeaderCellDef> Médecin </th>
         <td mat-cell *matCellDef="let c"> {{c.medecin?.prenom}} {{c.medecin?.nom}} </td>
       </ng-container>
 
-      <ng-container *ngIf="currentUser.role === 'PATIENT'" matColumnDef="medecinInami">
+      <ng-container *ngIf="isPatient" matColumnDef="medecinInami">
         <th mat-header-cell *matHeaderCellDef> INAMI </th>
         <td mat-cell *matCellDef="let c"> {{c.medecin?.numINAMI}} </td>
       </ng-container>
 
-      <ng-container *ngIf="currentUser.role === 'PATIENT'" matColumnDef="specialite">
+      <ng-container *ngIf="isPatient" matColumnDef="specialite">
         <th mat-header-cell *matHeaderCellDef> Spécialité </th>
         <td mat-cell *matCellDef="let c"> {{c.medecin?.specialite}} </td>
       </ng-container>
@@ -87,6 +86,9 @@
         <td mat-cell *matCellDef="let c">
           <button mat-icon-button color="primary" (click)="voirDetails(c)">
             <mat-icon>visibility</mat-icon>
+          </button>
+          <button *ngIf="isMedecin" mat-icon-button color="accent" (click)="editConsultation(c)">
+            <mat-icon>edit</mat-icon>
           </button>
         </td>
       </ng-container>

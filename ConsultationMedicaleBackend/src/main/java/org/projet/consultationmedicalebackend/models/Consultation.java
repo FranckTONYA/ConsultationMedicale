@@ -1,5 +1,7 @@
 package org.projet.consultationmedicalebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -13,9 +15,11 @@ public class Consultation {
     private Long id;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime debut;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fin;
 
     private String compteRendu;
@@ -34,6 +38,7 @@ public class Consultation {
     private Medecin medecin;
 
     @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Document> documents;
 
     public Consultation() {

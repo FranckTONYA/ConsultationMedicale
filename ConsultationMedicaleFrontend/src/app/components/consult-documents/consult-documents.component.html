@@ -1,0 +1,44 @@
+<h3>Documents</h3>
+
+<!-- UPLOAD -->
+<div class="upload-zone">
+  <input type="file" (change)="onFileSelected($event)" multiple>
+
+  <div class="preview-container">
+    <div *ngFor="let f of selectedFiles; let i=index" class="preview-item">
+      <span>{{ f.name }}</span>
+      <button (click)="removeSelectedFile(i)">×</button>
+    </div>
+  </div>
+
+  <button class="btn-upload" (click)="upload()" [disabled]="selectedFiles.length === 0">
+    Upload documents
+  </button>
+</div>
+
+<hr>
+
+<!-- EXISTING DOCUMENTS -->
+<h4>Documents existants</h4>
+
+<div class="existing">
+  <div *ngFor="let doc of existingDocs" class="doc-item">
+
+    <a [href]="getFileUrl(doc.urlStockage)" target="_blank">
+      <ng-container [ngSwitch]="doc.type">
+        
+        <img *ngSwitchCase="'IMAGE'" class="thumb" [src]="getFileUrl(doc.urlStockage)">
+        
+        <i *ngSwitchCase="'PDF'" class="fa fa-file-pdf"></i>
+        
+        <i *ngSwitchDefault class="fa fa-file-alt"></i>
+
+      </ng-container>
+
+      {{ doc.nom }}
+    </a>
+
+    <button (click)="deleteDoc(doc.id)">Supprimer</button>
+
+  </div>
+</div>

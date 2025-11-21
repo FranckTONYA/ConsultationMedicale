@@ -44,4 +44,37 @@ export class ConsultationService {
   getByMedecin(idMedecin: number) {
     return this.http.get<Consultation[]>(`${this.apiUrl}/find-by-medecin/${idMedecin}`);
   }
+
+  /* Update + Upload fichiers */
+  updateWithFiles(id: number, consultation: Consultation, files: File[]) {
+    const formData = new FormData();
+
+    formData.append(
+      "consultation",
+      new Blob([JSON.stringify(consultation)], { type: "application/json" })
+    );
+
+    if (files && files.length > 0) {
+      files.forEach(f => formData.append("files", f));
+    }
+
+    return this.http.put(`${this.apiUrl}/update-with-files/${id}`, formData);
+  }
+
+
+  /* Upload standalone */
+  uploadDocuments(id: number, files: File[]) {
+    const formData = new FormData();
+    files.forEach(file => formData.append("files", file));
+    return this.http.post(`${this.apiUrl}/${id}/upload-documents`, formData);
+  }
+
+  /* Gestion documents */
+  getDocumentsByConsultation(id: number) {
+    return this.http.get<any[]>(environment.apiUrl + `/document/find-by-consultation/${id}`);
+  }
+
+  deleteDocument(id: number) {
+    return this.http.delete(environment.apiUrl + `/document/delete-by-id/${id}`);
+  }
 }

@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ConsultationService } from '../../core/services/consultation.service';
 import { Consultation } from '../../models/consultation';
 import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
+import { DocumentService } from '../../core/services/document.service';
 
 @Component({
   selector: 'app-consultation-details',
@@ -22,7 +23,8 @@ export class ConsultationDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private consultationService: ConsultationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private documentService: DocumentService
   ) {}
 
   ngOnInit(): void {
@@ -33,6 +35,18 @@ export class ConsultationDetailsComponent implements OnInit {
       next: data => { this.consultation = data; this.isLoading = false; },
       error: () => { Swal.fire('Erreur','Impossible de charger la consultation','error'); this.isLoading=false; }
     });
+  }
+
+  viewDocument(doc: any) {
+    this.documentService.getFileUrl(doc.urlStockage).then(url => {
+      window.open(url, '_blank');
+    }).catch(() => {
+      Swal.fire('Erreur', 'Impossible de charger le document', 'error');
+    });
+  }
+
+  modifier() {
+    this.router.navigate(['/consultation/edit', this.consultation.id]);
   }
 
   retour() {
