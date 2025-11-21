@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ConsultationServiceImpl implements ConsultationService {
@@ -113,8 +114,11 @@ public class ConsultationServiceImpl implements ConsultationService {
         reserver.setStatut(StatutPlanning.INDISPONIBLE);
         planningMedecinRepo.save(reserver);
 
-        // Le RDV devient son propre créneau réservé
-//        consultation.setStatut(StatutRDV.EN_ATTENTE);
+        // Le Générer un lien Jitsi pour visio
+        String roomKey = UUID.randomUUID().toString().replace("-", "");
+        String jitsiLink = "https://meet.jit.si/" + roomKey;
+        consultation.setLienReunion(jitsiLink);
+
         consultationRepository.save(consultation);
 
         response.status = true;

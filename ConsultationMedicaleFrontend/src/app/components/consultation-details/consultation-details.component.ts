@@ -38,10 +38,13 @@ export class ConsultationDetailsComponent implements OnInit {
   }
 
   viewDocument(doc: any) {
+    this.isLoading = true;
     this.documentService.getFileUrl(doc.urlStockage).then(url => {
       window.open(url, '_blank');
+      this.isLoading = false;
     }).catch(() => {
       Swal.fire('Erreur', 'Impossible de charger le document', 'error');
+      this.isLoading = false;
     });
   }
 

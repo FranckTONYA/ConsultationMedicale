@@ -42,14 +42,19 @@
       <span class="field-value">{{ consultation.medecin.specialite }}</span>
     </div>
 
-    <div class="field-row">
+    <div class="field-row" *ngIf="consultation.statut === 'CONFIRMER'">
       <span class="field-label">Lien réunion :</span>
       <span class="field-value">
-        <a *ngIf="consultation.lienReunion" [href]="consultation.lienReunion" target="_blank">Rejoindre</a>
+        <a *ngIf="consultation.lienReunion"
+          [href]="consultation.lienReunion"
+          target="_blank">
+          Rejoindre la visioconférence
+        </a>
         <span *ngIf="!consultation.lienReunion">Aucun</span>
       </span>
     </div>
   </div>
+
 
   <!-- Compte rendu sur toute la largeur -->
   <div class="compte-rendu-block">
