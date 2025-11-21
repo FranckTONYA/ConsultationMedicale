@@ -38,7 +38,7 @@ public class Consultation {
     private Medecin medecin;
 
     @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference(value = "consultation-documents")
     private List<Document> documents;
 
     public Consultation() {

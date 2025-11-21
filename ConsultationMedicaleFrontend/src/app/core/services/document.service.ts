@@ -10,28 +10,36 @@ export class DocumentService {
 
   constructor(private http: HttpClient) {}
 
-  uploadFiles(consultationId: number, files: File[]) {
-    const formData = new FormData();
-    files.forEach(f => formData.append("files", f));
-
-    return this.http.post(`${this.apiUrl}/upload/${consultationId}`, formData);
-  }
-
   getByConsultation(id: number) {
     return this.http.get<any[]>(`${this.apiUrl}/find-by-consultation/${id}`);
   }
 
-  deleteDoc(id: number) {
-    return this.http.delete(`${this.apiUrl}/delete/${id}`);
+  deleteConsultationFile(id: number) {
+    return this.http.delete(`${this.apiUrl}/delete-consultation-file/${id}`);
   }
 
-  getFileBlob(fileName: string) {
+  deleteOrdonnanceFile(id: number) {
+    return this.http.delete(`${this.apiUrl}/delete-ordonnance-file/${id}`);
+  }
+
+  getConsultationFileBlob(fileName: string) {
     // Retourne le fichier en Blob pour affichage ou téléchargement
-    return this.http.get(`${this.apiUrl}/file/${fileName}`, { responseType: 'blob' });
+    return this.http.get(`${this.apiUrl}/get-consultation-file/${fileName}`, { responseType: 'blob' });
   }
 
-  async getFileUrl(fileName: string): Promise<string> {
-    const blob = await this.getFileBlob(fileName).toPromise();
+  async getConsultationFileUrl(fileName: string): Promise<string> {
+    const blob = await this.getConsultationFileBlob(fileName).toPromise();
     return URL.createObjectURL(blob!);
   }
+
+  getOrdonnanceFileBlob(fileName: string) {
+    // Retourne le fichier en Blob pour affichage ou téléchargement
+    return this.http.get(`${this.apiUrl}/get-ordonnance-file/${fileName}`, { responseType: 'blob' });
+  }
+
+  async getOrdonnanceFileUrl(fileName: string): Promise<string> {
+    const blob = await this.getOrdonnanceFileBlob(fileName).toPromise();
+    return URL.createObjectURL(blob!);
+  }
+
 }

@@ -73,24 +73,6 @@ export class ConsultationEditComponent implements OnInit {
     this.selectedFiles.splice(index, 1);
   }
 
-  // uploadFiles() {
-  //   if (this.selectedFiles.length === 0) return;
-
-  //   this.isLoading = true;
-  //   this.documentService.uploadFiles(this.consultation.id!, this.selectedFiles)
-  //     .subscribe({
-  //       next: () => {
-  //         this.selectedFiles = [];
-  //         this.loadDocuments();
-  //         this.isLoading = false;
-  //       },
-  //       error: () => {
-  //         Swal.fire('Erreur', 'Impossible d\'uploader les documents', 'error');
-  //         this.isLoading = false;
-  //       }
-  //     });
-  // }
-
   deleteDoc(id: number) {
     this.isLoading = true;
     Swal.fire({
@@ -101,7 +83,7 @@ export class ConsultationEditComponent implements OnInit {
       cancelButtonText: 'Non'
     }).then(result => {
       if (result.isConfirmed) {
-        this.documentService.deleteDoc(id).subscribe({
+        this.documentService.deleteConsultationFile(id).subscribe({
           next: () => {
             Swal.fire('Succès', 'Document supprimé avec succès', 'success');
             this.loadDocuments();
@@ -117,12 +99,9 @@ export class ConsultationEditComponent implements OnInit {
     });
   }
 
-  getFileUrl(name: string) {
-    return this.documentService.getFileUrl(name);
-  }
 
   viewDocument(doc: any) {
-    this.documentService.getFileUrl(doc.urlStockage).then(url => {
+    this.documentService.getConsultationFileUrl(doc.urlStockage).then(url => {
       window.open(url, '_blank');
     }).catch(() => {
       Swal.fire('Erreur', 'Impossible de charger le document', 'error');
@@ -150,7 +129,7 @@ export class ConsultationEditComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        Swal.fire('Erreur', 'Impossible de sauvegarder la consultation', 'error');
+        Swal.fire('Erreur', err.error?.error ?? 'Impossible de sauvegarder la consultation', 'error');
         this.isLoading = false;
       }
     });

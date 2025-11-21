@@ -1,0 +1,26 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<div class="page-wrapper" *ngIf="ordonnance">
+  <h2>Ordonnance — {{ ordonnance.patient.prenom }} {{ ordonnance.patient.nom }}</h2>
+
+  <div class="info-grid">
+    <div><strong>Date :</strong> {{ ordonnance.date | date:'shortDate' }}</div>
+    <div><strong>Médecin :</strong> {{ ordonnance.medecin.prenom }} {{ ordonnance.medecin.nom }}</div>
+  </div>
+
+  <div class="compte-rendu-block">
+    <h3>Contenu</h3>
+    <div>{{ ordonnance.contenu || 'Aucun contenu disponible.' }}</div>
+  </div>
+
+  <div class="docs-section" *ngIf="ordonnance.documents.length">
+    <h3>Documents joints</h3>
+    <div *ngFor="let doc of ordonnance.documents" class="doc-item">
+      <a href="javascript:void(0)" (click)="viewDocument(doc)">{{ doc.nom }}</a>
+    </div>
+  </div>
+
+  <div class="action-buttons">
+    <button mat-stroked-button color="primary" (click)="retour()">Retour</button>
+  </div>
+</div>

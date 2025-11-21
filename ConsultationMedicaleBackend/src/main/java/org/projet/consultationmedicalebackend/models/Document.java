@@ -21,8 +21,13 @@ public class Document {
 
     @ManyToOne
     @JoinColumn(name = "consultation_id")
-    @JsonBackReference
+    @JsonBackReference(value = "consultation-documents")
     private Consultation consultation;
+
+    @ManyToOne
+    @JoinColumn(name = "ordonnance_id")
+    @JsonBackReference(value = "ordonnance-documents")
+    private Ordonnance ordonnance;
 
     public Document() {
     }
@@ -32,6 +37,13 @@ public class Document {
         this.type = type;
         this.urlStockage = urlStockage;
         this.consultation = consultation;
+    }
+
+    public Document(String nom, TypeDoc type, String urlStockage, Ordonnance ordonnance) {
+        this.nom = nom;
+        this.type = type;
+        this.urlStockage = urlStockage;
+        this.ordonnance = ordonnance;
     }
 
     public Long getId() {
@@ -72,5 +84,13 @@ public class Document {
 
     public void setConsultation(Consultation consultation) {
         this.consultation = consultation;
+    }
+
+    public Ordonnance getOrdonnance() {
+        return ordonnance;
+    }
+
+    public void setOrdonnance(Ordonnance ordonnance) {
+        this.ordonnance = ordonnance;
     }
 }

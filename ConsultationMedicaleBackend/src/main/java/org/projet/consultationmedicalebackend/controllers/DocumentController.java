@@ -67,8 +67,8 @@ public class DocumentController {
         return documentService.save(document);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteDoc(@PathVariable Long id) {
+    @DeleteMapping("/delete-consultation-file/{id}")
+    public ResponseEntity<?> deleteConsultionFile(@PathVariable Long id) {
         CustomResponse customResponse = new CustomResponse();
         Optional<Document> documentOpt =  documentService.findById(id);
         if(documentOpt.isPresent()) {
@@ -87,30 +87,32 @@ public class DocumentController {
         }
     }
 
-    @PostMapping("/upload/{consultationId}")
-    public ResponseEntity<?> uploadFiles(
-            @PathVariable Long consultationId,
-            @RequestParam("files") List<MultipartFile> files) {
-        Optional<Consultation> consultationOpt = consultationService.findById(consultationId);
-        if (consultationOpt.isEmpty())
-            return  ResponseEntity.badRequest().body(Map.of("error", "Consultation non trouvée"));
+    @DeleteMapping("/delete-ordonnance-file/{id}")
+    public ResponseEntity<?> deleteOrdonnanceFile(@PathVariable Long id) {
+        CustomResponse customResponse = new CustomResponse();
+        Optional<Document> documentOpt =  documentService.findById(id);
+        if(documentOpt.isPresent()) {
+            File f = new File(System.getProperty("user.dir") + "/uploads-ordonnances/" + documentOpt.get().getUrlStockage());
+            if (f.exists()) f.delete();
 
-        CustomResponse customResponse = documentService.uploadConsultationFiles(files, consultationOpt.get());
-        if(customResponse.status)
-            return ResponseEntity.ok(Map.of("message", customResponse.message));
-        else
+            documentService.delete(id);
+            customResponse.status = true;
+            customResponse.message ="Document supprimé";
+            return ResponseEntity.ok( Map.of("message", customResponse.message));
+        }else {
+            customResponse.status = false;
+            customResponse.message = "Document introuvable";
             return ResponseEntity.badRequest().body(Map.of("error", customResponse.message));
+        }
     }
 
-
-    @GetMapping("/file/{fileName}")
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
+    @GetMapping("/get-consultation-file/{fileName}")
+    public ResponseEntity<?> getConsultationFile(@PathVariable String fileName) {
         try {
             File file = new File(System.getProperty("user.dir") + "/uploads-consultations/" + fileName);
 
-            if (!file.exists()) {
-                return ResponseEntity.notFound().build();
-            }
+            if (!file.exists())
+                return ResponseEntity.badRequest().body(Map.of("error", "Document introuvable"));
 
             Path path = file.toPath();
             Resource resource = new UrlResource(path.toUri());
@@ -131,5 +133,31 @@ public class DocumentController {
         }
     }
 
+    @GetMapping("/get-ordonnance-file/{fileName}")
+    public ResponseEntity<?> getOrdonnanceFile(@PathVariable String fileName) {
+        try {
+            File file = new File(System.getProperty("user.dir") + "/uploads-ordonnances/" + fileName);
+
+            if (!file.exists())
+                return ResponseEntity.badRequest().body(Map.of("error", "Document introuvable"));
+
+            Path path = file.toPath();
+            Resource resource = new UrlResource(path.toUri());
+
+            // Détection automatique du type MIME
+            String contentType = Files.probeContentType(path);
+            if (contentType == null) {
+                contentType = "application/octet-stream"; // fallback
+            }
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "inline; filename=\"" + fileName + "\"")
+                    .header("Content-Type", contentType)
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
 }

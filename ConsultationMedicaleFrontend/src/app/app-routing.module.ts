@@ -25,6 +25,9 @@ import { ScheduleConsultComponent } from './components/schedule-consult/schedule
 import { ConsultationListComponent } from './components/consultation-list/consultation-list.component';
 import { ConsultationDetailsComponent } from './components/consultation-details/consultation-details.component';
 import { ConsultationEditComponent } from './components/consultation-edit/consultation-edit.component';
+import { OrdonnanceDetailsComponent } from './components/ordonnance-details/ordonnance-details.component';
+import { OrdonnanceListComponent } from './components/ordonnance-list/ordonnance-list.component';
+import { OrdonnanceEditComponent } from './components/ordonnance-edit/ordonnance-edit.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -62,6 +65,15 @@ const routes: Routes = [
 
   { path: 'schedule-consult/:id', component: ScheduleConsultComponent, canActivate: [AuthGuard], 
     data: { roles:  [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN ] } 
+  },
+
+  // Ordonnances
+  { path: 'ordonnance/details/:id', component: OrdonnanceDetailsComponent, canActivate: [AuthGuard], 
+    data: { roles: [ RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
+
+  { path: 'ordonnance/list', component: OrdonnanceListComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN ]} 
   },
 
   // Dashboard PATIENT
@@ -116,6 +128,14 @@ const routes: Routes = [
   },
 
   { path: 'consultation/edit/:id', component: ConsultationEditComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.MEDECIN } 
+  },
+
+  { path: 'ordonnance/edit/:id', component: OrdonnanceEditComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.MEDECIN } 
+  },
+
+  { path: 'ordonnance/edit', component: OrdonnanceEditComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.MEDECIN } 
   },
   // { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard], 

@@ -1,8 +1,10 @@
 package org.projet.consultationmedicalebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "ORDONNANCE")
@@ -26,14 +28,19 @@ public class Ordonnance {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @OneToMany(mappedBy = "ordonnance", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "ordonnance-documents")
+    private List<Document> documents;
+
     public Ordonnance() {
     }
 
-    public Ordonnance(LocalDate date, String contenu, Medecin medecin, Patient patient) {
+    public Ordonnance(LocalDate date, String contenu, Medecin medecin, Patient patient, List<Document> documents) {
         this.date = date;
         this.contenu = contenu;
         this.medecin = medecin;
         this.patient = patient;
+        this.documents = documents;
     }
 
     public Long getId() {
@@ -74,5 +81,13 @@ public class Ordonnance {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 }

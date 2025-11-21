@@ -78,7 +78,7 @@ export class ScheduleConsultComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        Swal.fire('Erreur', "Impossible de charger le planning", 'error');
+        Swal.fire('Erreur', "Impossible de récupérer le médecin connecté", 'error');
       }
     });
   }

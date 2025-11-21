@@ -1,0 +1,81 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<div class="page-wrapper" *ngIf="form">
+  <h2>{{ isEdit ? "Modifier l'" : 'Créer une' }} ordonnance</h2>
+
+  <form [formGroup]="form" class="form-container">
+
+    <!-- NISS + sélection patient obligatoire -->
+    <div class="section" *ngIf="!isEdit">
+
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>NISS patient</mat-label>
+        <input 
+        matInput 
+        formControlName="patientNiss" 
+        placeholder="Rechercher NISS..." 
+        />
+    </mat-form-field>
+
+    <!-- Suggestion patient -->
+    <div 
+        *ngIf="filteredPatient" 
+        class="suggestion-item"
+        (click)="selectPatient(filteredPatient)"
+    >
+        {{ filteredPatient.prenom }} {{ filteredPatient.nom }} ({{ filteredPatient.niss }})
+    </div>
+
+    <!-- Patient sélectionné -->
+    <div 
+        *ngIf="patient.id" 
+        class="selected-patient mt-3 p-3 bg-blue-50 rounded flex items-center gap-3"
+    >
+        <mat-icon color="primary">person</mat-icon>
+        <div>
+        <strong>{{ patient.prenom }} {{ patient.nom }}</strong><br>
+        <span class="text-gray-600">NISS : {{ patient.niss }}</span>
+        </div>
+    </div>
+
+    </div>
+
+
+    <!-- Champ contenu sur TOUTE la largeur -->
+    <div class="section">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Contenu</mat-label>
+        <textarea matInput formControlName="contenu" rows="6" class="full-width-textarea"></textarea>
+      </mat-form-field>
+    </div>
+
+    <!-- Documents -->
+    <div class="section documents-section">
+      <h3>Documents</h3>
+      <input type="file" (change)="onFileSelected($event)" multiple class="w-full mb-2">
+
+      <div class="preview-container" *ngIf="selectedFiles.length">
+        <div *ngFor="let f of selectedFiles; let i=index" class="preview-item">
+          <span>{{ f.name }}</span>
+          <button type="button" (click)="removeSelectedFile(i)" mat-icon-button color="warn">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="existing-docs mt-2">
+        <div *ngFor="let doc of existingDocs" class="doc-item flex justify-between items-center mb-1">
+          <a href="javascript:void(0)" (click)="viewDocument(doc)">{{ doc.nom }}</a>
+          <button mat-icon-button color="warn" (click)="deleteDoc(doc.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button mat-stroked-button color="primary" (click)="cancel()">Annuler</button>
+      <button mat-raised-button color="accent" (click)="save()">Sauvegarder</button>
+    </div>
+  </form>
+</div>

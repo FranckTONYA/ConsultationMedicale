@@ -62,7 +62,9 @@ import { DoctorsListComponent } from './components/doctors-list/doctors-list.com
 import { ConsultationListComponent } from './components/consultation-list/consultation-list.component';
 import { ConsultationDetailsComponent } from './components/consultation-details/consultation-details.component';
 import { ConsultationEditComponent } from './components/consultation-edit/consultation-edit.component';
-import { ConsultDocumentsComponent } from './components/consult-documents/consult-documents.component';
+import { OrdonnanceListComponent } from './components/ordonnance-list/ordonnance-list.component';
+import { OrdonnanceEditComponent } from './components/ordonnance-edit/ordonnance-edit.component';
+import { OrdonnanceDetailsComponent } from './components/ordonnance-details/ordonnance-details.component';
 
 
 @NgModule({
@@ -93,7 +95,9 @@ import { ConsultDocumentsComponent } from './components/consult-documents/consul
     ConsultationListComponent,
     ConsultationDetailsComponent,
     ConsultationEditComponent,
-    ConsultDocumentsComponent
+    OrdonnanceListComponent,
+    OrdonnanceEditComponent,
+    OrdonnanceDetailsComponent,
   ],
   imports: [
     BrowserModule,

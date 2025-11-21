@@ -39,7 +39,7 @@ export class ConsultationDetailsComponent implements OnInit {
 
   viewDocument(doc: any) {
     this.isLoading = true;
-    this.documentService.getFileUrl(doc.urlStockage).then(url => {
+    this.documentService.getConsultationFileUrl(doc.urlStockage).then(url => {
       window.open(url, '_blank');
       this.isLoading = false;
     }).catch(() => {

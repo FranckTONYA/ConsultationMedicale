@@ -105,12 +105,18 @@ public class ConsultationController {
             if (files != null) {
                 for (MultipartFile file : files) {
 
-                    String folder = "/uploads-consultations/";
-                    String generatedName = fileStorageService.saveFile(file, folder);
+                    if (file.isEmpty()) continue;
 
-                    TypeDoc type = file.getContentType().contains("image") ? TypeDoc.IMAGE :
-                            file.getContentType().equals("application/pdf") ? TypeDoc.PDF :
-                                    TypeDoc.TEXT;
+                    String folder = "/uploads-consultations/";
+
+                    CustomResponse response = fileStorageService.saveFile(file, folder);
+
+                    if(!response.status)
+                        return ResponseEntity.badRequest().body(Map.of("error", response.message));
+
+                    String generatedName = response.message;
+
+                    TypeDoc type = fileStorageService.detectFileType(file);
 
                     Document doc = new Document(
                             generatedName,
@@ -118,7 +124,6 @@ public class ConsultationController {
                             generatedName,
                             consultationFound
                     );
-
                     documentService.save(doc);
                 }
             }

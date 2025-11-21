@@ -1,0 +1,75 @@
+.page-wrapper {
+  max-width: 900px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px 30px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+h2.title {
+  text-align: center;
+  margin-bottom: 50px;
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 30px;
+  margin-bottom: 30px;
+}
+
+.field-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.field-value {
+  margin-left: 6px;
+  color: #222;
+}
+
+.compte-rendu-block {
+  margin-top: 25px;
+  padding: 15px;
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+
+.compte-rendu-block h3 {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.docs-section {
+  margin-top: 20px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}

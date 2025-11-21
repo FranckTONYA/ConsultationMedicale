@@ -77,24 +77,10 @@ export class NavbarComponent implements OnInit{
     });
   }
 
-  /**
-   * Retourne true si l'utilisateur connecté peut voir la page dossiers-medicaux.
-   * S'assure que isLoggedIn est vrai et que le rôle est ADMINISTRATEUR ou MEDECIN.
-   */
-  canViewDossiers(): boolean {
-    if (!this.isLoggedIn) return false;
-
-    return this.role === RoleUtilisateur.ADMINISTRATEUR || this.role === RoleUtilisateur.MEDECIN;
-
-    // si user.role est l'enum (ou tu veux vérifier sur user):
-    // return this.user && (this.user.role === RoleUtilisateur.ADMINISTRATEUR || this.user.role === RoleUtilisateur.MEDECIN);
-  }
-
   canViewByAdmin(): boolean {
     if (!this.isLoggedIn) return false;
     return this.role === RoleUtilisateur.ADMINISTRATEUR;
   }
-
 
   canViewByPatient(): boolean {
     if (!this.isLoggedIn) return false;
@@ -104,5 +90,25 @@ export class NavbarComponent implements OnInit{
   canViewByMedecin(): boolean {
     if (!this.isLoggedIn) return false;
     return this.role === RoleUtilisateur.MEDECIN;
+  }
+
+  /**
+   * Retourne true si l'utilisateur connecté peut voir la page
+   * S'assure que isLoggedIn est vrai et que le rôle est ADMINISTRATEUR ou MEDECIN.
+   */
+  canViewByAdminAndMedecin(): boolean {
+    if (!this.isLoggedIn) return false;
+    return this.role === RoleUtilisateur.ADMINISTRATEUR || this.role === RoleUtilisateur.MEDECIN;
+
+  }
+
+  /**
+   * Retourne true si l'utilisateur connecté peut voir la page
+   * S'assure que isLoggedIn est vrai et que le rôle est MEDECIN ou PATIENT.
+   */
+  canViewByMedecinAndPatient(): boolean {
+    if (!this.isLoggedIn) return false;
+    return this.role === RoleUtilisateur.MEDECIN || this.role === RoleUtilisateur.PATIENT;
+
   }
 }
