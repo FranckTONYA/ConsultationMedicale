@@ -84,7 +84,7 @@ export class DoctorsListComponent implements OnInit {
   }
 
   viewDetails(doctor: Medecin) {
-    this.router.navigate(['/doctor-details', doctor.id]);
+    this.router.navigate(['/user-details', doctor.id], { state: { role: doctor.role }});
   }
 
   viewAgenda(doctor: Medecin) {

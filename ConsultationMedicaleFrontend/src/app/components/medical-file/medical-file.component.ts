@@ -28,6 +28,7 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<DossierMedical>([]);
   isLoading = true;
   currentUser = new Utilisateur();
+  RoleUtilisateur = RoleUtilisateur;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -114,5 +115,12 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
 
   modifier(dossier: DossierMedical) {
     this.router.navigate(['/dossier-medical/edit', dossier.id]);
+  }
+
+  goToUser(userId: number, role: RoleUtilisateur) {
+    this.router.navigate(
+      ['/user-details', userId],
+      { state: { role } }
+    );
   }
 }

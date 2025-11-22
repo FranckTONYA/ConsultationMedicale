@@ -5,6 +5,7 @@
 h2 {
   color: #1976d2;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .toolbar {
@@ -36,6 +37,17 @@ th{
   font-weight: bold !important; /* Augmente l'épaisseur */
   font-size: 15px; /* légère augmentation de taille */
   text-transform: uppercase; /* donne plus de présence visuelle */
+}
+
+.user-link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.user-link:hover {
+  text-decoration: none;
 }
 
 button[mat-icon-button] {

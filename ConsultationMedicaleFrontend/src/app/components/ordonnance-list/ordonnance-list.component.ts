@@ -22,6 +22,7 @@ export class OrdonnanceListComponent implements OnInit, AfterViewInit {
   isPatient = false;
   isMedecin = false;
   isLoading = true;
+  RoleUtilisateur = RoleUtilisateur;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -145,5 +146,12 @@ export class OrdonnanceListComponent implements OnInit, AfterViewInit {
         });
       }
     });
+  }
+
+  goToUser(userId: number, role: RoleUtilisateur) {
+    this.router.navigate(
+      ['/user-details', userId],
+      { state: { role } }
+    );
   }
 }

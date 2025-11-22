@@ -27,7 +27,12 @@
 
       <ng-container *ngIf="isMedecin" matColumnDef="patientNom">
         <th mat-header-cell *matHeaderCellDef> Patient </th>
-        <td mat-cell *matCellDef="let o">{{ o.patient?.prenom }} {{ o.patient?.nom }}</td>
+        <td mat-cell *matCellDef="let o">
+          <a class="user-link"
+            (click)="goToUser(o.patient?.id, RoleUtilisateur.PATIENT)">
+            {{o.patient?.prenom}} {{o.patient?.nom}}
+          </a>
+        </td>
       </ng-container>
 
       <ng-container *ngIf="isMedecin" matColumnDef="patientNiss">
@@ -37,7 +42,12 @@
 
       <ng-container *ngIf="isPatient" matColumnDef="medecinNom">
         <th mat-header-cell *matHeaderCellDef> Médecin </th>
-        <td mat-cell *matCellDef="let o">{{ o.medecin?.prenom }} {{ o.medecin?.nom }}</td>
+        <td mat-cell *matCellDef="let o">
+          <a class="user-link"
+            (click)="goToUser(o.medecin?.id, RoleUtilisateur.MEDECIN)">
+            {{o.medecin?.prenom}} {{o.medecin?.nom}}
+          </a>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="date">

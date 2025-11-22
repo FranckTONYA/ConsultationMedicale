@@ -48,7 +48,12 @@
       <!-- Colonnes pour médecin -->
       <ng-container *ngIf="isMedecin" matColumnDef="patientNom">
         <th mat-header-cell *matHeaderCellDef> Patient </th>
-        <td mat-cell *matCellDef="let c"> {{c.patient?.prenom}} {{c.patient?.nom}} </td>
+        <td mat-cell *matCellDef="let c">
+          <a class="user-link"
+            (click)="goToUser(c.patient?.id, RoleUtilisateur.PATIENT)">
+            {{c.patient?.prenom}} {{c.patient?.nom}}
+          </a>
+        </td>
       </ng-container>
 
       <ng-container *ngIf="isMedecin" matColumnDef="patientNiss">
@@ -59,7 +64,13 @@
       <!-- Colonnes pour patient -->
       <ng-container *ngIf="isPatient" matColumnDef="medecinNom">
         <th mat-header-cell *matHeaderCellDef> Médecin </th>
-        <td mat-cell *matCellDef="let c"> {{c.medecin?.prenom}} {{c.medecin?.nom}} </td>
+        <td mat-cell *matCellDef="let c">
+          <a class="user-link"
+            (click)="goToUser(c.medecin?.id, RoleUtilisateur.MEDECIN)">
+            {{c.medecin?.prenom}} {{c.medecin?.nom}}
+          </a>
+        </td>
+
       </ng-container>
 
       <ng-container *ngIf="isPatient" matColumnDef="medecinInami">

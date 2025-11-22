@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
 import { Patient } from '../../../models/patient';
+import { RoleUtilisateur } from '../../../models/utilisateur';
 
 @Component({
   selector: 'app-manage-patient',
@@ -70,7 +71,14 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
   }
 
   editPatient(id: number) {
-    this.router.navigate(['/edit-piant', id], { state: { modeAdmin: true }});
+    this.router.navigate(['/edit-patient', id], { state: { modeAdmin: true }});
+  }
+
+  voirDetails(userId: number) {
+    this.router.navigate(
+      ['/user-details', userId],
+      { state: { role :  RoleUtilisateur.PATIENT} }
+    );
   }
 
   deletePatient(id: number) {

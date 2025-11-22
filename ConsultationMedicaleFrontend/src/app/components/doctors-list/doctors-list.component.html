@@ -18,7 +18,7 @@
     <div class="cards-container">
         <mat-card *ngFor="let doctor of paginatedDoctors" class="doctor-card">
         <mat-card-header>
-            <mat-card-title>{{ doctor.nom }} {{ doctor.prenom }}</mat-card-title>
+            <mat-card-title> {{ doctor.prenom }} {{ doctor.nom }}</mat-card-title>
             <mat-card-subtitle>{{ doctor.specialite }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>

@@ -1,7 +1,7 @@
 import { Utilisateur } from "./utilisateur";
 
 export class Administrateur extends Utilisateur{
-    public NiveauAcces?: NiveauAcces;
+    public niveauAcces?: NiveauAcces;
     
     constructor(){
         super();

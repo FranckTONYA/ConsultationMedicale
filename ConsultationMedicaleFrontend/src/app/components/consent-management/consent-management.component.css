@@ -37,6 +37,17 @@ mat-paginator {
   background-color: #d9defa;
 }
 
+.user-link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.user-link:hover {
+  text-decoration: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   table, .mat-form-field {

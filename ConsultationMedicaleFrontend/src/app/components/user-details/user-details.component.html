@@ -1,0 +1,95 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 10px;"></mat-progress-bar>
+
+<div class="page-wrapper" *ngIf="user">
+
+  <h2 class="title">
+    Détails {{role === 'PATIENT' ? 'du Patient' : (role === 'MEDECIN' ? 'du Médecin' : "l'Administrateur")}}
+  </h2>
+
+  <!-- INFOS DE BASE UTILISATEUR -->
+  <div class="info-grid">
+     <div class="field-row">
+      <span class="field-label">Prénom :</span>
+      <span class="field-value">{{ user.prenom }}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Nom :</span>
+      <span class="field-value">{{ user.nom }}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Email :</span>
+      <span class="field-value">{{ user.email }}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Téléphone :</span>
+      <span class="field-value">{{ user.telephone }}</span>
+    </div>
+
+    <div class="field-row">
+      <span class="field-label">Adresse :</span>
+      <span class="field-value">{{ user.adresse }}</span>
+    </div>
+
+  </div>
+
+
+  <!-- PATIENT -->
+  <div *ngIf="role === 'PATIENT'">
+    <!-- <h3>Informations patient</h3> -->
+
+    <div class="info-grid">
+      <div class="field-row">
+        <span class="field-label">NISS :</span>
+        <span class="field-value">{{ asPatient?.niss }}</span>
+      </div>
+
+      <div class="field-row">
+        <span class="field-label">Date de naissance :</span>
+        <span class="field-value">{{ asPatient?.dateNaissance | date }}</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MEDECIN -->
+  <div *ngIf="role === 'MEDECIN'">
+    <h3>Données médecin</h3>
+
+    <div class="info-grid">
+        <div class="field-row">
+            <span class="field-label">Numéro INAMI :</span>
+            <span class="field-value">{{ asMedecin?.numINAMI }}</span>
+        </div>
+
+        <div class="field-row">
+            <span class="field-label">Spécialité :</span>
+            <span class="field-value">{{ asMedecin?.specialite }}</span>
+        </div>
+    </div>
+
+  </div>
+
+
+  <!-- ADMIN -->
+  <!-- <div *ngIf="role === 'ADMINISTRATEUR'">
+    <h3>Informations administrateur</h3>
+
+    <div class="field-row">
+      <span class="field-label">Niveau d'accès :</span>
+
+      <span class="field-value">
+        {{ $any(user).niveauAcces ?? 'Non défini' }}
+      </span>
+    </div>
+  </div> -->
+
+
+  <!-- Boutons -->
+  <!-- <div class="action-buttons">
+    <button mat-stroked-button color="primary" (click)="retour()">Retour</button>
+  </div> -->
+
+</div>

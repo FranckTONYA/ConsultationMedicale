@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { Administrateur } from '../../../models/administrateur';
 import { AdminService } from '../../../core/services/admin.service';
+import { RoleUtilisateur } from '../../../models/utilisateur';
 
 @Component({
   selector: 'app-manage-admin',
@@ -62,6 +63,13 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
 
   editAdmin(id: number) {
     this.router.navigate(['/edit-admin', id], { state: { modeAdmin: true } });
+  }
+
+  voirDetails(userId: number) {
+    this.router.navigate(
+      ['/user-details', userId],
+      { state: { role :  RoleUtilisateur.ADMINISTRATEUR} }
+    );
   }
 
   deleteAdmin(id: number) {

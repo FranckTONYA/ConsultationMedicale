@@ -28,6 +28,7 @@ import { ConsultationEditComponent } from './components/consultation-edit/consul
 import { OrdonnanceDetailsComponent } from './components/ordonnance-details/ordonnance-details.component';
 import { OrdonnanceListComponent } from './components/ordonnance-list/ordonnance-list.component';
 import { OrdonnanceEditComponent } from './components/ordonnance-edit/ordonnance-edit.component';
+import { UserDetailsComponent } from './components/user-details/user-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -38,6 +39,9 @@ const routes: Routes = [
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },
   { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
+  { path: 'user-details/:id', component: UserDetailsComponent, canActivate: [AuthGuard], 
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },
 

@@ -36,7 +36,13 @@
 
             <ng-container matColumnDef="nom">
                 <th mat-header-cell *matHeaderCellDef>Nom</th>
-                <td mat-cell *matCellDef="let m">{{ m.prenom }} {{ m.nom }}</td>
+                <td mat-cell *matCellDef="let m">
+                    <a class="user-link"
+                        (click)="goToUser(m.id, RoleUtilisateur.MEDECIN)">
+                        {{ m.prenom }} {{ m.nom }}
+                    </a>
+                </td>
+
             </ng-container>
 
             <ng-container matColumnDef="inami">

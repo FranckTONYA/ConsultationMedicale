@@ -8,6 +8,8 @@ import { Patient } from '../../models/patient';
 import { AuthService } from '../../core/services/auth.service';
 import { FormControl } from '@angular/forms';
 import { PatientService } from '../../core/services/patient.service';
+import { RoleUtilisateur } from '../../models/utilisateur';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-consent-management',
@@ -25,18 +27,20 @@ export class ConsentManagementComponent implements OnInit, AfterViewInit {
 
   searchControl = new FormControl('');
   searchedMedecin: Medecin | null = null;
+  RoleUtilisateur = RoleUtilisateur;
   isLoading = true;
 
   constructor(
     private patientService: PatientService,
     private medecinService: MedecinService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadCurrentPatient();
 
-    // 🔍 Recherche INAMI
+    // Recherche INAMI
     this.searchControl.valueChanges.subscribe(value => {
       if (!value || value.length < 3) {
         this.searchedMedecin = null;
@@ -173,5 +177,12 @@ export class ConsentManagementComponent implements OnInit, AfterViewInit {
     if (this.assignedMedecins.paginator) {
       this.assignedMedecins.paginator.firstPage();
     }
+  }
+
+  goToUser(userId: number, role: RoleUtilisateur) {
+    this.router.navigate(
+      ['/user-details', userId],
+      { state: { role } }
+    );
   }
 }

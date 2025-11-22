@@ -65,6 +65,7 @@ import { ConsultationEditComponent } from './components/consultation-edit/consul
 import { OrdonnanceListComponent } from './components/ordonnance-list/ordonnance-list.component';
 import { OrdonnanceEditComponent } from './components/ordonnance-edit/ordonnance-edit.component';
 import { OrdonnanceDetailsComponent } from './components/ordonnance-details/ordonnance-details.component';
+import { UserDetailsComponent } from './components/user-details/user-details.component';
 
 
 @NgModule({
@@ -98,6 +99,7 @@ import { OrdonnanceDetailsComponent } from './components/ordonnance-details/ordo
     OrdonnanceListComponent,
     OrdonnanceEditComponent,
     OrdonnanceDetailsComponent,
+    UserDetailsComponent,
   ],
   imports: [
     BrowserModule,

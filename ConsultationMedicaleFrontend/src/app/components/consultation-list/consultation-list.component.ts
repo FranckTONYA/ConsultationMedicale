@@ -25,6 +25,8 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
   isPatient = false;
   isMedecin = false;
   isLoading = true;
+  RoleUtilisateur = RoleUtilisateur;
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -140,4 +142,12 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
   editConsultation(consultation: Consultation) {
     this.router.navigate(['/consultation/edit', consultation.id]);
   }
+
+  goToUser(userId: number, role: RoleUtilisateur) {
+    this.router.navigate(
+      ['/user-details', userId],
+      { state: { role } }
+    );
+  }
+
 }
