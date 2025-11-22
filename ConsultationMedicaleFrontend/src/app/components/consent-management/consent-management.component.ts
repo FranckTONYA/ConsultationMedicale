@@ -18,14 +18,14 @@ import { PatientService } from '../../core/services/patient.service';
 export class ConsentManagementComponent implements OnInit, AfterViewInit {
 
   currentPatient = new Patient();
-  assignedMedecins: MatTableDataSource<Medecin> = new MatTableDataSource<Medecin>([]);
-  displayedColumns: string[] = ['nom', 'inami', 'specialite', 'actions'];
+  assignedMedecins = new MatTableDataSource<Medecin>([]);
+  displayedColumns: string[] = ['id', 'nom', 'inami', 'specialite', 'actions'];
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   searchControl = new FormControl('');
   searchedMedecin: Medecin | null = null;
   isLoading = true;
-
 
   constructor(
     private patientService: PatientService,
@@ -36,31 +36,30 @@ export class ConsentManagementComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.loadCurrentPatient();
 
+    // 🔍 Recherche INAMI
     this.searchControl.valueChanges.subscribe(value => {
-      this.isLoading = true;
-      if (value && value.length >= 3) {
-        this.medecinService.getByINAMI(Number(value)).subscribe({
-          next: (medecin: Medecin) => {
-            console.log(medecin);
-            // Si déjà assigné, ne pas proposer
-            // if (!this.assignedMedecins.data.some(m => m.id === medecin.id)) {
-            //   this.searchedMedecin = medecin;
-            // } else {
-            //   this.searchedMedecin = null;
-            // }
-
-            this.searchedMedecin = medecin;
-            this.isLoading = false;
-          },
-          error: () => {
-            this.searchedMedecin = null;
-            this.isLoading = false;
-          }
-        });
-      } else {
+      if (!value || value.length < 3) {
         this.searchedMedecin = null;
-        this.isLoading = false;
+        return;
       }
+
+      this.isLoading = true;
+
+      this.medecinService.getByINAMI(Number(value)).subscribe({
+        next: (medecin: Medecin) => {
+          // éviter de proposer un médecin déjà assigné
+          if (!this.assignedMedecins.data.some(m => m.id === medecin.id)) {
+            this.searchedMedecin = medecin;
+          } else {
+            this.searchedMedecin = null;
+          }
+          this.isLoading = false;
+        },
+        error: () => {
+          this.searchedMedecin = null;
+          this.isLoading = false;
+        }
+      });
     });
   }
 
@@ -68,88 +67,111 @@ export class ConsentManagementComponent implements OnInit, AfterViewInit {
     this.assignedMedecins.paginator = this.paginator;
   }
 
+  /** Chargement du patient connecté + médecins autorisés **/
   private loadCurrentPatient() {
     this.authService.userInfo$.subscribe({
       next: (patient: Patient) => {
         this.currentPatient = patient;
+
         this.patientService.getMedecinsOfPatient(patient.id!).subscribe({
-            next: (result) => {
-              this.assignedMedecins.data = result;
-              this.isLoading = false;
-            },
-            error: () => {
-              Swal.fire('Erreur', 'Impossible de récuperer les médecins autorisés.', 'error');
-              this.isLoading = false;
-            }
-          });
+          next: (result) => {
+            this.assignedMedecins.data = result;
+            this.isLoading = false;
+          },
+          error: () => {
+            Swal.fire('Erreur', 'Impossible de récupérer les médecins autorisés.', 'error');
+            this.isLoading = false;
+          }
+        });
       },
-      error: () =>{
+      error: () => {
         Swal.fire('Erreur', "Impossible de charger le patient connecté.", 'error');
         this.isLoading = false;
       }
-      });
+    });
   }
 
+  /** Ajout d'un médecin **/
   assignMedecin() {
-    this.isLoading = true;
     if (!this.searchedMedecin) return;
+
     const med = this.searchedMedecin;
-    console.log(med);
+    this.isLoading = true;
+
     Swal.fire({
-      title: `Autorisez-vous ${med.prenom} ${med.nom} à acceder à votre dossier ?`,
+      title: `Autoriser ${med.prenom} ${med.nom} ?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Oui',
       cancelButtonText: 'Annuler'
     }).then(result => {
-      console.log(result);
       if (result.isConfirmed) {
-        this.medecinService.assignPatientToMedecin(med.id!, this.currentPatient.id!)
-          .subscribe({
-            next: () => {
-              Swal.fire('Succès', 'Médecin autorisé avec succès.', 'success');
-              this.assignedMedecins.data = [...this.assignedMedecins.data, med];
-              this.searchControl.setValue('');
-              this.searchedMedecin = null;
-              this.isLoading = false;
-            },
-            error: (err) => {
-              Swal.fire('Erreur', err.error?.error ?? "Impossible d'autoriser ce médecin.", 'error');
-              this.isLoading = false;
-            }
-          });
+
+        this.medecinService.assignPatientToMedecin(med.id!, this.currentPatient.id!).subscribe({
+          next: () => {
+            Swal.fire('Succès', 'Médecin autorisé.', 'success');
+
+            // mise à jour tableau
+            this.assignedMedecins.data = [...this.assignedMedecins.data, med];
+
+            // reset zone de recherche
+            this.searchControl.setValue('');
+            this.searchedMedecin = null;
+            this.isLoading = false;
+          },
+          error: (err) => {
+            Swal.fire('Erreur', err.error?.error ?? "Impossible d'autoriser ce médecin.", 'error');
+            this.isLoading = false;
+          }
+        });
+
+      } else {
+        this.isLoading = false;
       }
     });
   }
 
+  /** Suppression d'un médecin **/
   removeMedecin(medecin: Medecin) {
     this.isLoading = true;
+
     Swal.fire({
-      title: `Supprimer l'autorisation de ${medecin.prenom} ${medecin.nom} sur votre dossier ?`,
+      title: `Retirer l'accès de ${medecin.prenom} ${medecin.nom} ?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui',
       cancelButtonText: 'Annuler'
     }).then(result => {
       if (result.isConfirmed) {
-        this.medecinService.removePatientFromMedecin(medecin.id!, this.currentPatient.id!)
-          .subscribe({
-            next: () => {
-              Swal.fire('Succès', 'Médecin désassigné.', 'success');
-              this.assignedMedecins.data = this.assignedMedecins.data.filter(m => m.id !== medecin.id);
-              this.isLoading = false;
-            },
-            error: (err) => {
-              Swal.fire('Erreur', err.error?.error ?? 'Impossible de désassigner ce médecin.', 'error');
-              this.isLoading = false;
-            }
-          });
+
+        this.medecinService.removePatientFromMedecin(medecin.id!, this.currentPatient.id!).subscribe({
+          next: () => {
+            Swal.fire('Succès', 'Accès retiré.', 'success');
+
+            this.assignedMedecins.data =
+              this.assignedMedecins.data.filter(m => m.id !== medecin.id);
+
+            this.isLoading = false;
+          },
+          error: (err) => {
+            Swal.fire('Erreur', err.error?.error ?? 'Impossible de retirer cet accès.', 'error');
+            this.isLoading = false;
+          }
+        });
+
+      } else {
+        this.isLoading = false;
       }
     });
   }
 
+  /** Filtrage tableau **/
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.assignedMedecins.filter = filterValue.trim().toLowerCase();
+
+    if (this.assignedMedecins.paginator) {
+      this.assignedMedecins.paginator.firstPage();
+    }
   }
 }

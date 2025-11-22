@@ -86,9 +86,16 @@ export class OrdonnanceEditComponent implements OnInit {
     // Recherche patient via NISS
     this.form.get('patientNiss')?.valueChanges.subscribe(value => {
       if (value && value.length >= 3) {
+        this.isLoading = true;
         this.patientService.getByNISS(value).subscribe({
-          next: patient => this.filteredPatient = patient,
-          error: () => this.filteredPatient = null
+          next: (patient) => {
+            this.filteredPatient = patient;
+            this.isLoading = false;
+          },
+          error: () => {
+            this.filteredPatient = null;
+            this.isLoading = false;
+          }
         });
       } else {
         this.filteredPatient = null;
@@ -185,10 +192,10 @@ save() {
   }
 
   this.isLoading = true;
-  const data: Ordonnance = { ...this.ordonnance, ...this.form.value };
 
   if (!this.isEdit) {
-    this.ordonnance.medecin = { id: this.medecin.id } as any;
+    this.ordonnance.medecin = { id: this.medecin.id } as Medecin;
+    const data: Ordonnance = { ...this.ordonnance, ...this.form.value };
     this.ordonnanceService.createWithFile(data, this.selectedFiles).subscribe({
       next: () => {
         Swal.fire('Succès', 'Ordonnance créée', 'success');
@@ -202,6 +209,7 @@ save() {
     });
 
   } else {
+    const data: Ordonnance = { ...this.ordonnance, ...this.form.value };
     this.ordonnanceService.updateWithFiles(this.ordonnance.id!, data, this.selectedFiles).subscribe({
       next: () => {
         Swal.fire('Succès', 'Ordonnance mise à jour', 'success');
@@ -218,6 +226,14 @@ save() {
 
 
   cancel() {
-    this.router.navigate(['/ordonnance/list']);
-  }
+    Swal.fire({
+        title: 'Annuler les modifications ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui',
+        cancelButtonText:'Non'
+      }).then(result => {
+        if (result.isConfirmed) this.router.navigate(['/ordonnance/list']);
+      });
+    }
 }

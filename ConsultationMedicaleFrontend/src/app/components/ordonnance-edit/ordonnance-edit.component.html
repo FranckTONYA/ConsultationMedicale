@@ -1,7 +1,10 @@
-<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 10px;"></mat-progress-bar>
 
 <div class="page-wrapper" *ngIf="form">
-  <h2>{{ isEdit ? "Modifier l'" : 'Créer une' }} ordonnance</h2>
+  <h2 class="title">
+    {{ isEdit ? `Modifier l'ordonnance — ${ ordonnance.patient.prenom } ${ ordonnance.patient.nom } ${ ordonnance.patient.niss }` : 
+  'Créer une ordonnance' }} 
+  </h2>
 
   <form [formGroup]="form" class="form-container">
 
@@ -41,13 +44,14 @@
     </div>
 
 
-    <!-- Champ contenu sur TOUTE la largeur -->
+    <!-- Champ contenu -->
     <div class="section">
-      <mat-form-field appearance="outline" class="w-full">
+      <mat-form-field appearance="outline" class="w-full full-width">
         <mat-label>Contenu</mat-label>
         <textarea matInput formControlName="contenu" rows="6" class="full-width-textarea"></textarea>
       </mat-form-field>
     </div>
+
 
     <!-- Documents -->
     <div class="section documents-section">
@@ -74,8 +78,8 @@
     </div>
 
     <div class="action-buttons">
-      <button mat-stroked-button color="primary" (click)="cancel()">Annuler</button>
-      <button mat-raised-button color="accent" (click)="save()">Sauvegarder</button>
+      <button mat-stroked-button color="primary" (click)="cancel()" style="background-color:#ea3535; color:white;">Annuler</button>
+      <button mat-raised-button color="accent" (click)="save()" style="background-color:green; color:white;">Sauvegarder</button>
     </div>
   </form>
 </div>

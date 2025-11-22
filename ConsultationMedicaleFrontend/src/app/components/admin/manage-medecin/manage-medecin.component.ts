@@ -13,34 +13,73 @@ import { Medecin } from '../../../models/medecin';
   styleUrls: ['./manage-medecin.component.css']
 })
 export class ManageMedecinComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'nom', 'prenom', 'specialite', 'numINAMI', 'telephone', 'email', 'actions'];
+
+  displayedColumns = [
+    'id', 
+    'nom', 
+    'prenom', 
+    'specialite', 
+    'numINAMI', 
+    'telephone', 
+    'email', 
+    'actions'
+  ];
+
   dataSource = new MatTableDataSource<Medecin>([]);
   isLoading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private medecinService: MedecinService, private router: Router) {}
+  constructor(
+    private medecinService: MedecinService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadMedecins();
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    // requis pour éviter erreurs d'initialisation
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   loadMedecins() {
+    this.isLoading = true;
+
     this.medecinService.getAll().subscribe({
-      next: (data) => {
+      next: (data: Medecin[]) => {
         this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
+
+        // Configure le paginator si déjà dispo
+        if (this.paginator) {
+          this.dataSource.paginator = this.paginator;
+        }
+
+        // Fix filtrage pour plusieurs colonnes
+        this.dataSource.filterPredicate = (row: Medecin, filter: string) =>
+          `${row.nom} ${row.prenom} ${row.specialite} ${row.numINAMI} ${row.email}`
+            .toLowerCase()
+            .includes(filter);
+
         this.isLoading = false;
       },
-      error: (err) => {
+      error: () => {
         this.isLoading = false;
-        console.error(err);
+        Swal.fire('Erreur', 'Impossible de charger les médecins.', 'error');
       }
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   addMedecin() {
@@ -57,36 +96,32 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui',
-      cancelButtonText:'Non',
+      cancelButtonText: 'Non',
     }).then(result => {
       if (result.isConfirmed) {
+
         this.medecinService.delete(id).subscribe({
           next: () => {
             Swal.fire({
-            icon: 'success',
-            title: 'Suppréssion réussie',
-            text: "Le médecin a bien été supprimé !",
-            timer: 1500,
-            showConfirmButton: false
-          });
-          this.loadMedecins()
+              icon: 'success',
+              title: 'Supprimé',
+              text: 'Le médecin a été supprimé.',
+              timer: 1500,
+              showConfirmButton: false
+            });
+
+            this.loadMedecins(); // refresh propre
           },
-          error: () =>{
+          error: () => {
             Swal.fire({
               icon: 'error',
-              title: "Erreur de suppression",
-              text: 'La suppression du médecin a rencontré un erreur.',
-              showConfirmButton: true,
+              title: 'Erreur',
+              text: 'La suppression a échoué.',
             });
-          } 
+          }
         });
+
       }
     });
-  }
-  
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

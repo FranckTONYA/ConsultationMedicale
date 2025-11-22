@@ -1,5 +1,5 @@
 <div class="page-container">
-  <h2>Mes consultations</h2>
+  <h2 class="title">Mes consultations</h2>
 
   <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar><br>
 
@@ -37,6 +37,13 @@
 
   <div class="table-container">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let a; let i = index">
+          {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
+        </td>
+      </ng-container>
 
       <!-- Colonnes pour médecin -->
       <ng-container *ngIf="isMedecin" matColumnDef="patientNom">

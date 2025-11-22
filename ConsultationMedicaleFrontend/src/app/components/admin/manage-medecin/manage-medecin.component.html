@@ -20,7 +20,9 @@
 
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>#</th>
-        <td mat-cell *matCellDef="let m">{{ m.id }}</td>
+        <td mat-cell *matCellDef="let a; let i = index">
+          {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="nom">

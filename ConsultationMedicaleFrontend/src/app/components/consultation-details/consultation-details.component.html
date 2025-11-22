@@ -5,13 +5,13 @@
   <h2 class="title">
     Consultation —
     {{ currentUser.role === 'MEDECIN'
-      ? consultation.patient.prenom + ' ' + consultation.patient.nom
-      : consultation.medecin.prenom + ' ' + consultation.medecin.nom }}
+      ? consultation.patient.prenom + ' ' + consultation.patient.nom + ' ' + consultation.patient.niss
+      : consultation.medecin.prenom + ' ' + consultation.medecin.nom +' ' + consultation.medecin.numINAMI }}
   </h2>
 
   <!-- Informations de base -->
   <div class="info-grid">
-
+<!-- 
     <div class="field-row" *ngIf="currentUser.role === 'MEDECIN'">
       <span class="field-label">NISS :</span>
       <span class="field-value">{{ consultation.patient.niss }}</span>
@@ -20,7 +20,7 @@
     <div class="field-row" *ngIf="currentUser.role === 'PATIENT'">
       <span class="field-label">INAMI :</span>
       <span class="field-value">{{ consultation.medecin.numINAMI }}</span>
-    </div>
+    </div> -->
 
     <div class="field-row">
       <span class="field-label">Statut :</span>

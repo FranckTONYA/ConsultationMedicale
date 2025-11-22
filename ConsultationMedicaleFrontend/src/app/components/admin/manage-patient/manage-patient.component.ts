@@ -13,7 +13,13 @@ import { Patient } from '../../../models/patient';
   styleUrls: ['./manage-patient.component.css']
 })
 export class ManagePatientComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'nom', 'prenom', 'niss', 'dateNaissance', 'telephone', 'adresse', 'email', 'actions'];
+  
+  displayedColumns = [
+    'id', 'nom', 'prenom', 'niss',
+    'dateNaissance', 'telephone',
+    'adresse', 'email', 'actions'
+  ];
+
   dataSource = new MatTableDataSource<Patient>([]);
   isLoading = true;
 
@@ -23,6 +29,16 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadPatients();
+
+    // Filtre insensible à la casse
+    this.dataSource.filterPredicate = (data: Patient, filter: string) => {
+      const dataStr =
+        (data.nom + ' ' + data.prenom + ' ' + data.niss + ' ' +
+         data.telephone + ' ' + data.email + ' ' + data.adresse)
+          .toLowerCase();
+
+      return dataStr.includes(filter);
+    };
   }
 
   ngAfterViewInit() {
@@ -33,8 +49,14 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
     this.patientService.getAll().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
         this.isLoading = false;
+
+        // Sécurité si paginator arrive après les données
+        setTimeout(() => {
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+        });
       },
       error: (err) => {
         this.isLoading = false;
@@ -48,7 +70,7 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
   }
 
   editPatient(id: number) {
-    this.router.navigate(['/edit-patient', id], { state: { modeAdmin: true }});
+    this.router.navigate(['/edit-piant', id], { state: { modeAdmin: true }});
   }
 
   deletePatient(id: number) {
@@ -63,19 +85,19 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
         this.patientService.delete(id).subscribe({
           next: () => {
             Swal.fire({
-            icon: 'success',
-            title: 'Suppréssion réussie',
-            text: "Le patient a bien été supprimé !",
-            timer: 1500,
-            showConfirmButton: false
-          });
-          this.loadPatients()
+              icon: 'success',
+              title: 'Suppréssion réussie',
+              text: "Le patient a bien été supprimé !",
+              timer: 1500,
+              showConfirmButton: false
+            });
+            this.loadPatients();
           },
           error: () =>{
             Swal.fire({
               icon: 'error',
               title: "Erreur de suppression",
-              text: "La suppression du patient a rencontré un erreur.",
+              text: "La suppression du patient a rencontré une erreur.",
               showConfirmButton: true,
             });
           } 
@@ -84,9 +106,13 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
     });
   }
 
-  /** Filtrage instantané **/
+  /** Filtrage instantané + reset pagination **/
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }

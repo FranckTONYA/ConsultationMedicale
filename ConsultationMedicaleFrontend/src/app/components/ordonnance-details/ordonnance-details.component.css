@@ -58,9 +58,8 @@ h2.title {
 
 .action-buttons {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-top: 30px;
-  gap: 15px;
 }
 
 /* 📱 Responsive */

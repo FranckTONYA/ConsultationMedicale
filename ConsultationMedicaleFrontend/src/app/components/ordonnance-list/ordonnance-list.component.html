@@ -1,9 +1,10 @@
 <div class="page-container">
   <h2>Mes ordonnances</h2>
-  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+  
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar><br>
 
   <div class="toolbar">
-    <button *ngIf="isMedecin" mat-raised-button color="primary" (click)="creerOrdonnance()">
+    <button *ngIf="isMedecin" mat-raised-button color="primary" (click)="creerOrdonnance()" class="add-btn">
       <mat-icon>add</mat-icon> Créer ordonnance
     </button>
 
@@ -16,6 +17,13 @@
 
   <div class="table-container">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let a; let i = index">
+          {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
+        </td>
+      </ng-container>
 
       <ng-container *ngIf="isMedecin" matColumnDef="patientNom">
         <th mat-header-cell *matHeaderCellDef> Patient </th>

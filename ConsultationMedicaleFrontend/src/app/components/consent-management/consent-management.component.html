@@ -27,6 +27,13 @@
 
         <table mat-table [dataSource]="assignedMedecins" class="mat-elevation-z8">
 
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let a; let i = index">
+                    {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
+                </td>
+            </ng-container>
+
             <ng-container matColumnDef="nom">
                 <th mat-header-cell *matHeaderCellDef>Nom</th>
                 <td mat-cell *matCellDef="let m">{{ m.prenom }} {{ m.nom }}</td>

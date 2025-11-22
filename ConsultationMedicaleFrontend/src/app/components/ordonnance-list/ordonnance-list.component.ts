@@ -32,29 +32,38 @@ export class OrdonnanceListComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    // Filter predicate compatible pagination + JSON filter
     this.dataSource.filterPredicate = (data: Ordonnance, filter: string) => {
-      const text = filter.trim().toLowerCase();
+      let parsed = { text: '' };
+
+      try {
+        parsed = JSON.parse(filter);
+      } catch {}
+
+      const text = parsed.text.toLowerCase().trim();
+
       const textToSearch = this.isMedecin
         ? `${data.patient?.prenom ?? ''} ${data.patient?.nom ?? ''} ${data.patient?.niss ?? ''}`
         : `${data.medecin?.prenom ?? ''} ${data.medecin?.nom ?? ''}`;
+
       return textToSearch.toLowerCase().includes(text);
     };
 
-    this.authService.userInfo$.subscribe({ 
-      next : (user) => {
-      this.currentUser = user;
-      this.isPatient = user.role === RoleUtilisateur.PATIENT;
-      this.isMedecin = user.role === RoleUtilisateur.MEDECIN;
-      this.displayedColumns = this.isMedecin
-        ? ['patientNom', 'patientNiss', 'date', 'actions']
-        : ['medecinNom', 'date', 'actions'];
-      this.loadOrdonnances();
-      this.isLoading = false;
-    },
-     error: () => {
-      Swal.fire('Erreur',"Impossible de charger les l'utilisateur connecté",'error');
-      this.isLoading = false;
-     }
+    this.authService.userInfo$.subscribe({
+      next: (user) => {
+        this.currentUser = user;
+        this.isPatient = user.role === RoleUtilisateur.PATIENT;
+        this.isMedecin = user.role === RoleUtilisateur.MEDECIN;
+
+        this.displayedColumns = this.isMedecin
+          ? ['id', 'patientNom', 'patientNiss', 'date', 'actions']
+          : ['id', 'medecinNom', 'date', 'actions'];
+
+        this.loadOrdonnances();
+      },
+      error: () => {
+        Swal.fire('Erreur', "Impossible de charger l'utilisateur connecté", 'error');
+      }
     });
   }
 
@@ -64,18 +73,41 @@ export class OrdonnanceListComponent implements OnInit, AfterViewInit {
 
   loadOrdonnances() {
     this.isLoading = true;
+
     const obs = this.isMedecin
       ? this.ordonnanceService.getByMedecin(this.currentUser.id!)
       : this.ordonnanceService.getByPatient(this.currentUser.id!);
+
     obs.subscribe({
-      next: data => { this.dataSource.data = data; this.isLoading = false; },
-      error: () => { Swal.fire('Erreur','Impossible de charger les ordonnances','error'); this.isLoading=false; }
+      next: (data) => {
+        this.dataSource.data = data;
+        this.applyCombinedFilter();
+        this.isLoading = false;
+      },
+      error: () => {
+        Swal.fire('Erreur', 'Impossible de charger les ordonnances', 'error');
+        this.isLoading = false;
+      }
     });
   }
 
+  // Méthode centralisée pour pagination + filtres
+  applyCombinedFilter() {
+    const filterObj = {
+      text: this.searchText || ''
+    };
+
+    this.dataSource.filter = JSON.stringify(filterObj);
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
   applyFilter(event: Event) {
-    const value = (event.target as HTMLInputElement).value || '';
-    this.dataSource.filter = value.trim().toLowerCase();
+    this.searchText = (event.target as HTMLInputElement).value || '';
+    this.applyCombinedFilter();
   }
 
   creerOrdonnance() {
@@ -99,14 +131,15 @@ export class OrdonnanceListComponent implements OnInit, AfterViewInit {
       confirmButtonText: 'Oui',
       cancelButtonText: 'Non'
     }).then(result => {
-      if(result.isConfirmed) {
+      if (result.isConfirmed) {
         this.ordonnanceService.delete(ord.id!).subscribe({
-          next: () => { Swal.fire('Succès','Ordonnance supprimée','success'); 
-            this.loadOrdonnances(); 
+          next: () => {
+            Swal.fire('Succès', 'Ordonnance supprimée', 'success');
+            this.loadOrdonnances();
             this.isLoading = false;
           },
           error: () => {
-            Swal.fire('Erreur','Impossible de supprimer','error');
+            Swal.fire('Erreur', 'Impossible de supprimer', 'error');
             this.isLoading = false;
           }
         });

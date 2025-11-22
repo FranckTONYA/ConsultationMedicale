@@ -66,14 +66,14 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
       this.isMedecin = user.role === RoleUtilisateur.MEDECIN;
 
       if (this.isMedecin) {
-        this.displayedColumns = ['patientNom', 'patientNiss', 'debut', 'fin', 'statut', 'actions'];
+        this.displayedColumns = ['id', 'patientNom', 'patientNiss', 'debut', 'fin', 'statut', 'actions'];
         this.loadConsultationsMedecin(user.id!);
       } else if (this.isPatient) {
-        this.displayedColumns = ['medecinNom', 'medecinInami', 'specialite', 'debut', 'fin', 'statut', 'actions'];
+        this.displayedColumns = ['id', 'medecinNom', 'medecinInami', 'specialite', 'debut', 'fin', 'statut', 'actions'];
         this.loadConsultationsPatient(user.id!);
       } else {
         // rôle par défaut : afficher rien
-        this.displayedColumns = ['debut', 'fin', 'statut', 'actions'];
+        this.displayedColumns = ['id', 'debut', 'fin', 'statut', 'actions'];
         this.isLoading = false;
       }
     });

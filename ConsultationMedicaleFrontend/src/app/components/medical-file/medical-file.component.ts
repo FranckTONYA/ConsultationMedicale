@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 export class MedicalFileComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [
+    'id',
     'patient',
     'niss',
     'groupeSanguin',
@@ -37,11 +38,11 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    // définir le filterPredicate *avant* de remplir dataSource
-    this.dataSource.filterPredicate = (data: DossierMedical, filter: string) => {
-      const search = filter.trim().toLowerCase();
 
-      // Construire la chaîne à chercher : prénom + nom + NISS + groupe etc.
+    /** FilterPredicate défini une seule fois **/
+    this.dataSource.filterPredicate = (data: DossierMedical, filter: string) => {
+      const val = filter.trim().toLowerCase();
+
       const patientName = `${data?.patient?.prenom ?? ''} ${data?.patient?.nom ?? ''}`.toLowerCase();
       const niss = (data?.patient?.niss ?? '').toLowerCase();
       const groupe = (data?.groupeSanguin ?? '').toLowerCase();
@@ -49,15 +50,18 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
 
       const combined = `${patientName} ${niss} ${groupe} ${allergies}`;
 
-      return combined.includes(search);
+      return combined.includes(val);
     };
 
+    /** Récupération utilisateur + chargement des dossiers */
     this.authService.userInfo$.subscribe(info => {
       this.currentUser = info;
-      if(info.role == RoleUtilisateur.MEDECIN)
-        this.loadDossiers(this.currentUser.id!, false);
-      else
-        this.loadDossiers(this.currentUser.id!, true);
+
+      if (info.role === RoleUtilisateur.MEDECIN) {
+        this.loadDossiers(info.id!, false);
+      } else {
+        this.loadDossiers(info.id!, true);
+      }
     });
   }
 
@@ -65,47 +69,45 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  /** Charge les dossiers en tenant compte du rôle */
   loadDossiers(medecinId: number, modeAdmin: boolean) {
-    if(modeAdmin){
-      this.dossierService.getAll().subscribe({
-        next: (data) => {
-          this.dataSource.data = data;
-          this.isLoading = false;
-        },
-        error: (err) =>{
-          Swal.fire('Erreur', "Erreur rencontrée lors de l'opération", 'error')
-          this.isLoading = false;
-        } 
-      });
-    } else{
-        this.dossierService.getByMedecin(medecinId).subscribe({
-        next: (data) => {
-          this.dataSource.data = data;
-          this.isLoading = false;
-        },
-        error: () => this.isLoading = false
-      });
-    }
+    this.isLoading = true;
 
-    // si un filtre est actif, forcer le recalcul
-    if (this.dataSource.filter) {
-      const f = this.dataSource.filter;
-      this.dataSource.filter = '';              // reset
-      this.dataSource.filter = f;               // ré-apply
-    }
+    const source$ = modeAdmin
+      ? this.dossierService.getAll()
+      : this.dossierService.getByMedecin(medecinId);
 
+    source$.subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+        this.isLoading = false;
+
+        /** Si un filtre était actif : recalcul obligatoire */
+        if (this.dataSource.filter) {
+          const f = this.dataSource.filter;
+          this.dataSource.filter = '';
+          this.dataSource.filter = f;
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire('Erreur', "Erreur rencontrée lors de l'opération", 'error');
+      }
+    });
   }
 
+  /** Filtre instantané */
   applyFilter(event: Event) {
     const value = (event.target as HTMLInputElement).value || '';
     this.dataSource.filter = value.trim().toLowerCase();
 
-    // retourne à la première page si la pagination est active
+    /** Revenir à la 1ère page */
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
+  /** Navigation */
   voir(dossier: DossierMedical) {
     this.router.navigate(['/dossier-medical/details', dossier.id]);
   }

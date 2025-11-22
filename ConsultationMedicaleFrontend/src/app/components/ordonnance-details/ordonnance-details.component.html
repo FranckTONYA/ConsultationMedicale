@@ -1,11 +1,18 @@
-<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 10px;"></mat-progress-bar>
 
 <div class="page-wrapper" *ngIf="ordonnance">
-  <h2>Ordonnance — {{ ordonnance.patient.prenom }} {{ ordonnance.patient.nom }}</h2>
+  <h2 class="title">
+    Ordonnance —
+    {{ currentUser.role === 'MEDECIN'
+      ? ordonnance.patient.prenom + ' ' + ordonnance.patient.nom + ' ' + ordonnance.patient.niss
+      : ordonnance.medecin.prenom + ' ' + ordonnance.medecin.nom +' ' + ordonnance.medecin.numINAMI }}
+  </h2>
 
   <div class="info-grid">
-    <div><strong>Date :</strong> {{ ordonnance.date | date:'shortDate' }}</div>
-    <div><strong>Médecin :</strong> {{ ordonnance.medecin.prenom }} {{ ordonnance.medecin.nom }}</div>
+    <div class="field-row">
+      <span class="field-label">Date :</span>
+      <span class="field-value">{{ ordonnance.date | date:'shortDate' }}</span>
+    </div>
   </div>
 
   <div class="compte-rendu-block">
@@ -22,5 +29,11 @@
 
   <div class="action-buttons">
     <button mat-stroked-button color="primary" (click)="retour()">Retour</button>
+
+    <button mat-flat-button color="accent"
+            *ngIf="currentUser.role === 'MEDECIN'"
+            (click)="modifier()">
+      Modifier la consultation
+    </button>
   </div>
 </div>
