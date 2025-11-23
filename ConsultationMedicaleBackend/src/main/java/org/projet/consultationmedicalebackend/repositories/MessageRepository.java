@@ -14,6 +14,14 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findByEmetteur(Utilisateur emetteur);
     List<Message> findByRecepteur(Utilisateur recepteur);
 
-    @Query("SELECT m FROM Message m WHERE (m.emetteur = :e) AND (m.recepteur = :r) ")
-    List<Message> findConversation(@Param("e") Utilisateur emetteur, @Param("r")Utilisateur recepteur);
+    @Query("""
+            SELECT m FROM Message m 
+            WHERE 
+                (m.emetteur = :u1 AND m.recepteur = :u2)
+                OR 
+                (m.emetteur = :u2 AND m.recepteur = :u1)
+            ORDER BY m.dateEnvoi ASC
+            """)
+    List<Message> findConversation(@Param("u1") Utilisateur utilisateur1, @Param("u2") Utilisateur utilisateur2);
+
 }

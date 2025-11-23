@@ -66,6 +66,8 @@ import { OrdonnanceListComponent } from './components/ordonnance-list/ordonnance
 import { OrdonnanceEditComponent } from './components/ordonnance-edit/ordonnance-edit.component';
 import { OrdonnanceDetailsComponent } from './components/ordonnance-details/ordonnance-details.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
+import { MessagingComponent } from './components/messaging/messaging.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
 
 
 @NgModule({
@@ -100,6 +102,8 @@ import { UserDetailsComponent } from './components/user-details/user-details.com
     OrdonnanceEditComponent,
     OrdonnanceDetailsComponent,
     UserDetailsComponent,
+    MessagingComponent,
+    ConversationComponent,
   ],
   imports: [
     BrowserModule,

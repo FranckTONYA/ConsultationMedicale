@@ -42,4 +42,14 @@ export class DocumentService {
     return URL.createObjectURL(blob!);
   }
 
+  getMessageFileBlob(fileName: string) {
+    // Retourne le fichier en Blob pour affichage ou téléchargement
+    return this.http.get(`${this.apiUrl}/get-message-file/${fileName}`, { responseType: 'blob' });
+  }
+
+  async getMessageFileUrl(fileName: string): Promise<string> {
+    const blob = await this.getMessageFileBlob(fileName).toPromise();
+    return URL.createObjectURL(blob!);
+  }
+
 }

@@ -1,0 +1,17 @@
+.page-container {
+  padding: 1.5rem;
+}
+
+.search {
+  width: 100%;
+  margin-bottom: 1.2rem;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  background: #469ef7 !important;
+  color: white !important;
+}

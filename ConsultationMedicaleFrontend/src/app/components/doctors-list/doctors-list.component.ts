@@ -90,4 +90,8 @@ export class DoctorsListComponent implements OnInit {
   viewAgenda(doctor: Medecin) {
     this.router.navigate(['/schedule-consult', doctor.id]);
   }
+
+  openConversation(doctor: Medecin) {
+    this.router.navigate(['/messaging/conversation', doctor.id ]);
+  }
 }

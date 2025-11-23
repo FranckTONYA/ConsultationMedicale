@@ -1,3 +1,4 @@
+import { Document } from "./document";
 import { Utilisateur } from "./utilisateur";
 
 export class Message {
@@ -5,8 +6,11 @@ export class Message {
     public contenu: string;
     public lu?: boolean;
     public dateEnvoi: Date;
+    public emetteurId?: number;
+    public recepteurId?: number;
     public emetteur: Utilisateur;
     public recepteur: Utilisateur;
+    public document?: Document;
 
     
     constructor(){

@@ -29,6 +29,11 @@ public class Document {
     @JsonBackReference(value = "ordonnance-documents")
     private Ordonnance ordonnance;
 
+    @OneToOne
+    @JoinColumn(name = "message_id")
+    @JsonBackReference
+    private Message message;
+
     public Document() {
     }
 
@@ -44,6 +49,13 @@ public class Document {
         this.type = type;
         this.urlStockage = urlStockage;
         this.ordonnance = ordonnance;
+    }
+
+    public Document(String nom, TypeDoc type, String urlStockage, Message message) {
+        this.nom = nom;
+        this.type = type;
+        this.urlStockage = urlStockage;
+        this.message = message;
     }
 
     public Long getId() {
@@ -92,5 +104,13 @@ public class Document {
 
     public void setOrdonnance(Ordonnance ordonnance) {
         this.ordonnance = ordonnance;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
     }
 }

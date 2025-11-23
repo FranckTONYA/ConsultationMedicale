@@ -1,0 +1,46 @@
+<div class="conversation-container">
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+  <div #scrollContainer class="messages">
+
+    <div *ngFor="let m of messages"
+         class="msg"
+         [class.me]="m.emetteurId === currentUserId">
+
+      <div class="bubble">
+
+        <p>{{ m.contenu }}</p>
+
+        <div *ngIf="m.document" class="attachment">
+          <button mat-stroked-button (click)="viewDocument(m.document)">
+            <mat-icon>attach_file</mat-icon> {{ m.document.nom }}
+          </button>
+        </div>
+
+        <span class="date">
+          {{ m.dateEnvoi | date:'short':'':'fr-FR' }}
+        </span>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="input-bar">
+
+    <input [(ngModel)]="newMessage"
+           placeholder="Écrire un message…">
+
+    <input type="file" (change)="onFileSelected($event)" hidden #fileInput>
+
+    <button mat-icon-button (click)="fileInput.click()">
+      <mat-icon>attach_file</mat-icon>
+    </button>
+
+    <button mat-icon-button color="primary" (click)="send()">
+      <mat-icon>send</mat-icon>
+    </button>
+
+  </div>
+</div>

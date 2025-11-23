@@ -106,6 +106,26 @@ public class DocumentController {
         }
     }
 
+    @DeleteMapping("/delete-message-file/{id}")
+    public ResponseEntity<?> deleteMessageFile(@PathVariable Long id) {
+        CustomResponse customResponse = new CustomResponse();
+        Optional<Document> documentOpt =  documentService.findById(id);
+        if(documentOpt.isPresent()) {
+            File f = new File(System.getProperty("user.dir") + "/uploads-messages/" + documentOpt.get().getUrlStockage());
+            if (f.exists()) f.delete();
+
+            documentService.delete(id);
+            customResponse.status = true;
+            customResponse.message ="Document supprimé";
+            return ResponseEntity.ok( Map.of("message", customResponse.message));
+        }else {
+            customResponse.status = false;
+            customResponse.message = "Document introuvable";
+            return ResponseEntity.badRequest().body(Map.of("error", customResponse.message));
+        }
+    }
+
+
     @GetMapping("/get-consultation-file/{fileName}")
     public ResponseEntity<?> getConsultationFile(@PathVariable String fileName) {
         try {
@@ -137,6 +157,33 @@ public class DocumentController {
     public ResponseEntity<?> getOrdonnanceFile(@PathVariable String fileName) {
         try {
             File file = new File(System.getProperty("user.dir") + "/uploads-ordonnances/" + fileName);
+
+            if (!file.exists())
+                return ResponseEntity.badRequest().body(Map.of("error", "Document introuvable"));
+
+            Path path = file.toPath();
+            Resource resource = new UrlResource(path.toUri());
+
+            // Détection automatique du type MIME
+            String contentType = Files.probeContentType(path);
+            if (contentType == null) {
+                contentType = "application/octet-stream"; // fallback
+            }
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "inline; filename=\"" + fileName + "\"")
+                    .header("Content-Type", contentType)
+                    .body(resource);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @GetMapping("/get-message-file/{fileName}")
+    public ResponseEntity<?> getMessageFile(@PathVariable String fileName) {
+        try {
+            File file = new File(System.getProperty("user.dir") + "/uploads-messages/" + fileName);
 
             if (!file.exists())
                 return ResponseEntity.badRequest().body(Map.of("error", "Document introuvable"));

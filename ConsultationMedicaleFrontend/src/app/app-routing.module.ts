@@ -29,6 +29,8 @@ import { OrdonnanceDetailsComponent } from './components/ordonnance-details/ordo
 import { OrdonnanceListComponent } from './components/ordonnance-list/ordonnance-list.component';
 import { OrdonnanceEditComponent } from './components/ordonnance-edit/ordonnance-edit.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
+import { MessagingComponent } from './components/messaging/messaging.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -42,6 +44,12 @@ const routes: Routes = [
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },
   { path: 'user-details/:id', component: UserDetailsComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
+  { path: 'messaging', component: MessagingComponent, canActivate: [AuthGuard], 
+    data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+  },
+  { path: 'messaging/conversation/:id', component: ConversationComponent, canActivate: [AuthGuard], 
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },
 

@@ -36,7 +36,6 @@ export class ConsultationEditComponent implements OnInit {
     this.consultationService.getById(id).subscribe({
       next: (data) => {
         this.consultation = data;
-        console.log(this.consultation);
         this.buildForm();
         this.loadDocuments();
         this.isLoading = false;
@@ -98,7 +97,6 @@ export class ConsultationEditComponent implements OnInit {
       }
     });
   }
-
 
   viewDocument(doc: any) {
     this.documentService.getConsultationFileUrl(doc.urlStockage).then(url => {
