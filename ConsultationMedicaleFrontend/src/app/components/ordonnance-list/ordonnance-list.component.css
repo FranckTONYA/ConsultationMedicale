@@ -29,9 +29,8 @@ h2 {
   background-color: rgb(57, 158, 79);
 }
 
-.search-field {
-  width: 320px;
-  min-width: 160px;
+.search {
+  width: 50%;
 }
 
 .status-select {

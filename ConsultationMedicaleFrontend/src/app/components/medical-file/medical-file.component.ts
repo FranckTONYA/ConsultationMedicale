@@ -123,4 +123,8 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
       { state: { role } }
     );
   }
+
+  openConversation(userId: number) {
+    this.router.navigate(['/messaging/conversation', userId]);
+  }
 }

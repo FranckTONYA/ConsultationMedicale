@@ -5,7 +5,7 @@
 
   <div class="toolbar">
     <!-- Barre de recherche -->
-    <mat-form-field appearance="outline" class="search-field">
+    <mat-form-field appearance="outline" class="search">
       <mat-label>Rechercher...</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Patient, NISS, groupe sanguin..." />
       <mat-icon matSuffix>search</mat-icon>
@@ -62,6 +62,9 @@
           </button>
           <button mat-icon-button color="accent" (click)="modifier(d)">
             <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="openConversation(d.patient.id)">
+            <mat-icon>message</mat-icon>
           </button>
         </td>
       </ng-container>

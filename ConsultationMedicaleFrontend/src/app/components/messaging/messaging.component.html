@@ -12,18 +12,46 @@
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let a; let i = index">
+        {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="user">
       <th mat-header-cell *matHeaderCellDef>Utilisateur</th>
+      <!-- <td mat-cell *matCellDef="let row">
+        {{ row.userName }} 
+        {{ row.user.role === RoleUtilisateur.PATIENT ? '(Patient)' : 
+        ( row.user.role === RoleUtilisateur.MEDECIN ? '(Médecin)' : '(Administrateur)' )  }}
+      </td> -->
+
       <td mat-cell *matCellDef="let row">
-        {{ row.userName }}
+        <a class="user-link"
+          (click)="goToUser(row.user.id, row.user.role)">
+            {{ row.userName }} 
+            {{ row.user.role === RoleUtilisateur.PATIENT ? '(Patient)' : 
+            ( row.user.role === RoleUtilisateur.MEDECIN ? '(Médecin)' : '(Administrateur)' )  }}
+        </a>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="lastMessage">
       <th mat-header-cell *matHeaderCellDef>Dernier message</th>
       <td mat-cell *matCellDef="let row">
-        {{ row.lastMessage | slice:0:50 }}…
+        <ng-container *ngIf="row.lastMessage">
+          <mat-icon *ngIf="row.lastMessage.endsWith('.pdf')
+                        || row.lastMessage.endsWith('.jpg')
+                        || row.lastMessage.endsWith('.png')
+                        || row.lastMessage.endsWith('.docx')">
+            attach_file
+          </mat-icon>
+
+          {{ row.lastMessage | slice:0:50 }}…
+        </ng-container>
       </td>
+
     </ng-container>
 
     <ng-container matColumnDef="date">
@@ -34,10 +62,10 @@
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef></th>
+      <th mat-header-cell *matHeaderCellDef>Action</th>
       <td mat-cell *matCellDef="let row">
         <button mat-icon-button color="primary" (click)="openConversation(row.user.id)">
-          <mat-icon>arrow_forward</mat-icon>
+          <mat-icon>message</mat-icon>
         </button>
       </td>
     </ng-container>

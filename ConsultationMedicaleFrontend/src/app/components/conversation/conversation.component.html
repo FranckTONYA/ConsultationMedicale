@@ -1,6 +1,14 @@
 <div class="conversation-container">
 
-  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 10px;"></mat-progress-bar>
+
+  <div *ngIf="otherUser" class="conv-header">
+    <h3>{{ otherUser.prenom }} {{ otherUser.nom }} {{ otherUser.role === RoleUtilisateur.MEDECIN ? ' — ' + otherUser.specialite : ''}}</h3>
+    <p *ngIf="otherUser.role === RoleUtilisateur.PATIENT">NISS : {{ otherUser.niss }}</p>
+    <p *ngIf="otherUser.role === RoleUtilisateur.MEDECIN">INAMI : {{ otherUser.numINAMI }}</p>
+    <span class="role">{{ otherUser.role }}</span>
+  </div>
+
 
   <div #scrollContainer class="messages">
 
@@ -14,7 +22,8 @@
 
         <div *ngIf="m.document" class="attachment">
           <button mat-stroked-button (click)="viewDocument(m.document)">
-            <mat-icon>attach_file</mat-icon> {{ m.document.nom }}
+            <mat-icon>attach_file</mat-icon> 
+            {{ m.document.nom }}
           </button>
         </div>
 
@@ -30,7 +39,16 @@
   <div class="input-bar">
 
     <input [(ngModel)]="newMessage"
+           (keyup.enter)="send()"
            placeholder="Écrire un message…">
+
+    <div *ngIf="selectedFile" class="file-preview">
+      <mat-icon>attach_file</mat-icon>
+      {{ selectedFile.name }}
+      <button mat-icon-button color="warn" (click)="removeSelectedFile()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
 
     <input type="file" (change)="onFileSelected($event)" hidden #fileInput>
 

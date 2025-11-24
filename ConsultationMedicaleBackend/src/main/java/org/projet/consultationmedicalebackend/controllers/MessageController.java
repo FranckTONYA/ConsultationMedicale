@@ -134,6 +134,9 @@ public class MessageController {
                         messageSaved
                 );
                 documentService.save(doc);
+
+                messageSaved.setDocument(doc);
+                messageService.save(messageSaved);
             }
 
             return ResponseEntity.ok(Map.of("message", "Message crée avec succès"));

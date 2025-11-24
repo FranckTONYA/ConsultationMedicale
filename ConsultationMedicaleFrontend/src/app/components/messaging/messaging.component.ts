@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MessageService } from '../../core/services/message.service';
 import { AuthService } from '../../core/services/auth.service';
-import { Utilisateur } from '../../models/utilisateur';
+import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 import { Router } from '@angular/router';
 import { UtilisateurService } from '../../core/services/utilisateur.service';
 import Swal from 'sweetalert2';
@@ -16,12 +16,13 @@ import Swal from 'sweetalert2';
 })
 export class MessagingComponent implements OnInit, AfterViewInit {
 
-  displayedColumns = ['user', 'lastMessage', 'date', 'actions'];
+  displayedColumns = ['id', 'user', 'lastMessage', 'date', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   searchText = "";
   currentUser!: Utilisateur;
+  RoleUtilisateur = RoleUtilisateur;
   isLoading = true;
 
   constructor(
@@ -65,13 +66,21 @@ export class MessagingComponent implements OnInit, AfterViewInit {
 
               const other = m.emetteurId === this.currentUser.id ? recepteur : emetteur;
 
-              if (!map.has(other.id!)) {
-                map.set(other.id!, {
+              const key = other.id!;
+
+              if (!map.has(key)) {
+                map.set(key, {
                   user: other,
                   userName: `${other.prenom} ${other.nom}`,
-                  lastMessage: m.contenu,
+                  lastMessage: m.document ? m.document.nom : m.contenu,
                   date: m.dateEnvoi
                 });
+              } else {
+                const existing = map.get(key);
+                if (new Date(m.dateEnvoi) > new Date(existing.date)) {
+                  existing.lastMessage = m.document ? m.document.nom : m.contenu;
+                  existing.date = m.dateEnvoi;
+                }
               }
 
               this.dataSource.data = Array.from(map.values());
@@ -100,5 +109,12 @@ export class MessagingComponent implements OnInit, AfterViewInit {
 
   openConversation(userId: number) {
     this.router.navigate(['/messaging/conversation', userId]);
+  }
+
+  goToUser(userId: number, role: RoleUtilisateur) {
+    this.router.navigate(
+      ['/user-details', userId],
+      { state: { role } }
+    );
   }
 }

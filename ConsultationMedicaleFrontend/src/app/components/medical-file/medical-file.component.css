@@ -8,16 +8,16 @@ h2 {
   text-align: center;
 }
 
-.toolbar {
+/* .toolbar {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 1rem;
-}
+} */
 
-.search-field {
-  width: 600px;
+.search {
+  width: 100%;
 }
 
 .table-container {

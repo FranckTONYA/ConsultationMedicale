@@ -57,8 +57,8 @@ export class OrdonnanceListComponent implements OnInit, AfterViewInit {
         this.isMedecin = user.role === RoleUtilisateur.MEDECIN;
 
         this.displayedColumns = this.isMedecin
-          ? ['id', 'patientNom', 'patientNiss', 'date', 'actions']
-          : ['id', 'medecinNom', 'date', 'actions'];
+          ? ['id', 'patientNom', 'patientNiss', 'contenu', 'date', 'actions']
+          : ['id', 'medecinNom', 'medecinINAMI', 'contenu', 'date', 'actions'];
 
         this.loadOrdonnances();
       },

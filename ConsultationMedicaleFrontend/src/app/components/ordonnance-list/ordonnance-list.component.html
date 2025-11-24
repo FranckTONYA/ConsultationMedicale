@@ -8,7 +8,7 @@
       <mat-icon>add</mat-icon> Créer ordonnance
     </button>
 
-    <mat-form-field appearance="outline" class="search-field">
+    <mat-form-field appearance="outline" class="search">
       <mat-label>Rechercher...</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher..."/>
       <mat-icon matSuffix>search</mat-icon>
@@ -48,6 +48,16 @@
             {{o.medecin?.prenom}} {{o.medecin?.nom}}
           </a>
         </td>
+      </ng-container>
+
+      <ng-container *ngIf="isPatient" matColumnDef="medecinINAMI">
+        <th mat-header-cell *matHeaderCellDef> INAMI </th>
+        <td mat-cell *matCellDef="let o">{{ o.medecin?.numINAMI }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="contenu">
+        <th mat-header-cell *matHeaderCellDef> Contenu </th>
+        <td mat-cell *matCellDef="let o">{{ o.contenu | slice:0:50 }}… </td>
       </ng-container>
 
       <ng-container matColumnDef="date">

@@ -1,17 +1,75 @@
 .page-container {
-  padding: 1.5rem;
+  padding: 2rem;
+}
+
+h2 {
+  color: #1976d2;
+  margin-bottom: 1.5rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .search {
   width: 100%;
-  margin-bottom: 1.2rem;
+}
+
+.table-container {
+  margin-top: 1rem;
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
-th {
-  background: #469ef7 !important;
+th{
+  background-color: #469ef7 !important;
   color: white !important;
+  font-weight: bold !important; /* Augmente l'épaisseur */
+  font-size: 15px; /* légère augmentation de taille */
+  text-transform: uppercase; /* donne plus de présence visuelle */
+}
+
+.user-link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.user-link:hover {
+  text-decoration: none;
+}
+
+button[mat-icon-button] {
+  margin: 0 4px;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  h2 {
+    text-align: center;
+  }
 }

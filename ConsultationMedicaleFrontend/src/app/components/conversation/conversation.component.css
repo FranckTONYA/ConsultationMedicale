@@ -2,8 +2,10 @@
   height: calc(100vh - 140px);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
+/* Zone messages */
 .messages {
   flex: 1;
   overflow-y: auto;
@@ -11,6 +13,7 @@
   background: #f4f7fc;
 }
 
+/* Message */
 .msg {
   display: flex;
   margin-bottom: 12px;
@@ -20,12 +23,14 @@
   justify-content: flex-end;
 }
 
+/* Bulles */
 .bubble {
   padding: 12px;
   max-width: 70%;
   border-radius: 12px;
   background: white;
   box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
+  word-wrap: break-word;
 }
 
 .msg.me .bubble {
@@ -33,17 +38,39 @@
   color: white;
 }
 
-.date {
-  font-size: 11px;
-  opacity: 0.7;
+/* Attachement */
+.attachment button {
+  margin-top: 6px;
+  font-size: 13px;
 }
 
+/* Style attachement dans bulle bleue */
+.msg.me .attachment button {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border-color: rgba(255,255,255,0.6) !important;
+}
+
+.msg.me .attachment mat-icon {
+  color: white !important;
+}
+
+/* Date */
+.date {
+  display: block;
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+/* Zone d'envoi */
 .input-bar {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 1rem;
   background: white;
+  border-top: 1px solid #ddd;
 }
 
 .input-bar input {
@@ -51,4 +78,106 @@
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Preview fichier */
+.file-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #e8e8e8;
+  border-radius: 8px;
+  font-size: 14px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conv-header {
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.conv-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.conv-header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.conv-header .role {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 10px;
+  background: #1976d2;
+  color: white;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* ----------- RESPONSIVE ----------- */
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  .bubble {
+    max-width: 90%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .messages {
+    padding: 0.5rem;
+  }
+
+  .date {
+    font-size: 10px;
+  }
+
+  .input-bar {
+    gap: 6px;
+    padding: 0.7rem;
+  }
+
+  .input-bar input {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .file-preview {
+    max-width: 120px;
+    font-size: 12px;
+  }
+
+  .attachment button {
+    font-size: 12px;
+    padding: 4px 6px !important;
+  }
+
+  .conv-header h3 {
+    font-size: 17px;
+  }
+  .conv-header p {
+    font-size: 12px;
+  }
+  .conv-header .role {
+    font-size: 11px;
+  }
+}
+
+/* Tablette */
+@media (max-width: 900px) {
+  .bubble {
+    max-width: 80%;
+  }
 }

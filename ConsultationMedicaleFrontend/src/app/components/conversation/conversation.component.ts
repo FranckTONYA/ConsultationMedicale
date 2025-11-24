@@ -5,6 +5,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { Message } from '../../models/message';
 import { DocumentService } from '../../core/services/document.service';
 import Swal from 'sweetalert2';
+import { UtilisateurService } from '../../core/services/utilisateur.service';
+import { RoleUtilisateur } from '../../models/utilisateur';
 
 @Component({
   selector: 'app-conversation',
@@ -15,14 +17,16 @@ import Swal from 'sweetalert2';
 export class ConversationComponent implements OnInit {
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
   currentUserId!: number;
   otherUserId!: any;
+  otherUser: any = null;
 
   messages: Message[] = [];
   newMessage = "";
   selectedFile?: File;
-
+  RoleUtilisateur = RoleUtilisateur;
   isLoading = true;
 
   constructor(
@@ -30,10 +34,16 @@ export class ConversationComponent implements OnInit {
     private msgService: MessageService,
     private authService: AuthService,
     private documentService: DocumentService,
+    private userService: UtilisateurService
   ) {}
 
   ngOnInit(): void {
     this.otherUserId = this.route.snapshot.paramMap.get('id');
+
+    // On récupère l'utilisateur avec qui on discute
+    this.userService.getById(this.otherUserId).subscribe(u => {
+      this.otherUser = u;
+    });
 
     this.authService.userInfo$.subscribe(u => {
       this.currentUserId = u.id!;
@@ -42,8 +52,6 @@ export class ConversationComponent implements OnInit {
   }
 
   loadConversation() {
-    console.log(this.currentUserId)
-    console.log(this.otherUserId)
     this.msgService.getConversation(this.currentUserId, this.otherUserId)
       .subscribe(data => {
         console.log(data);
@@ -61,7 +69,6 @@ export class ConversationComponent implements OnInit {
     msg.emetteur = { id: this.currentUserId } as any;
     msg.recepteur = { id: this.otherUserId } as any;
 
-    console.log(msg);
     this.msgService.sendMessageWithFile(msg, this.selectedFile)
         .subscribe(() => this.afterSend());
 
@@ -76,11 +83,21 @@ export class ConversationComponent implements OnInit {
   afterSend() {
     this.newMessage = "";
     this.selectedFile = undefined;
+
+    if (this.fileInput)
+      this.fileInput.nativeElement.value = "";
+
     this.loadConversation();
   }
 
   onFileSelected(ev: any) {
     this.selectedFile = ev.target.files[0];
+  }
+
+  removeSelectedFile() {
+    this.selectedFile = undefined;
+    if (this.fileInput)
+      this.fileInput.nativeElement.value = "";
   }
 
   scrollToBottom() {
