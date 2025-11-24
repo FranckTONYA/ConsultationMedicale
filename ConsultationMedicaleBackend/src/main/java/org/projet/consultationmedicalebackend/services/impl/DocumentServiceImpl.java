@@ -2,9 +2,11 @@ package org.projet.consultationmedicalebackend.services.impl;
 
 import org.projet.consultationmedicalebackend.models.Consultation;
 import org.projet.consultationmedicalebackend.models.Document;
+import org.projet.consultationmedicalebackend.models.Ordonnance;
 import org.projet.consultationmedicalebackend.models.TypeDoc;
 import org.projet.consultationmedicalebackend.repositories.ConsultationRepository;
 import org.projet.consultationmedicalebackend.repositories.DocumentRepository;
+import org.projet.consultationmedicalebackend.repositories.OrdonnanceRepository;
 import org.projet.consultationmedicalebackend.services.DocumentService;
 import org.projet.consultationmedicalebackend.utils.CustomResponse;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +25,13 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
     private final ConsultationRepository consultationRepository;
+    private final OrdonnanceRepository ordonnanceRepository;
 
-    public DocumentServiceImpl(DocumentRepository documentRepository, ConsultationRepository consultationRepository) {
+    public DocumentServiceImpl(DocumentRepository documentRepository, ConsultationRepository consultationRepository,
+                               OrdonnanceRepository ordonnanceRepository) {
         this.documentRepository = documentRepository;
         this.consultationRepository = consultationRepository;
+        this.ordonnanceRepository = ordonnanceRepository;
     }
 
     @Override
@@ -48,6 +53,12 @@ public class DocumentServiceImpl implements DocumentService {
     public List<Document> findByConsultation(Long consultationId) {
         Consultation consultation = consultationRepository.findById(consultationId).orElse(null);
         return documentRepository.findByConsultation(consultation);
+    }
+
+    @Override
+    public List<Document> findByOrdonnance(Long ordonnanceId) {
+        Ordonnance ordonnance = ordonnanceRepository.findById(ordonnanceId).orElse(null);
+        return documentRepository.findByOrdonnance(ordonnance);
     }
 
     @Override

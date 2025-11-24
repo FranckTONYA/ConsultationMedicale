@@ -52,16 +52,27 @@ export class ConversationComponent implements OnInit {
   }
 
   loadConversation() {
+    this.isLoading = true;
     this.msgService.getConversation(this.currentUserId, this.otherUserId)
       .subscribe(data => {
-        console.log(data);
         this.messages = data;
+        // Marquer comme lus les messages où je suis le recepteur
+        const unreadMessages = this.messages.filter(m =>
+          m.recepteurId === this.currentUserId && !m.lu
+        );
+
+        unreadMessages.forEach(msg => {
+          msg.lu = true;
+          this.msgService.update(msg.id!, msg).subscribe();
+        });
+
         this.isLoading = false;
         setTimeout(() => this.scrollToBottom(), 50);
       });
   }
 
   send() {
+    this.isLoading = true;
     if (!this.newMessage.trim() && !this.selectedFile) return;
 
     const msg = new Message();
@@ -69,8 +80,22 @@ export class ConversationComponent implements OnInit {
     msg.emetteur = { id: this.currentUserId } as any;
     msg.recepteur = { id: this.otherUserId } as any;
 
-    this.msgService.sendMessageWithFile(msg, this.selectedFile)
-        .subscribe(() => this.afterSend());
+    this.msgService.sendMessageWithFile(msg, this.selectedFile).subscribe({
+      next: () => {
+        this.afterSend();
+        this.isLoading = true;
+      },
+      error: (err) => {
+        if (err.status === 413) {
+          Swal.fire("Fichier trop volumineux", "Votre document dépasse la taille maximale autorisée de 5MB", "error");
+          this.isLoading = false;
+        } else {
+          Swal.fire("Erreur", err.error?.error || "Impossible d’envoyer le message", "error");
+          this.isLoading = false;
+        }
+      }
+    });
+
 
     // if (this.selectedFile)
     //   this.msgService.sendMessageWithFile(msg, this.selectedFile)

@@ -56,6 +56,11 @@ public class DocumentController {
         return documentService.findByConsultation(consultationId);
     }
 
+    @GetMapping("/find-by-ordonnance/{ordonnanceId}")
+    public List<Document> getByOrdonnance(@PathVariable Long ordonnanceId) {
+        return documentService.findByOrdonnance(ordonnanceId);
+    }
+
     @PostMapping
     public Document create(@RequestBody Document document) {
         return documentService.save(document);

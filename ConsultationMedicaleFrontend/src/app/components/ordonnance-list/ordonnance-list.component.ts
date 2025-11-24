@@ -81,6 +81,8 @@ export class OrdonnanceListComponent implements OnInit, AfterViewInit {
 
     obs.subscribe({
       next: (data) => {
+         // Tri décroissant par date
+        data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         this.dataSource.data = data;
         this.applyCombinedFilter();
         this.isLoading = false;

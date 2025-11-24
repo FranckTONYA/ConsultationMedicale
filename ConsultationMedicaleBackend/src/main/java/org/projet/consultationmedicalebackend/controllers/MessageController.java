@@ -58,13 +58,6 @@ public class MessageController {
         return messageService.save(message);
     }
 
-    @PutMapping("update/{id}")
-    public Message update(@PathVariable Long id, @RequestBody Message message) {
-        message.setId(id);
-        return messageService.save(message);
-    }
-
-
     @DeleteMapping("/delete-by-id/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Message> messsageOpt = messageService.findById(id);
@@ -145,5 +138,18 @@ public class MessageController {
             e.printStackTrace();
             return ResponseEntity.status(500).body((Map.of("error", "Erreur serveur :" + e.getMessage())));
         }
+    }
+
+    @PutMapping("/update/{id}")
+    public Message update(@PathVariable Long id, @RequestBody Message message) {
+
+        Message messageFound = messageService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Message non trouvée"));
+
+        // Mise à jour
+        messageFound.setContenu(message.getContenu());
+        messageFound.setLu(message.isLu());
+
+        return messageService.save(messageFound);
     }
 }

@@ -97,7 +97,11 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
   loadConsultationsPatient(idPatient: number) {
     this.isLoading = true;
     this.consultationService.getByPatient(idPatient).subscribe({
-      next: data => { this.dataSource.data = data; this.isLoading = false; this.applyCombinedFilter(); },
+      next: data => { 
+        this.dataSource.data = data; 
+        this.isLoading = false; 
+        this.applyCombinedFilter(); 
+      },
       error: () => { Swal.fire('Erreur', 'Impossible de charger les consultations', 'error'); this.isLoading = false; }
     });
   }

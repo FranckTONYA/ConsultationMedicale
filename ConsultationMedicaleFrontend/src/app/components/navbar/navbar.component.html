@@ -24,9 +24,9 @@
 
         <a *ngIf="canViewByAdminAndMedecin()" routerLink="/dossiers-medicaux" routerLinkActive="active"><mat-icon>folder</mat-icon> Dossiers médicaux</a>
        
-        <a *ngIf="canViewByPatient()" routerLink="/consent-management" routerLinkActive="active"><mat-icon>folder</mat-icon> Consentements</a>
+        <a *ngIf="canViewByPatient()" routerLink="/consent-management" routerLinkActive="active"><mat-icon>check_circle</mat-icon> Consentements</a>
        
-        <a *ngIf="canViewByPatient()" routerLink="/doctors-list" routerLinkActive="active"><mat-icon>folder</mat-icon> Médecins</a>
+        <a *ngIf="canViewByPatient()" routerLink="/doctors-list" routerLinkActive="active"><mat-icon>healing</mat-icon> Médecins</a>
 
         <a *ngIf="canViewByPatient()" routerLink="/consultation/list" routerLinkActive="active"><mat-icon>medical_services</mat-icon> Consultations</a>
         
@@ -74,7 +74,7 @@
             Gestion Patient
           </button>
           <button mat-menu-item routerLink="/manage-medecin">
-            <mat-icon>medical_services</mat-icon>
+            <mat-icon>healing</mat-icon>
             Gestion Médecin
           </button>
           <button mat-menu-item routerLink="/manage-admin">

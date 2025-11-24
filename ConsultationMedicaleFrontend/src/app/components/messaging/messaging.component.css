@@ -9,15 +9,15 @@ h2 {
 
 .toolbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Séparation gauche/droite */
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  width: 100%;
+  margin-bottom: 15px;
+  gap: 20px;
 }
 
 .search {
-  width: 100%;
+  width: 60%;
 }
 
 .table-container {
@@ -53,6 +53,29 @@ th{
 button[mat-icon-button] {
   margin: 0 4px;
 }
+
+.unread-row {
+  background: #e9f1ff !important;
+  font-weight: 600;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.status.unread {
+  background: #ffdddd;
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.status.read {
+  background: #dff5e1;
+  color: #2e7d32;
+}
+
 
 /* ✅ Responsive */
 @media (max-width: 768px) {

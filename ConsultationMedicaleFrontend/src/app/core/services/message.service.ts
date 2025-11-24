@@ -29,23 +29,6 @@ export class MessageService {
 
   sendMessageWithFile(msg: Message, file: File | undefined) {
     const form = new FormData();
-
-    // form.append("message", new Blob([JSON.stringify(msg)], {
-    //   type: 'application/json'
-    // }));
-
-    console.log(msg)
-    // form.append("message",
-    //   new Blob(
-    //     [JSON.stringify({
-    //       contenu: msg.contenu,
-    //       emetteurId: msg.emetteur.id,
-    //       recepteurId: msg.recepteur.id
-    //     })],
-    //     { type: "application/json" }
-    //   )
-    // );
-
     form.append("contenu", msg.contenu);
     form.append("emetteurId",msg.emetteur.id!.toString());
     form.append("recepteurId", msg.recepteur.id!.toString());
@@ -53,6 +36,10 @@ export class MessageService {
     if (file) form.append("file", file);
 
     return this.http.post(`${this.apiUrl}/create-with-file`, form);
+  }
+  
+  update(id: number, message: Message) {
+    return this.http.put<Message>(`${this.apiUrl}/update/${id}`, message);
   }
 
   delete(id: number) {

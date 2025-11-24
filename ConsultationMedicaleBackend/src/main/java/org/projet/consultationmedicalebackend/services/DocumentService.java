@@ -13,6 +13,7 @@ public interface DocumentService {
     List<Document> findAll();
     Optional<Document> findById(Long id);
     List<Document> findByConsultation(Long consultationId);
+    List<Document> findByOrdonnance(Long ordonnanceId);
     void delete(Long id);
     CustomResponse uploadConsultationFiles(List<MultipartFile> file, Consultation consultation);
 }

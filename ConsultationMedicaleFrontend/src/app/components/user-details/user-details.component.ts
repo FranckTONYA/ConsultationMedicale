@@ -23,6 +23,7 @@ export class UserDetailsComponent implements OnInit {
   isLoading = true;
   role!: RoleUtilisateur;
   id!: number;
+  RoleUtilisateur = RoleUtilisateur;
 
   user!: Utilisateur | Patient | Medecin | Administrateur;
 

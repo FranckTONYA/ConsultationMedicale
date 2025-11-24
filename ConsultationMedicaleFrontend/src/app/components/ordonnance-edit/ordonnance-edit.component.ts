@@ -106,7 +106,7 @@ export class OrdonnanceEditComponent implements OnInit {
   loadDocuments() {
     this.isLoading = true;
     if (!this.ordonnance.id) return;
-    this.documentService.getByConsultation(this.ordonnance.id).subscribe({
+    this.documentService.getByOrdonnance(this.ordonnance.id).subscribe({
       next: docs => {
         this.existingDocs = docs;
         this.isLoading = false;
@@ -203,7 +203,12 @@ save() {
         this.router.navigate(['/ordonnance/list']);
       },
       error: err => {
-        Swal.fire('Erreur', err.error?.error || 'Erreur serveur', 'error');
+         if (err.status === 413) {
+            Swal.fire("Fichier trop volumineux", "Votre document dépasse la taille maximale autorisée de 5MB", "error");
+          } else {
+             Swal.fire('Erreur', err.error?.error || "Erreur lors de l'enregistrement de l'ordonnance", 'error');
+          }
+       
         this.isLoading = false;
       }
     });
@@ -217,7 +222,11 @@ save() {
         this.router.navigate(['/ordonnance/list']);
       },
       error: err => {
-        Swal.fire('Erreur', err.error?.error || 'Erreur serveur', 'error');
+         if (err.status === 413) {
+            Swal.fire("Fichier trop volumineux", "Votre document dépasse la taille maximale autorisée de 5MB", "error");
+          } else {
+             Swal.fire('Erreur', err.error?.error || 'Erreur serveur', 'error');
+          }
         this.isLoading = false;
       }
     });

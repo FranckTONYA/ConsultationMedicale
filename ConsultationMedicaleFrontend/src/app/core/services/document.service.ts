@@ -14,6 +14,10 @@ export class DocumentService {
     return this.http.get<any[]>(`${this.apiUrl}/find-by-consultation/${id}`);
   }
 
+  getByOrdonnance(id: number) {
+    return this.http.get<any[]>(`${this.apiUrl}/find-by-ordonnance/${id}`);
+  }
+
   deleteConsultationFile(id: number) {
     return this.http.delete(`${this.apiUrl}/delete-consultation-file/${id}`);
   }

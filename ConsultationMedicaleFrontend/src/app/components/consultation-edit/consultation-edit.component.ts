@@ -57,9 +57,16 @@ export class ConsultationEditComponent implements OnInit {
   // ---------------- DOCUMENTS ----------------
 
   loadDocuments() {
+    this.isLoading = true;
     this.documentService.getByConsultation(this.consultation.id!).subscribe({
-      next: docs => this.existingDocs = docs,
-      error: () => Swal.fire('Erreur', 'Impossible de charger les documents', 'error')
+      next: docs => {
+        this.existingDocs = docs;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire('Erreur', 'Impossible de charger les documents', 'error');
+      }
     });
   }
 
@@ -126,9 +133,12 @@ export class ConsultationEditComponent implements OnInit {
         this.router.navigate(['/consultation/list']);
       },
       error: (err) => {
-        console.log(err);
-        Swal.fire('Erreur', err.error?.error ?? 'Impossible de sauvegarder la consultation', 'error');
-        this.isLoading = false;
+         if (err.status === 413) {
+            Swal.fire("Fichier trop volumineux", "Votre document dépasse la taille maximale autorisée de 5MB", "error");
+          } else {
+            Swal.fire('Erreur', err.error?.error ?? 'Impossible de sauvegarder la consultation', 'error');
+            this.isLoading = false;
+          }
       }
     });
   }
