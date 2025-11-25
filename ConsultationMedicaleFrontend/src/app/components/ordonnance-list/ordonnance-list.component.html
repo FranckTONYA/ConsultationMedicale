@@ -1,7 +1,7 @@
 <div class="page-container">
   <h2>Mes ordonnances</h2>
   
-  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar><br>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate" ></mat-progress-bar><br>
 
   <div class="toolbar">
     <button *ngIf="isMedecin" mat-raised-button color="primary" (click)="creerOrdonnance()" class="add-btn">

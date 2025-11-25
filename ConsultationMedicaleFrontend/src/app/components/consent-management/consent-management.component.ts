@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import Swal from 'sweetalert2';
@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 import { PatientService } from '../../core/services/patient.service';
 import { RoleUtilisateur } from '../../models/utilisateur';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-consent-management',
@@ -17,7 +18,7 @@ import { Router } from '@angular/router';
   templateUrl: './consent-management.component.html',
   styleUrl: './consent-management.component.css'
 })
-export class ConsentManagementComponent implements OnInit, AfterViewInit {
+export class ConsentManagementComponent implements OnInit, AfterViewInit, OnDestroy {
 
   currentPatient = new Patient();
   assignedMedecins = new MatTableDataSource<Medecin>([]);
@@ -29,6 +30,7 @@ export class ConsentManagementComponent implements OnInit, AfterViewInit {
   searchedMedecin: Medecin | null = null;
   RoleUtilisateur = RoleUtilisateur;
   isLoading = true;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private patientService: PatientService,
@@ -39,8 +41,53 @@ export class ConsentManagementComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadCurrentPatient();
+    this.setupSearchListener();
+  }
 
-    // Recherche INAMI
+  ngAfterViewInit() {
+    this.assignedMedecins.paginator = this.paginator;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /** Chargement du patient connecté + médecins autorisés **/
+  private loadCurrentPatient() {
+    this.authService.userInfo$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (patient: Patient) => {
+
+         // <<< AJOUT IMPORTANT pour éviter des erreur avec d'autres roles utilisateur>>>
+        if (!patient || patient.role !== RoleUtilisateur.PATIENT) {
+          this.isLoading = false;
+          return; // ON BLOQUE L'EXÉCUTION
+        }
+
+        this.currentPatient = patient;
+
+        this.patientService.getMedecinsOfPatient(patient.id!).subscribe({
+          next: (result) => {
+            this.assignedMedecins.data = result;
+            this.isLoading = false;
+          },
+          error: () => {
+            Swal.fire('Erreur', 'Impossible de récupérer les médecins autorisés.', 'error');
+            this.isLoading = false;
+          }
+        });
+      },
+      error: () => {
+        Swal.fire('Erreur', "Impossible de charger le patient connecté.", 'error');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Recherche du médecin par INAMI
+  private setupSearchListener(){
     this.searchControl.valueChanges.subscribe(value => {
       if (!value || value.length < 3) {
         this.searchedMedecin = null;
@@ -64,34 +111,6 @@ export class ConsentManagementComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         }
       });
-    });
-  }
-
-  ngAfterViewInit() {
-    this.assignedMedecins.paginator = this.paginator;
-  }
-
-  /** Chargement du patient connecté + médecins autorisés **/
-  private loadCurrentPatient() {
-    this.authService.userInfo$.subscribe({
-      next: (patient: Patient) => {
-        this.currentPatient = patient;
-
-        this.patientService.getMedecinsOfPatient(patient.id!).subscribe({
-          next: (result) => {
-            this.assignedMedecins.data = result;
-            this.isLoading = false;
-          },
-          error: () => {
-            Swal.fire('Erreur', 'Impossible de récupérer les médecins autorisés.', 'error');
-            this.isLoading = false;
-          }
-        });
-      },
-      error: () => {
-        Swal.fire('Erreur', "Impossible de charger le patient connecté.", 'error');
-        this.isLoading = false;
-      }
     });
   }
 

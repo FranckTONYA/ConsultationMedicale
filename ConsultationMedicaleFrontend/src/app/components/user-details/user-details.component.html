@@ -3,7 +3,7 @@
 <div class="page-wrapper" *ngIf="user">
 
   <h2 class="title">
-    Détails {{role === 'PATIENT' ? 'du Patient' : (role === 'MEDECIN' ? 'du Médecin' : "de l'Administrateur")}}
+    Détails {{role === 'PATIENT' ? 'du Patient' : (role === 'MEDECIN' ? 'du Médecin' : "de l'administrateur")}}
   </h2>
 
   <!-- INFOS DE BASE UTILISATEUR -->
@@ -23,7 +23,7 @@
       <span class="field-value">{{ user.email }}</span>
     </div>
 
-    <div class="field-row" *ngIf="role === RoleUtilisateur.PATIENT">
+    <div class="field-row" *ngIf="role !== RoleUtilisateur.ADMINISTRATEUR">
       <span class="field-label">Téléphone :</span>
       <span class="field-value">{{ user.telephone }}</span>
     </div>
