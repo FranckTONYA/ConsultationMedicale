@@ -31,11 +31,13 @@ import { OrdonnanceEditComponent } from './components/ordonnance-edit/ordonnance
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { MessagingComponent } from './components/messaging/messaging.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register-patient', component: RegisterPatientComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'verify-code', component: VerifyCodeComponent },
   { path: 'profil', component: ProfilComponent, canActivate: [AuthGuard], 
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 

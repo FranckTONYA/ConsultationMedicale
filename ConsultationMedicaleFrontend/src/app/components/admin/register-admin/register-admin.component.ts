@@ -21,6 +21,7 @@ export class RegisterAdminComponent implements OnInit {
   adminId?: number;
   currentAdmin = new Administrateur();
   modeAdmin = false;
+  isLoading = true;
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +56,7 @@ export class RegisterAdminComponent implements OnInit {
     this.registerForm.get('motDePasse')?.valueChanges.subscribe(() => {
       this.registerForm.get('confirmPassword')?.updateValueAndValidity();
     });
+    this.isLoading = false;
   }
 
   initForm() {
@@ -65,12 +67,31 @@ export class RegisterAdminComponent implements OnInit {
         adresse: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-        motDePasse: ['', [Validators.required, Validators.minLength(6)]],
+        motDePasse: [
+          '',
+          [
+            Validators.required,
+            this.strongPasswordValidator,
+          ],
+        ],
         confirmPassword: ['', Validators.required],
         role: [RoleUtilisateur.ADMINISTRATEUR]
       },
       { validators: this.passwordMatchValidator }
     );
+  }
+
+  strongPasswordValidator(control: AbstractControl) {
+    const value = control.value;
+    if (!value) return null;
+
+    // Min 8 caractères, 1 maj, 1 chiffre, 1 symbole
+    const strongPasswordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/;
+
+    return strongPasswordRegex.test(value)
+      ? null
+      : { weakPassword: true };
   }
 
   passwordMatchValidator(formGroup: AbstractControl) {
@@ -85,12 +106,17 @@ export class RegisterAdminComponent implements OnInit {
   }
 
   loadAdmin(id: number) {
+    this.isLoading = true;
     this.adminService.getById(id).subscribe({
       next: (admin: Administrateur) => {
         this.currentAdmin = admin;
         this.registerForm.patchValue(admin);
+        this.isLoading = false;
       },
-      error: () => Swal.fire('Erreur', 'Impossible de charger l’administrateur', 'error'),
+      error: () => {
+        Swal.fire('Erreur', 'Impossible de charger l’administrateur', 'error');
+        this.isLoading = false;
+      }
     });
   }
 
@@ -99,6 +125,8 @@ export class RegisterAdminComponent implements OnInit {
       Swal.fire('Champs manquants ou invalides', 'Merci de vérifier les informations.', 'warning');
       return;
     }
+
+    this.isLoading = true;
 
     const adminData = { ...this.registerForm.value };
     delete adminData.confirmPassword;
@@ -112,17 +140,25 @@ export class RegisterAdminComponent implements OnInit {
       this.adminService.update(this.adminId, adminData).subscribe({
         next: () => {
           Swal.fire('Succès', 'Administrateur mis à jour.', 'success');
+          this.isLoading = false;
           this.router.navigate([this.modeAdmin ? '/manage-admin' : '/profil']);
         },
-        error: () => Swal.fire('Erreur', 'Impossible de modifier.', 'error'),
+        error: () => {
+          Swal.fire('Erreur', 'Impossible de modifier.', 'error');
+          this.isLoading = false;
+        }
       });
     } else {
       this.authService.registerAdmin(adminData).subscribe({
         next: () => {
           Swal.fire('Succès', 'Administrateur ajouté.', 'success');
+          this.isLoading = false;
           this.router.navigate(['/manage-admin']);
         },
-        error: (err) => Swal.fire('Erreur', err.error?.error ?? 'Échec.', 'error'),
+        error: (err) => {
+          Swal.fire('Erreur', err.error?.error ?? 'Échec.', 'error');
+          this.isLoading = false;
+        }
       });
     }
   }

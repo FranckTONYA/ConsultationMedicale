@@ -1,110 +1,62 @@
 <mat-toolbar class="navbar">
-    <!-- Logo -->
-    <!-- <div class="logo" routerLink="/">
-        <mat-icon>local_hospital</mat-icon>
-        <span class="app-name">MediConsult</span>
-    </div> -->
-    <div class="logo" routerLink="/dashboard">
-        <img src="logo_all.jpg" width="140" style="border-radius: 0%;">
-    </div>
+  <!-- Logo -->
+  <div class="logo" routerLink="/dashboard">
+    <img src="logo_all.jpg" width="140" style="border-radius: 0%;">
+  </div>
 
-  <!-- Liens (Desktop) -->
+  <!-- Liens de navigation -->
   <nav class="nav-links" [class.open]="menuOpen">
-    
     <ng-container *ngIf="!isLoggedIn">
-        <a routerLink="/login" routerLinkActive="active" (click)="menuOpen = false">Connexion</a>
-        <a routerLink="/register-patient" routerLinkActive="active" (click)="menuOpen = false">Inscription</a>
+      <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Connexion</a>
+      <a routerLink="/register-patient" routerLinkActive="active" (click)="closeMenu()">Inscription</a>
     </ng-container>
 
     <ng-container *ngIf="isLoggedIn">
-        <a routerLinkActive="active" (click)="openDashboard()"><mat-icon>home</mat-icon>Accueil</a>
-        <!-- <a routerLink="/rendezvous" routerLinkActive="active" (click)="menuOpen = false">Rendez-vous</a>
-        <a routerLink="/dossiers" routerLinkActive="active" (click)="menuOpen = false">Mes Dossiers</a>
-        <a routerLink="/contact" routerLinkActive="active" (click)="menuOpen = false">Contact</a> -->
+      <a routerLinkActive="active" (click)="openDashboard(); closeMenu()"><mat-icon>home</mat-icon>Accueil</a>
+      <a *ngIf="canViewByAdminAndMedecin()" routerLink="/dossiers-medicaux" routerLinkActive="active" (click)="closeMenu()"><mat-icon>folder</mat-icon>Dossiers médicaux</a>
+      <a *ngIf="canViewByPatient()" routerLink="/consent-management" routerLinkActive="active" (click)="closeMenu()"><mat-icon>check_circle</mat-icon>Consentements</a>
+      <a *ngIf="canViewByPatient()" routerLink="/doctors-list" routerLinkActive="active" (click)="closeMenu()"><mat-icon>healing</mat-icon>Médecins</a>
+      <a *ngIf="canViewByPatient()" routerLink="/consultation/list" routerLinkActive="active" (click)="closeMenu()"><mat-icon>medical_services</mat-icon>Consultations</a>
+      <a *ngIf="canViewByMedecinAndPatient()" routerLink="/ordonnance/list" routerLinkActive="active" (click)="closeMenu()"><mat-icon>assignment</mat-icon>Ordonnances</a>
+      <a routerLink="/messaging" routerLinkActive="active" (click)="closeMenu()"><mat-icon>message</mat-icon>Messagerie</a>
 
-        <a *ngIf="canViewByAdminAndMedecin()" routerLink="/dossiers-medicaux" routerLinkActive="active"><mat-icon>folder</mat-icon> Dossiers médicaux</a>
-       
-        <a *ngIf="canViewByPatient()" routerLink="/consent-management" routerLinkActive="active"><mat-icon>check_circle</mat-icon> Consentements</a>
-       
-        <a *ngIf="canViewByPatient()" routerLink="/doctors-list" routerLinkActive="active"><mat-icon>healing</mat-icon> Médecins</a>
+      <!-- Plannification Médecin -->
+      <div *ngIf="canViewByMedecin()" class="nav-item dropdown" [matMenuTriggerFor]="gestionplanning">
+        <a class="nav-link"><mat-icon>event</mat-icon>Plannification <mat-icon class="arrow-icon">expand_more</mat-icon></a>
+      </div>
+      <mat-menu #gestionplanning="matMenu" class="gestion-menu">
+        <button mat-menu-item routerLink="/schedule-medecin"><mat-icon>event</mat-icon>Calendrier</button>
+        <button mat-menu-item routerLink="/consultation/list"><mat-icon>medical_services</mat-icon>Consultations</button>
+      </mat-menu>
 
-        <a *ngIf="canViewByPatient()" routerLink="/consultation/list" routerLinkActive="active"><mat-icon>medical_services</mat-icon> Consultations</a>
-        
-        <a *ngIf="canViewByMedecinAndPatient()" routerLink="/ordonnance/list" routerLinkActive="active"><mat-icon>assignment</mat-icon> Ordonnances</a>
-        
-        <a routerLink="/messaging" routerLinkActive="active"><mat-icon>message</mat-icon> Messagerie</a>
-        
-        <!-- <a routerLink="/profil" routerLinkActive="active"><mat-icon>account_circle</mat-icon> Profil</a> -->
-        <!-- <a routerLink="/contact" routerLinkActive="active"><mat-icon>contact_mail</mat-icon> Contact</a> -->
-        
+      <!-- Gestion utilisateurs Admin -->
+      <div *ngIf="canViewByAdmin()" class="nav-item dropdown" [matMenuTriggerFor]="gestionMenu">
+        <a class="nav-link"><mat-icon>group</mat-icon>Gestion Utilisateurs <mat-icon class="arrow-icon">expand_more</mat-icon></a>
+      </div>
+      <mat-menu #gestionMenu="matMenu" class="gestion-menu">
+        <button mat-menu-item routerLink="/manage-patient"><mat-icon>person</mat-icon>Gestion Patient</button>
+        <button mat-menu-item routerLink="/manage-medecin"><mat-icon>healing</mat-icon>Gestion Médecin</button>
+        <button mat-menu-item routerLink="/manage-admin"><mat-icon>admin_panel_settings</mat-icon>Gestion Administrateur</button>
+      </mat-menu>
 
-        <!-- Plannification Médecin -->
-        <div *ngIf="canViewByMedecin()" class="nav-item dropdown" [matMenuTriggerFor]="gestionplanning">
-          <a class="nav-link">
-            <mat-icon>event</mat-icon>
-            Plannification
-            <mat-icon class="arrow-icon">expand_more</mat-icon>
-          </a>
-        </div>
-        <!-- Menu déroulant -->
-        <mat-menu #gestionplanning="matMenu" class="gestion-menu">
-          <button mat-menu-item routerLink="/schedule-medecin">
-            <mat-icon>event</mat-icon>
-            Calendrier
-          </button>
-          <button mat-menu-item routerLink="/consultation/list">
-            <mat-icon>medical_services</mat-icon>
-            Consultations
-          </button>
-        </mat-menu>
-
-
-        <!-- Gestion Utilisateur par un administrateur-->
-        <div *ngIf="canViewByAdmin()" class="nav-item dropdown" [matMenuTriggerFor]="gestionMenu">
-          <a class="nav-link">
-            <mat-icon>group</mat-icon>
-            Gestion Utilisateurs
-            <mat-icon class="arrow-icon">expand_more</mat-icon>
-          </a>
-        </div>
-        <!-- Menu déroulant -->
-        <mat-menu #gestionMenu="matMenu" class="gestion-menu">
-          <button mat-menu-item routerLink="/manage-patient">
-            <mat-icon>person</mat-icon>
-            Gestion Patient
-          </button>
-          <button mat-menu-item routerLink="/manage-medecin">
-            <mat-icon>healing</mat-icon>
-            Gestion Médecin
-          </button>
-          <button mat-menu-item routerLink="/manage-admin">
-            <mat-icon>admin_panel_settings</mat-icon>
-            Gestion Administrateur
-          </button>
-        </mat-menu>
-
-
+      <!-- Menu utilisateur mobile -->
+      <div class="user-mobile" *ngIf="menuOpen">
+        <a routerLink="/profil" (click)="closeMenu()"><mat-icon>account_circle</mat-icon>Mon Profil</a>
+        <a (click)="logout(); closeMenu()"><mat-icon>logout</mat-icon>Déconnexion</a>
+      </div>
     </ng-container>
   </nav>
 
-  <!-- Menu utilisateur (si connecté) -->
-  <div *ngIf="isLoggedIn" class="user-menu">
+  <!-- Menu utilisateur desktop -->
+  <div *ngIf="isLoggedIn" class="user-menu desktop-only">
     <button mat-button [matMenuTriggerFor]="menu" class="user-btn">
-      <!-- <img src="assets/img/user-avatar.png" alt="Profil" class="avatar" /> -->
       <span class="avatar">{{ username }}</span>
       <mat-icon>expand_more</mat-icon>
     </button>
     <span class="role">{{ role }}</span>
-
     <mat-menu #menu="matMenu" class="user-expand">
-      <button mat-menu-item routerLink="/profil">
-        <mat-icon>account_circle</mat-icon>
-        Mon Profil
-      </button>
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        Déconnexion
-      </button>
+      <button mat-menu-item routerLink="/profil"><mat-icon>account_circle</mat-icon>Mon Profil</button>
+      <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>Déconnexion</button>
     </mat-menu>
   </div>
 

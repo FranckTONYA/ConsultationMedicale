@@ -75,12 +75,31 @@ export class RegisterPatientComponent implements OnInit {
         adresse: ['', Validators.required],
         telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
         email: ['', [Validators.required, Validators.email]],
-        motDePasse: ['', [Validators.required, Validators.minLength(6)]],
+        motDePasse: [
+          '',
+          [
+            Validators.required,
+            this.strongPasswordValidator,
+          ],
+        ],
         confirmPassword: ['', Validators.required],
         role: [RoleUtilisateur.PATIENT],
       },
       { validators: this.passwordMatchValidator }
     );
+  }
+
+  strongPasswordValidator(control: AbstractControl) {
+    const value = control.value;
+    if (!value) return null;
+
+    // Min 8 caractères, 1 maj, 1 chiffre, 1 symbole
+    const strongPasswordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/;
+
+    return strongPasswordRegex.test(value)
+      ? null
+      : { weakPassword: true };
   }
 
   passwordMatchValidator(formGroup: AbstractControl) {

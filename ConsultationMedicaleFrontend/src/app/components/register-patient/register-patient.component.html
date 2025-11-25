@@ -112,10 +112,11 @@
         <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('required')">
           Le mot de passe est obligatoire.
         </mat-error>
-        <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('minlength')">
-          Le mot de passe doit contenir au moins 6 caractères.
+        <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('weakPassword')">
+            Le mot de passe doit contenir au minimum 8 caractères,
+            dont une majuscule, un chiffre et un symbole.
         </mat-error>
-      </mat-form-field>
+        </mat-form-field>
 
       <!-- Confirmation mot de passe -->
       <mat-form-field appearance="outline" class="half-width">

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../core/services/auth.service';
 import Swal from 'sweetalert2';
@@ -18,6 +18,8 @@ export class ChangePasswordComponent implements OnInit {
   resetToken: string | null = null;
   codeForm!: FormGroup;
   currentUser!: Utilisateur;
+  hidePassword = true;
+  hideConfirmPassword = true;
 
   constructor(private fb: FormBuilder,
      private authService: AuthService,
@@ -38,8 +40,18 @@ export class ChangePasswordComponent implements OnInit {
 
     this.codeForm = this.fb.group({
       code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]]
-    });
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          this.strongPasswordValidator,
+        ],
+
+      ],
+      confirmPassword: ['', Validators.required]
+    },
+    { validators: this.passwordMatchValidator }
+  );
 
     if(this.currentUser)
       this.sendEmail();
@@ -52,6 +64,49 @@ export class ChangePasswordComponent implements OnInit {
         });
     }
 
+  }
+
+  strongPasswordValidator(control: AbstractControl) {
+    const value = control.value;
+    if (!value) return null;
+
+    // Min 8 caractères, 1 maj, 1 chiffre, 1 symbole
+    const strongPasswordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/;
+
+    return strongPasswordRegex.test(value)
+      ? null
+      : { weakPassword: true };
+  }
+
+  passwordMatchValidator(formGroup: AbstractControl) {
+    const passwordControl = formGroup.get('newPassword');
+    const confirmControl = formGroup.get('confirmPassword');
+
+    if (!passwordControl || !confirmControl) return null;
+
+    const password = passwordControl.value;
+    const confirm = confirmControl.value;
+
+    if (confirm === '') {
+      confirmControl.setErrors(confirmControl.errors ? { ...confirmControl.errors, required: true } : { required: true });
+      return null;
+    }
+
+    if (password !== confirm) {
+      confirmControl.setErrors({ ...confirmControl.errors, passwordMismatch: true });
+    } else {
+      if (confirmControl.hasError('passwordMismatch')) {
+        delete confirmControl.errors!['passwordMismatch'];
+        if (!Object.keys(confirmControl.errors!).length) {
+          confirmControl.setErrors(null);
+        } else {
+          confirmControl.setErrors(confirmControl.errors);
+        }
+      }
+    }
+
+    return null;
   }
 
   sendEmail() {

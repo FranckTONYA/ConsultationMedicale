@@ -8,6 +8,7 @@
     <h2 class="form-title">
       {{ isEditMode ? 'Modification Médecin' : 'Inscription Médecin' }}
     </h2>
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-bottom:10px ;"></mat-progress-bar>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="row">
@@ -102,8 +103,9 @@
                 <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('required')">
                     Le mot de passe est obligatoire.
                 </mat-error>
-                <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('minlength')">
-                    Le mot de passe doit contenir au moins 6 caractères.
+                <mat-error *ngIf="registerForm.get('motDePasse')?.hasError('weakPassword')">
+                    Le mot de passe doit contenir au minimum 8 caractères,
+                    dont une majuscule, un chiffre et un symbole.
                 </mat-error>
             </mat-form-field>
 

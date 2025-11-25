@@ -21,6 +21,7 @@ export class RegisterMedecinComponent implements OnInit {
   medecinId?: number;
   currentMedecin = new Medecin();
   modeAdmin = false;
+  isLoading = true;
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +56,8 @@ export class RegisterMedecinComponent implements OnInit {
     this.registerForm.get('motDePasse')?.valueChanges.subscribe(() => {
       this.registerForm.get('confirmPassword')?.updateValueAndValidity();
     });
+
+    this.isLoading = false;
   }
 
   initForm() {
@@ -67,12 +70,31 @@ export class RegisterMedecinComponent implements OnInit {
         adresse: ['', Validators.required],
         telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
         email: ['', [Validators.required, Validators.email]],
-        motDePasse: ['', [Validators.required, Validators.minLength(6)]],
+        motDePasse: [
+          '',
+          [
+            Validators.required,
+            this.strongPasswordValidator,
+          ],
+        ],
         confirmPassword: ['', Validators.required],
         role: [RoleUtilisateur.MEDECIN],
       },
       { validators: this.passwordMatchValidator }
     );
+  }
+
+  strongPasswordValidator(control: AbstractControl) {
+    const value = control.value;
+    if (!value) return null;
+
+    // Min 8 caractères, 1 maj, 1 chiffre, 1 symbole
+    const strongPasswordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).{8,}$/;
+
+    return strongPasswordRegex.test(value)
+      ? null
+      : { weakPassword: true };
   }
 
   passwordMatchValidator(formGroup: AbstractControl) {
@@ -88,12 +110,17 @@ export class RegisterMedecinComponent implements OnInit {
   }
 
   loadMedecin(id: number) {
+    this.isLoading = true;
     this.medecinService.getById(id).subscribe({
       next: (m: Medecin) => {
         this.currentMedecin = m;
         this.registerForm.patchValue(m);
+        this.isLoading = false;
       },
-      error: () => Swal.fire('Erreur', 'Impossible de charger le médecin', 'error'),
+      error: () => {
+        Swal.fire('Erreur', 'Impossible de charger le médecin', 'error');
+        this.isLoading = false;
+      }
     });
   }
 
@@ -103,6 +130,8 @@ export class RegisterMedecinComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
+
     const medecinData = { ...this.registerForm.value };
     delete medecinData.confirmPassword;
 
@@ -110,17 +139,25 @@ export class RegisterMedecinComponent implements OnInit {
       this.medecinService.update(this.medecinId, medecinData).subscribe({
         next: () => {
           Swal.fire('Succès', 'Médecin mis à jour.', 'success');
+          this.isLoading = false;
           this.router.navigate([this.modeAdmin ? '/manage-medecin' : '/profil']);
         },
-        error: () => Swal.fire('Erreur', 'Impossible de modifier.', 'error'),
+        error: () => {
+          Swal.fire('Erreur', 'Impossible de modifier.', 'error');
+          this.isLoading = false;
+        }
       });
     } else {
       this.authService.registerMedecin(medecinData).subscribe({
         next: () => {
           Swal.fire('Succès', 'Médecin ajouté.', 'success');
+          this.isLoading = false;
           this.router.navigate(['/manage-medecin']);
         },
-        error: (err) => Swal.fire('Erreur', err.error?.error ?? 'Échec.', 'error'),
+        error: (err) => {
+          Swal.fire('Erreur', err.error?.error ?? 'Échec.', 'error');
+          this.isLoading = false;
+        }
       });
     }
   }
