@@ -52,8 +52,22 @@
       </div>
 
       <div class="row">
-        <p *ngIf="isEditMode"><strong>Email :</strong> {{ currentAdmin.email }}</p>
 
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Sexe</mat-label>
+
+          <mat-select formControlName="sexe">
+            <mat-option [value]="null" disabled>— Sélectionner —</mat-option>
+            <mat-option value="MASCULIN">Masculin</mat-option>
+            <mat-option value="FEMININ">Féminin</mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="registerForm.get('sexe')?.hasError('required')">
+            Le sexe est obligatoire.
+          </mat-error>
+        </mat-form-field>
+
+        <p *ngIf="isEditMode"><strong>Email :</strong> {{ currentAdmin.email }}</p>
         <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" />

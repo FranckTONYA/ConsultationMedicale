@@ -128,8 +128,8 @@ export class ScheduleComponent implements OnInit {
     this.events = [];
 
     this.consultations.forEach(c => {
-      let color = '#2196F3'; // EN_ATTENTE bleu
-      if (c.statut === StatutRDV.CONFIRMER) color = '#1d8585ff'; // CONFIRMER vert foncé
+      let color = '#cca20aff'; // EN_ATTENTE marron
+      if (c.statut === StatutRDV.CONFIRMER) color = '#2196F3'; // CONFIRMER vert foncé
       if (c.statut === StatutRDV.TERMINER) color = '#000000'; // TERMINER noir
 
       this.events.push({

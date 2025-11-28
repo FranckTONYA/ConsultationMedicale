@@ -70,6 +70,7 @@ export class RegisterPatientComponent implements OnInit {
       {
         nom: ['', Validators.required],
         prenom: ['', Validators.required],
+        sexe: [null, Validators.required],
         niss: ['', [Validators.required, Validators.pattern(/^[0-9]{11}$/)]],
         dateNaissance: ['', Validators.required],
         adresse: ['', Validators.required],
@@ -157,7 +158,7 @@ export class RegisterPatientComponent implements OnInit {
 
     const patientData = { ...this.registerForm.value };
     delete patientData.confirmPassword; // inutile pour le backend
-
+    
     if (this.isEditMode && this.patientId) {
       this.patientService.update(this.patientId, patientData).subscribe({
         next: () => {

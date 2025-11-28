@@ -19,11 +19,16 @@
     </div>
 
     <div class="field-row">
+      <span class="field-label">Sexe :</span>
+      <span class="field-value">{{ user.sexe }}</span>
+    </div>
+
+    <div class="field-row">
       <span class="field-label">Email :</span>
       <span class="field-value">{{ user.email }}</span>
     </div>
 
-    <div class="field-row" *ngIf="role !== RoleUtilisateur.ADMINISTRATEUR">
+    <div class="field-row">
       <span class="field-label">Téléphone :</span>
       <span class="field-value">{{ user.telephone }}</span>
     </div>

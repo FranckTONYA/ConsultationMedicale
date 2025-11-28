@@ -35,7 +35,6 @@ export class VerifyCodeComponent implements OnInit {
 
   onSubmit() {
     const verificationToken = sessionStorage.getItem('verificationToken');
-    console.log(verificationToken);
     const code = this.verifyForm.value.code;
 
     if (!verificationToken) {
@@ -72,7 +71,6 @@ export class VerifyCodeComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        console.error(err);
         this.snack.open('Code incorrect ou expiré. Réessayez.', 'Fermer', { duration: 4000 });
         Swal.fire({
         icon: 'error',

@@ -65,6 +65,7 @@ export class RegisterMedecinComponent implements OnInit {
       {
         nom: ['', Validators.required],
         prenom: ['', Validators.required],
+        sexe: [null, Validators.required],
         specialite: ['', Validators.required],
         numINAMI: ['', [Validators.required, Validators.pattern(/^[0-9]{11}$/)]],
         adresse: ['', Validators.required],

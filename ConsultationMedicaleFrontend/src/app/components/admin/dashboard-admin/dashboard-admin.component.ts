@@ -57,7 +57,6 @@ export class DashboardAdminComponent {
           },
           error: (err) => {
             Swal.fire('Erreur', 'Impossible de créer cet utilisateur', 'error');
-            console.error(err);
           }
         });
       }
@@ -81,7 +80,6 @@ export class DashboardAdminComponent {
           },
           error: (err) => {
             Swal.fire('Erreur', 'Suppression impossible', 'error');
-            console.error(err);
           }
         });
       }

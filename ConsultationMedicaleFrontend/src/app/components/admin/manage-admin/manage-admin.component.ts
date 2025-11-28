@@ -5,7 +5,8 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { Administrateur } from '../../../models/administrateur';
 import { AdminService } from '../../../core/services/admin.service';
-import { RoleUtilisateur } from '../../../models/utilisateur';
+import { RoleUtilisateur, Utilisateur } from '../../../models/utilisateur';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-manage-admin',
@@ -15,21 +16,28 @@ import { RoleUtilisateur } from '../../../models/utilisateur';
 })
 export class ManageAdminComponent implements OnInit, AfterViewInit {
 
-  displayedColumns = ['id', 'nom', 'prenom', 'email', 'telephone', 'actions'];
+  displayedColumns = ['id', 'nom', 'prenom', 'sexe', 'email', 'telephone', 'actions'];
   dataSource = new MatTableDataSource<Administrateur>([]);
+  currentUser = new Utilisateur();
   isLoading = true;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private adminService: AdminService, private router: Router) {}
+  constructor(private adminService: AdminService, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
+    // Récupération de l'utilisateur connecté
+    this.authService.userInfo$.subscribe(user => {
+      this.currentUser = user;
+    });
+    
     // PREDICATE AJOUTÉ (nécessaire pour filtre correct + pagination)
     this.dataSource.filterPredicate = (admin: Administrateur, filter: string) => {
       const text = filter.trim().toLowerCase();
       return (
         admin.nom?.toLowerCase().includes(text) ||
         admin.prenom?.toLowerCase().includes(text) ||
+        admin.sexe?.toLowerCase().includes(text) ||
         admin.email?.toLowerCase().includes(text) ||
         admin.telephone?.toLowerCase().includes(text)
       );
@@ -73,6 +81,16 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
   }
 
   deleteAdmin(id: number) {
+    if (id === this.currentUser.id) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Action interdite',
+        text: 'Vous ne pouvez pas supprimer votre propre compte.',
+      });
+      return;
+    }
+
+    this.isLoading = true;
     Swal.fire({
       title: 'Supprimer cet administrateur ?',
       icon: 'warning',
@@ -90,9 +108,11 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
               timer: 1500,
               showConfirmButton: false
             });
+            this.isLoading = false;
             this.loadAdmins();
           },
           error: () => {
+            this.isLoading = false;
             Swal.fire({
               icon: 'error',
               title: "Erreur de suppression",
@@ -114,5 +134,9 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
       this.dataSource.paginator.firstPage();
       this.dataSource.paginator = this.paginator;
     }
+  }
+
+  openConversation(userId: number) {
+    this.router.navigate(['/messaging/conversation', userId]);
   }
 }

@@ -70,24 +70,24 @@ const routes: Routes = [
 
   // Consultations
   { path: 'consultation/details/:id', component: ConsultationDetailsComponent, canActivate: [AuthGuard], 
-    data: { roles: [ RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+    data: { roles: [ RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT, RoleUtilisateur.ADMINISTRATEUR ]} 
   },
 
   { path: 'consultation/list', component: ConsultationListComponent, canActivate: [AuthGuard], 
-    data: { roles: [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN ]} 
+    data: { roles: [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN, RoleUtilisateur.ADMINISTRATEUR ]} 
   },
 
   { path: 'schedule-consult/:id', component: ScheduleConsultComponent, canActivate: [AuthGuard], 
-    data: { roles:  [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN ] } 
+    data: { roles:  [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN, RoleUtilisateur.ADMINISTRATEUR ] } 
   },
 
   // Ordonnances
   { path: 'ordonnance/details/:id', component: OrdonnanceDetailsComponent, canActivate: [AuthGuard], 
-    data: { roles: [ RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
+    data: { roles: [ RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT, RoleUtilisateur.ADMINISTRATEUR ]} 
   },
 
   { path: 'ordonnance/list', component: OrdonnanceListComponent, canActivate: [AuthGuard], 
-    data: { roles: [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN ]} 
+    data: { roles: [RoleUtilisateur.PATIENT, RoleUtilisateur.MEDECIN, RoleUtilisateur.ADMINISTRATEUR ]} 
   },
 
   // Dashboard PATIENT
@@ -98,7 +98,7 @@ const routes: Routes = [
     data: { role: RoleUtilisateur.PATIENT } 
   },
   { path: 'doctors-list', component: DoctorsListComponent, canActivate: [AuthGuard], 
-    data: { role: RoleUtilisateur.PATIENT } 
+    data: { roles: [RoleUtilisateur.PATIENT, RoleUtilisateur.ADMINISTRATEUR ] } 
   },
 
   // Dashboard ADMINISTRATEUR
@@ -142,15 +142,15 @@ const routes: Routes = [
   },
 
   { path: 'consultation/edit/:id', component: ConsultationEditComponent, canActivate: [AuthGuard], 
-    data: { role: RoleUtilisateur.MEDECIN } 
+    data: { roles: [RoleUtilisateur.MEDECIN, RoleUtilisateur.ADMINISTRATEUR ] } 
   },
 
   { path: 'ordonnance/edit/:id', component: OrdonnanceEditComponent, canActivate: [AuthGuard], 
-    data: { role: RoleUtilisateur.MEDECIN } 
+    data: { roles: [RoleUtilisateur.MEDECIN, RoleUtilisateur.ADMINISTRATEUR ]} 
   },
 
   { path: 'ordonnance/edit', component: OrdonnanceEditComponent, canActivate: [AuthGuard], 
-    data: { role: RoleUtilisateur.MEDECIN } 
+    data: { roles: [RoleUtilisateur.MEDECIN, RoleUtilisateur.ADMINISTRATEUR ] } 
   },
   // { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard], 
   //   data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 

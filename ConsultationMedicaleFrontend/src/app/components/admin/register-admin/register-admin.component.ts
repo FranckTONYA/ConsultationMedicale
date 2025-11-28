@@ -64,6 +64,7 @@ export class RegisterAdminComponent implements OnInit {
       {
         nom: ['', Validators.required],
         prenom: ['', Validators.required],
+        sexe: [null, Validators.required],
         adresse: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],

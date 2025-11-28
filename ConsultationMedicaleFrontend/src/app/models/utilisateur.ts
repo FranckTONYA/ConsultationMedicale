@@ -2,6 +2,7 @@ export class Utilisateur{
     public id?: number;
     public nom: string;
     public prenom: string;
+    public sexe?: Sexe;
     public adresse: string;
     public telephone: string;
     public email: string;
@@ -22,4 +23,9 @@ export enum RoleUtilisateur {
     PATIENT = 'PATIENT',
     MEDECIN = 'MEDECIN',
     ADMINISTRATEUR = 'ADMINISTRATEUR'
+}
+
+export enum Sexe {
+    MASCULIN = 'MASCULIN',
+    FEMININ = 'FEMININ'
 }

@@ -15,7 +15,7 @@
       <a routerLinkActive="active" (click)="openDashboard(); closeMenu()"><mat-icon>home</mat-icon>Accueil</a>
       <a *ngIf="canViewByAdminAndMedecin()" routerLink="/dossiers-medicaux" routerLinkActive="active" (click)="closeMenu()"><mat-icon>folder</mat-icon>Dossiers médicaux</a>
       <a *ngIf="canViewByPatient()" routerLink="/consent-management" routerLinkActive="active" (click)="closeMenu()"><mat-icon>check_circle</mat-icon>Consentements</a>
-      <a *ngIf="canViewByPatient()" routerLink="/doctors-list" routerLinkActive="active" (click)="closeMenu()"><mat-icon>healing</mat-icon>Médecins</a>
+      <a *ngIf="canViewByAdminAndPatient()" routerLink="/doctors-list" routerLinkActive="active" (click)="closeMenu()"><mat-icon>healing</mat-icon>Médecins</a>
       <a *ngIf="canViewByPatient()" routerLink="/consultation/list" routerLinkActive="active" (click)="closeMenu()"><mat-icon>medical_services</mat-icon>Consultations</a>
       <a *ngIf="canViewByMedecinAndPatient()" routerLink="/ordonnance/list" routerLinkActive="active" (click)="closeMenu()"><mat-icon>assignment</mat-icon>Ordonnances</a>
       <a routerLink="/messaging" routerLinkActive="active" (click)="closeMenu()"><mat-icon>message</mat-icon>Messagerie</a>
@@ -25,7 +25,7 @@
         <a class="nav-link"><mat-icon>event</mat-icon>Plannification <mat-icon class="arrow-icon">expand_more</mat-icon></a>
       </div>
       <mat-menu #gestionplanning="matMenu" class="gestion-menu">
-        <button mat-menu-item routerLink="/schedule-medecin"><mat-icon>event</mat-icon>Calendrier</button>
+        <button mat-menu-item routerLink="/schedule-medecin"><mat-icon>event</mat-icon>Agenda</button>
         <button mat-menu-item routerLink="/consultation/list"><mat-icon>medical_services</mat-icon>Consultations</button>
       </mat-menu>
 

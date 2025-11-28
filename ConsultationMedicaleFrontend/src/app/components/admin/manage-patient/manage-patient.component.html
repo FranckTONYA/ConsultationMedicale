@@ -43,6 +43,11 @@
         <td mat-cell *matCellDef="let p">{{ p.niss }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="sexe">
+        <th mat-header-cell *matHeaderCellDef>Sexe</th>
+        <td mat-cell *matCellDef="let p">{{ p.sexe }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="dateNaissance">
         <th mat-header-cell *matHeaderCellDef>Date de naissance</th>
         <td mat-cell *matCellDef="let p">{{ p.dateNaissance | date }}</td>
@@ -74,6 +79,9 @@
           </button>
           <button mat-icon-button color="warn" (click)="deletePatient(p.id)">
             <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="openConversation(p.id)">
+            <mat-icon>message</mat-icon>
           </button>
         </td>
       </ng-container>

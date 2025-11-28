@@ -104,6 +104,16 @@ export class NavbarComponent implements OnInit{
 
   /**
    * Retourne true si l'utilisateur connecté peut voir la page
+   * S'assure que isLoggedIn est vrai et que le rôle est ADMINISTRATEUR ou PATIENT.
+   */
+  canViewByAdminAndPatient(): boolean {
+    if (!this.isLoggedIn) return false;
+    return this.role === RoleUtilisateur.ADMINISTRATEUR || this.role === RoleUtilisateur.PATIENT;
+
+  }
+
+  /**
+   * Retourne true si l'utilisateur connecté peut voir la page
    * S'assure que isLoggedIn est vrai et que le rôle est MEDECIN ou PATIENT.
    */
   canViewByMedecinAndPatient(): boolean {

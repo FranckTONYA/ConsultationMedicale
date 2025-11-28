@@ -65,12 +65,29 @@ export class LoginComponent {
         }
       },
       error: (err) => {
+        
+      if (err.status === 0) {
+        // Le serveur est down ou inaccessible
+          Swal.fire({
+            icon: 'error',
+            title: 'Serveur indisponible',
+            text: "Le serveur ne répond pas. Vérifiez votre connexion ou réessayez plus tard.",
+          });
+        }else if(err.status === 401){
+          Swal.fire({
+            icon: 'error',
+            title: 'Échec de connexion',
+            text: 'Email ou mot de passe incorrect.',
+          });
+        } else {
+        // Autre erreur (500, CORS, etc.)
         Swal.fire({
-          icon: 'error',
-          title: 'Échec de connexion',
-          text: 'Email ou mot de passe incorrect.',
-        });
-        console.error(err);
+            icon: 'error',
+            title: 'Erreur inconnue',
+            text: "Une erreur est survenue. Veuillez réessayer.",
+          });
+        }
+
       }
     });
   }

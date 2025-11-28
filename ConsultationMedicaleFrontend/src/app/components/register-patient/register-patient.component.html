@@ -56,13 +56,28 @@
       <!-- Ligne 3 -->
       <div class="row">
         <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Sexe</mat-label>
+          <mat-select formControlName="sexe">
+            <mat-option value="null" disabled>— Sélectionner —</mat-option>
+            <mat-option value="MASCULIN">Masculin</mat-option>
+            <mat-option value="FEMININ">Féminin</mat-option>
+          </mat-select>
+          <mat-error *ngIf="registerForm.get('sexe')?.hasError('required')">
+            Le sexe est obligatoire.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
           <mat-label>Adresse</mat-label>
           <input matInput formControlName="adresse" />
           <mat-error *ngIf="registerForm.get('adresse')?.hasError('required')">
             L'adresse est obligatoire.
           </mat-error>
         </mat-form-field>
+      </div>
 
+      <!-- Ligne 4 -->
+      <div class="row">
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Téléphone</mat-label>
           <input matInput formControlName="telephone" maxlength="10" />
@@ -73,12 +88,8 @@
             Le téléphone doit contenir 10 chiffres.
           </mat-error>
         </mat-form-field>
-      </div>
-
-      <!-- Ligne 4 -->
-      <div class="row">
+        
         <p *ngIf="isEditMode"><strong>Email :</strong> {{ currentPatient.email }}</p>
-
         <mat-form-field appearance="outline" class="half-width" *ngIf="!isEditMode">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" />

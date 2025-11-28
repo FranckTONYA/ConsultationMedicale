@@ -19,6 +19,7 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
     'id', 
     'nom', 
     'prenom', 
+    'sexe',
     'specialite', 
     'numINAMI', 
     'telephone', 
@@ -61,7 +62,7 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
 
         // Fix filtrage pour plusieurs colonnes
         this.dataSource.filterPredicate = (row: Medecin, filter: string) =>
-          `${row.nom} ${row.prenom} ${row.specialite} ${row.numINAMI} ${row.email}`
+          `${row.nom} ${row.prenom} ${row.sexe} ${row.specialite} ${row.numINAMI} ${row.email}`
             .toLowerCase()
             .includes(filter);
 
@@ -96,6 +97,10 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
       ['/user-details', userId],
       { state: { role :  RoleUtilisateur.MEDECIN} }
     );
+  }
+
+  openConversation(userId: number) {
+    this.router.navigate(['/messaging/conversation', userId]);
   }
 
   deleteMedecin(id: number) {

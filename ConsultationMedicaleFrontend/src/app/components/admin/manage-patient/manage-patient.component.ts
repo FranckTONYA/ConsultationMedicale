@@ -16,7 +16,7 @@ import { RoleUtilisateur } from '../../../models/utilisateur';
 export class ManagePatientComponent implements OnInit, AfterViewInit {
   
   displayedColumns = [
-    'id', 'nom', 'prenom', 'niss',
+    'id', 'nom', 'prenom', 'sexe', 'niss',
     'dateNaissance', 'telephone',
     'adresse', 'email', 'actions'
   ];
@@ -34,7 +34,7 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
     // Filtre insensible à la casse
     this.dataSource.filterPredicate = (data: Patient, filter: string) => {
       const dataStr =
-        (data.nom + ' ' + data.prenom + ' ' + data.niss + ' ' +
+        (data.nom + ' ' + data.prenom + ' ' + data.sexe + ' ' + data.niss + ' ' +
          data.telephone + ' ' + data.email + ' ' + data.adresse)
           .toLowerCase();
 
@@ -61,7 +61,6 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
       },
       error: (err) => {
         this.isLoading = false;
-        console.error(err);
       }
     });
   }
@@ -79,6 +78,10 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
       ['/user-details', userId],
       { state: { role :  RoleUtilisateur.PATIENT} }
     );
+  }
+
+  openConversation(userId: number) {
+    this.router.navigate(['/messaging/conversation', userId]);
   }
 
   deletePatient(id: number) {
