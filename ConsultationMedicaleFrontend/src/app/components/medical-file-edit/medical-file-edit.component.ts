@@ -4,6 +4,7 @@ import { DossierMedical } from '../../models/dossier-medical';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DossierMedicalService } from '../../core/services/dossier-medical.service';
 import Swal from 'sweetalert2';
+import { PatientService } from '../../core/services/patient.service';
 
 @Component({
   selector: 'app-medical-file-edit',
@@ -23,7 +24,8 @@ export class MedicalFileEditComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private dossierService: DossierMedicalService
+    private dossierService: DossierMedicalService,
+    private patientService: PatientService,
   ) {}
 
   ngOnInit(): void {
@@ -31,8 +33,25 @@ export class MedicalFileEditComponent implements OnInit {
     this.dossierService.getById(id).subscribe({
       next: (data) => {
         this.dossier = data;
-        this.buildForm();
-        this.isLoading = false;
+
+        // Vérifie si le patient est déjà présent
+        if (!this.dossier.patient?.id) {
+          // Si le patient n’est pas présent, on le charge via son endpoint
+          this.patientService.getByDossier(id).subscribe({
+            next: (patient) => {
+              this.dossier.patient = patient;
+              this.buildForm();
+              this.isLoading = false;
+            },
+            error: () => {
+              this.isLoading = false;
+              Swal.fire('Erreur', 'Impossible de récupérer le patient du dossier', 'error');
+            }
+          });
+        } else {
+          this.buildForm();
+          this.isLoading = false;
+        }
       },
       error: () => {
         this.isLoading = false;

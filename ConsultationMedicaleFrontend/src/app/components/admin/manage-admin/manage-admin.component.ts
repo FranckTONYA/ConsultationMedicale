@@ -93,6 +93,7 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
     Swal.fire({
       title: 'Supprimer cet administrateur ?',
       icon: 'warning',
+      text: "Cette opération supprimera également tous les éléments liés à cet administrateur" ,
       showCancelButton: true,
       confirmButtonText: 'Oui',
       cancelButtonText: 'Non',

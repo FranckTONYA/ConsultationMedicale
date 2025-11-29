@@ -7,6 +7,7 @@ import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import Swal from 'sweetalert2';
+import { PatientService } from '../../core/services/patient.service';
 
 @Component({
   selector: 'app-medical-file',
@@ -34,6 +35,7 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
 
   constructor(
     private dossierService: DossierMedicalService,
+    private patientService: PatientService,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -79,8 +81,23 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
       : this.dossierService.getByMedecin(medecinId);
 
     source$.subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
+    next: async (data) => {
+      // Pour chaque dossier, récupérer le patient via l'endpoint dédié
+      const dossiersWithPatient = await Promise.all(
+        data.map(async d => {
+          if (!d.patient) {
+            try {
+              const patient = await this.patientService.getByDossier(d.id!).toPromise();
+              d.patient = patient!;
+            } catch (e) {
+               Swal.fire('Erreur', "Patient introuvable pour le dossier", 'error');
+            }
+          }
+          return d;
+        })
+      );
+
+      this.dataSource.data = dossiersWithPatient;
         this.isLoading = false;
 
         /** Si un filtre était actif : recalcul obligatoire */

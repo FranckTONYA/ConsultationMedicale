@@ -1,6 +1,6 @@
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate" style="margin-top: 20px;"></mat-progress-bar>
 
-<div class="page-wrapper" *ngIf="dossier">
+<div class="page-wrapper" *ngIf="dossier && ! isLoading">
 
   <h2 class="title">
     Dossier Médical — {{ dossier.patient.prenom }} {{ dossier.patient.nom }}

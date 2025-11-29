@@ -88,6 +88,7 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
   deletePatient(id: number) {
     Swal.fire({
       title: 'Supprimer ce patient ?',
+      text: "Cette opération supprimera également tous les éléments liés à ce patient" ,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Oui',

@@ -107,6 +107,7 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
     Swal.fire({
       title: 'Supprimer ce médecin ?',
       icon: 'warning',
+      text: "Cette opération supprimera également tous les éléments liés à ce médecin" ,
       showCancelButton: true,
       confirmButtonText: 'Oui',
       cancelButtonText: 'Non',

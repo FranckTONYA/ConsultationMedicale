@@ -23,6 +23,10 @@ export class PatientService {
     return this.http.get<Patient>(`${this.apiUrl}/find-by-niss/${id}`);
   }
 
+  getByDossier(id: number): Observable<Patient> {
+    return this.http.get<Patient>(`${this.apiUrl}/find-by-dossier/${id}`);
+  }
+
   getAll() {
     return this.http.get<Patient[]>(`${this.apiUrl}/getAll`);
   }
