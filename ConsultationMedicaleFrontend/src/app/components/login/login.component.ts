@@ -54,15 +54,24 @@ export class LoginComponent {
             this.role = (this.user && this.user.role) ? this.user.role: "" ;
           }
         });
-        
+
         if(this.role.length !== 0){
           if(this.role === RoleUtilisateur.ADMINISTRATEUR)
-             this.router.navigate(['/dashboard-admin']);
+             this.router.navigate(['/manage-patient']);
           if(this.role === RoleUtilisateur.MEDECIN)
-             this.router.navigate(['/dashboard-medecin']);
+             this.router.navigate(['/consultation/list']);
           if(this.role === RoleUtilisateur.PATIENT)
-             this.router.navigate(['/dashboard-patient']);
+             this.router.navigate(['/doctors-list']);
         }
+        
+        // if(this.role.length !== 0){
+        //   if(this.role === RoleUtilisateur.ADMINISTRATEUR)
+        //      this.router.navigate(['/dashboard-admin']);
+        //   if(this.role === RoleUtilisateur.MEDECIN)
+        //      this.router.navigate(['/dashboard-medecin']);
+        //   if(this.role === RoleUtilisateur.PATIENT)
+        //      this.router.navigate(['/dashboard-patient']);
+        // }
       },
       error: (err) => {
         

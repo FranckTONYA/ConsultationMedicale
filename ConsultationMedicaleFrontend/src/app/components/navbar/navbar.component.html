@@ -12,7 +12,7 @@
     </ng-container>
 
     <ng-container *ngIf="isLoggedIn">
-      <a routerLinkActive="active" (click)="openDashboard(); closeMenu()"><mat-icon>home</mat-icon>Accueil</a>
+      <!-- <a routerLinkActive="active" (click)="openDashboard(); closeMenu()"><mat-icon>home</mat-icon>Accueil</a> -->
       <a *ngIf="canViewByAdminAndMedecin()" routerLink="/dossiers-medicaux" routerLinkActive="active" (click)="closeMenu()"><mat-icon>folder</mat-icon>Dossiers médicaux</a>
       <a *ngIf="canViewByPatient()" routerLink="/consent-management" routerLinkActive="active" (click)="closeMenu()"><mat-icon>check_circle</mat-icon>Consentements</a>
       <a *ngIf="canViewByAdminAndPatient()" routerLink="/doctors-list" routerLinkActive="active" (click)="closeMenu()"><mat-icon>healing</mat-icon>Médecins</a>

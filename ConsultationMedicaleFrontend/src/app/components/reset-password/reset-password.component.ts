@@ -112,7 +112,7 @@ export class ResetPasswordComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: "Echec d'envoi",
-          text: 'Erreur lors de l’envoi du code par e-mail',
+          text:  err.error?.error ?? 'Erreur lors de l’envoi du code par e-mail',
           showConfirmButton: true,
         });
 
@@ -141,11 +141,11 @@ export class ResetPasswordComponent implements OnInit {
         sessionStorage.removeItem('resetToken');
         this.router.navigate(['/login']);
       },
-      error: () => {this.isLoading = false;
+      error: (err) => {this.isLoading = false;
         Swal.fire({
           icon: 'error',
           title: "Erreur de validation",
-          text: 'Code incorrect ou expiré.',
+          text:  err.error?.error ?? 'Code incorrect ou expiré.',
           showConfirmButton: true,
         });
       }
