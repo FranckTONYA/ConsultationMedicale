@@ -22,6 +22,7 @@ export class RegisterPatientComponent implements OnInit {
   currentPatient = new Patient();
   verificationToken: string | null = null;
   modeAdmin = false;
+  isLoading = false
 
   constructor(
     private fb: FormBuilder,
@@ -159,26 +160,37 @@ export class RegisterPatientComponent implements OnInit {
     const patientData = { ...this.registerForm.value };
     delete patientData.confirmPassword; // inutile pour le backend
 
+    this.isLoading = true;
+
     if (this.isEditMode && this.patientId) {
       this.patientService.update(this.patientId, patientData).subscribe({
         next: () => {
+          this.isLoading = false;
           Swal.fire('Succès', 'Patient mis à jour.', 'success');
           this.router.navigate([this.modeAdmin ? '/manage-patient' : '/profil']);
         },
-        error: () => Swal.fire('Erreur', 'Impossible de modifier le patient.', 'error')
+        error: () =>{ 
+          this.isLoading = false;
+          Swal.fire('Erreur', 'Impossible de modifier le patient.', 'error');
+        }
       });
     } else {
       if (this.modeAdmin) {
         this.authService.registerPatient(patientData).subscribe({
           next: () => {
+            this.isLoading = false;
             Swal.fire('Succès', 'Patient ajouté.', 'success');
             this.router.navigate(['/manage-patient']);
           },
-          error: (err) => Swal.fire('Erreur', err.error?.error ?? 'Échec lors de l’inscription.', 'error'),
+          error: (err) => {
+            this.isLoading = false;
+            Swal.fire('Erreur', err.error?.error ?? 'Échec lors de l’inscription.', 'error');
+          }
         });
       } else {
         this.authService.startPatientRegistration(patientData).subscribe({
           next: (res) => {
+            this.isLoading = false;
             this.verificationToken = res.verificationToken;
             sessionStorage.setItem('verificationToken', this.verificationToken!);
             Swal.fire({
@@ -191,6 +203,7 @@ export class RegisterPatientComponent implements OnInit {
             });
           },
           error: (err) =>{
+            this.isLoading = false;
             Swal.fire('Erreur', err.error?.error ?? 'Échec lors de l’inscription.', 'error');
           } 
         });

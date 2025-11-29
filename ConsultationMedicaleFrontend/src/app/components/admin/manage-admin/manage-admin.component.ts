@@ -90,7 +90,6 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.isLoading = true;
     Swal.fire({
       title: 'Supprimer cet administrateur ?',
       icon: 'warning',
@@ -99,6 +98,7 @@ export class ManageAdminComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'Non',
     }).then(result => {
       if (result.isConfirmed) {
+        this.isLoading = true;
         this.adminService.delete(id).subscribe({
           next: () => {
             Swal.fire({

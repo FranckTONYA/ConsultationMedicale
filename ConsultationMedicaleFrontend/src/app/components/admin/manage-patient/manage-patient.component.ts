@@ -47,6 +47,7 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
   }
 
   loadPatients() {
+    this.isLoading = true;
     this.patientService.getAll().subscribe({
       next: (data) => {
         this.dataSource.data = data;
@@ -93,8 +94,10 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
       cancelButtonText:'Non',
     }).then(result => {
       if (result.isConfirmed) {
+        this.isLoading = true;
         this.patientService.delete(id).subscribe({
           next: () => {
+            this.isLoading = false;
             Swal.fire({
               icon: 'success',
               title: 'Suppréssion réussie',
@@ -105,6 +108,7 @@ export class ManagePatientComponent implements OnInit, AfterViewInit {
             this.loadPatients();
           },
           error: () =>{
+            this.isLoading = false;
             Swal.fire({
               icon: 'error',
               title: "Erreur de suppression",

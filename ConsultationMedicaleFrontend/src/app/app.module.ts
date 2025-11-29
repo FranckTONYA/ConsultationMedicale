@@ -29,6 +29,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getFrenchPaginatorIntl } from './core/i18n/french-paginator-intl';
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common';
 registerLocaleData(localeFr);
@@ -133,6 +135,7 @@ import { ConversationComponent } from './components/conversation/conversation.co
     MatSelectModule,
     MatListModule,
     FullCalendarModule,
+    MatProgressSpinnerModule,
     ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [

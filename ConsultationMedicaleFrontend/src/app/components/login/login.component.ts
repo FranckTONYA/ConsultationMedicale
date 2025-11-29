@@ -16,6 +16,7 @@ export class LoginComponent {
   hidePassword = true;
   user : Utilisateur = new Utilisateur(); 
   role = "";
+  isloading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +38,8 @@ export class LoginComponent {
       });
       return;
     }
+
+    this.isloading = true;
 
     const { email, motDePasse } = this.loginForm.value;
     this.authService.login(email, motDePasse).subscribe({
@@ -63,6 +66,8 @@ export class LoginComponent {
           if(this.role === RoleUtilisateur.PATIENT)
              this.router.navigate(['/doctors-list']);
         }
+
+        this.isloading = false;
         
         // if(this.role.length !== 0){
         //   if(this.role === RoleUtilisateur.ADMINISTRATEUR)
@@ -97,6 +102,7 @@ export class LoginComponent {
           });
         }
 
+        this.isloading = false;
       }
     });
   }

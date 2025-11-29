@@ -112,9 +112,10 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
       cancelButtonText: 'Non',
     }).then(result => {
       if (result.isConfirmed) {
-
+        this.isLoading = true;
         this.medecinService.delete(id).subscribe({
           next: () => {
+            this.isLoading = false;
             Swal.fire({
               icon: 'success',
               title: 'Supprimé',
@@ -126,6 +127,7 @@ export class ManageMedecinComponent implements OnInit, AfterViewInit {
             this.loadMedecins(); // refresh propre
           },
           error: () => {
+            this.isLoading = false;
             Swal.fire({
               icon: 'error',
               title: 'Erreur',

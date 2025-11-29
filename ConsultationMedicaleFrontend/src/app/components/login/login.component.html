@@ -26,9 +26,23 @@
         </button>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="btn-login" type="submit">
-        Se connecter
+      <button mat-raised-button 
+              color="primary" 
+              class="btn-login" 
+              type="submit"
+              [disabled]="isloading">
+
+        <!-- Spinner pendant le chargement -->
+        <mat-progress-spinner 
+            *ngIf="isloading" 
+            mode="indeterminate" 
+            diameter="22"
+            strokeWidth="3">
+        </mat-progress-spinner>
+
+        <span *ngIf="!isloading">Se connecter</span>
       </button>
+
     </form>
 
     <p class="register-link">

@@ -157,11 +157,26 @@
       </mat-form-field>
     </div>
 
-      <div class="btn-container">
-        <button mat-raised-button color="primary" type="submit" class="btn-register">
-          {{ isEditMode ? 'Enregistrer les modifications' : "Inscrire" }}
-        </button>
-      </div>
+    <div class="btn-container">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="btn-register"
+        [disabled]="isLoading"
+      >
+        <mat-progress-spinner
+          *ngIf="isLoading"
+          diameter="20"
+          mode="indeterminate"
+          color="accent"
+        ></mat-progress-spinner>
+        <span *ngIf="!isLoading">
+          {{ isEditMode ? 'Enregistrer les modifications' : 'Inscrire' }}
+        </span>
+      </button>
+    </div>
+
 
     </form>
   </mat-card>
