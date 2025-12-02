@@ -75,11 +75,10 @@ export class NavbarComponent implements OnInit{
       cancelButtonText: 'Annuler'
     }).then(result => {
       if (result.isConfirmed) {
-        this.authService.logout();
         this.isLoggedIn = false;
         this.username = "";
         this.role = "";
-        this.router.navigate(['/login']);
+        this.authService.logout();
       }
     });
   }

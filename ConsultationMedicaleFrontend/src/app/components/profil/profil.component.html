@@ -36,11 +36,15 @@
 
     <div class="btn-group">
       <button mat-raised-button color="primary" (click)="goToEditProfile()">
-        <mat-icon>edit</mat-icon> Modifier le profil
+        <mat-icon>edit</mat-icon> Modifier mon profil
       </button>
 
       <button mat-stroked-button color="accent" (click)="goToChangePassword()">
-        <mat-icon>lock</mat-icon> Modifier le mot de passe
+        <mat-icon>lock</mat-icon> Modifier mon mot de passe
+      </button>
+
+      <button mat-raised-button color="primary" (click)="deleteAccount()" style="color: white; background-color: #ea3535;">
+        <mat-icon>delete</mat-icon> Supprimer mon compte
       </button>
     </div>
   </mat-card>

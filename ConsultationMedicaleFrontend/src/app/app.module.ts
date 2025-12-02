@@ -30,6 +30,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { getFrenchPaginatorIntl } from './core/i18n/french-paginator-intl';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common';
@@ -70,6 +71,8 @@ import { OrdonnanceDetailsComponent } from './components/ordonnance-details/ordo
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { MessagingComponent } from './components/messaging/messaging.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
+import { ConditionsUtilisationComponent } from './components/legal/conditions-utilisation/conditions-utilisation.component';
+import { PolitiqueConfidentialiteComponent } from './components/legal/politique-confidentialite/politique-confidentialite.component';
 
 
 @NgModule({
@@ -106,6 +109,8 @@ import { ConversationComponent } from './components/conversation/conversation.co
     UserDetailsComponent,
     MessagingComponent,
     ConversationComponent,
+    ConditionsUtilisationComponent,
+    PolitiqueConfidentialiteComponent,
   ],
   imports: [
     BrowserModule,
@@ -136,6 +141,7 @@ import { ConversationComponent } from './components/conversation/conversation.co
     MatListModule,
     FullCalendarModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule,
     ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [

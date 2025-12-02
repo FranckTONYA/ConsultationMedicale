@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
   background: linear-gradient(135deg, #2196f3, #42a5f5);
   min-height: 100vh;
 }
@@ -12,7 +11,7 @@
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  width: 700px;
+  width: 800px;
   max-width: 90%;
 }
 

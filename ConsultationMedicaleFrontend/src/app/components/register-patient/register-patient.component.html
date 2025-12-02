@@ -157,6 +157,31 @@
       </mat-form-field>
     </div>
 
+    <div  *ngIf="!isEditMode && !modeAdmin">
+      <!-- Conditions d'utilisation -->
+      <mat-checkbox formControlName="acceptTerms">
+        J’ai lu et j’accepte les 
+        <a routerLink="/conditions-utilisation" target="_blank">conditions d’utilisation</a>
+        et la 
+        <a routerLink="/politique-confidentialite" target="_blank">politique de confidentialité</a>.
+      </mat-checkbox>
+      <mat-error *ngIf="registerForm.get('acceptTerms')?.hasError('required')">
+        Vous devez accepter les conditions avant de vous inscrire.
+      </mat-error>
+
+      <br/>
+
+      <!-- Consentement données de santé -->
+      <mat-checkbox formControlName="healthDataConsent">
+        J’autorise le traitement de mes données de santé conformément au RGPD et aux finalités médicales.
+      </mat-checkbox>
+      <mat-error *ngIf="registerForm.get('healthDataConsent')?.hasError('required')">
+        Le consentement au traitement des données de santé est obligatoire.
+      </mat-error>
+
+    </div>
+   
+
     <div class="btn-container">
       <button
         mat-raised-button

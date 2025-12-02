@@ -53,17 +53,35 @@ export class RegisterPatientComponent implements OnInit {
         passwordControl?.updateValueAndValidity();
         confirmControl?.updateValueAndValidity();
 
+        this.deleteConsentsValidators();
          // Supprimer le validateur global
         this.registerForm.setValidators(null);
         this.registerForm.updateValueAndValidity();
       }
     });
 
+    if(this.modeAdmin)
+      this.deleteConsentsValidators();
+
     // Rafraîchit la validation à chaque frappe sur les deux champs
     this.registerForm.get('motDePasse')?.valueChanges.subscribe(() => {
       this.registerForm.get('confirmPassword')?.updateValueAndValidity({ onlySelf: true });
     });
 
+  }
+
+  deleteConsentsValidators(){
+    // Supprimer validateurs consentements RGPD
+    const terms = this.registerForm.get('acceptTerms');
+    const health = this.registerForm.get('healthDataConsent');
+    terms?.clearValidators();
+    health?.clearValidators();
+    terms?.updateValueAndValidity();
+    health?.updateValueAndValidity();
+
+    // Supprimer le validateur global
+    this.registerForm.setValidators(null);
+    this.registerForm.updateValueAndValidity();
   }
 
   initForm() {
@@ -85,6 +103,8 @@ export class RegisterPatientComponent implements OnInit {
           ],
         ],
         confirmPassword: ['', Validators.required],
+        acceptTerms: [false, Validators.requiredTrue],
+        healthDataConsent: [false, Validators.requiredTrue], 
         role: [RoleUtilisateur.PATIENT],
       },
       { validators: this.passwordMatchValidator }
@@ -154,6 +174,20 @@ export class RegisterPatientComponent implements OnInit {
         title: 'Champs manquants ou invalides',
         text: 'Merci de vérifier les informations saisies.',
       });
+      return;
+    }
+
+    if (!this.isEditMode && !this.modeAdmin && !this.registerForm.get('acceptTerms')?.value) {
+      Swal.fire('Conditions requises', 'Vous devez accepter les conditions d’utilisation.', 'warning');
+      return;
+    }
+
+    if (!this.isEditMode && !this.modeAdmin && !this.registerForm.get('healthDataConsent')?.value) {
+      Swal.fire(
+        'Consentement requis',
+        'Vous devez autoriser le traitement de vos données de santé pour continuer.',
+        'warning'
+      );
       return;
     }
 

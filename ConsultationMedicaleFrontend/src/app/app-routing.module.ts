@@ -32,6 +32,8 @@ import { UserDetailsComponent } from './components/user-details/user-details.com
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { MessagingComponent } from './components/messaging/messaging.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { ConditionsUtilisationComponent } from './components/legal/conditions-utilisation/conditions-utilisation.component';
+import { PolitiqueConfidentialiteComponent } from './components/legal/politique-confidentialite/politique-confidentialite.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -39,6 +41,8 @@ const routes: Routes = [
   { path: 'register-patient', component: RegisterPatientComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'verify-code', component: VerifyCodeComponent },
+  { path: 'conditions-utilisation', component: ConditionsUtilisationComponent },
+  { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
   { path: 'profil', component: ProfilComponent, canActivate: [AuthGuard], 
     data: { roles: [RoleUtilisateur.ADMINISTRATEUR, RoleUtilisateur.MEDECIN, RoleUtilisateur.PATIENT ]} 
   },
