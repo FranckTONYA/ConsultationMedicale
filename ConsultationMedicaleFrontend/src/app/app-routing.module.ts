@@ -18,7 +18,6 @@ import { VerifyCodeComponent } from './components/verify-code/verify-code.compon
 import { MedicalFileComponent } from './components/medical-file/medical-file.component';
 import { MedicalFileDetailsComponent } from './components/medical-file-details/medical-file-details.component';
 import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
-import { ConsentManagementComponent } from './components/consent-management/consent-management.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { DoctorsListComponent } from './components/doctors-list/doctors-list.component';
 import { ScheduleConsultComponent } from './components/schedule-consult/schedule-consult.component';
@@ -34,6 +33,8 @@ import { MessagingComponent } from './components/messaging/messaging.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { ConditionsUtilisationComponent } from './components/legal/conditions-utilisation/conditions-utilisation.component';
 import { PolitiqueConfidentialiteComponent } from './components/legal/politique-confidentialite/politique-confidentialite.component';
+import { PatientConsentComponent } from './components/consent/patient-consent/patient-consent.component';
+import { DoctorConsentComponent } from './components/consent/doctor-consent/doctor-consent.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -98,7 +99,7 @@ const routes: Routes = [
   { path: 'dashboard-patient', component: DashboardPatientComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.PATIENT } 
   },
-  { path: 'consent-management', component: ConsentManagementComponent, canActivate: [AuthGuard], 
+  { path: 'patient-consent', component: PatientConsentComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.PATIENT } 
   },
   { path: 'doctors-list', component: DoctorsListComponent, canActivate: [AuthGuard], 
@@ -140,7 +141,11 @@ const routes: Routes = [
   { path: 'dashboard-medecin', component: DashboardMedecinComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.MEDECIN } 
   },
-  
+
+  { path: 'doctor-consent', component: DoctorConsentComponent, canActivate: [AuthGuard], 
+    data: { role: RoleUtilisateur.MEDECIN } 
+  },
+
   { path: 'schedule-medecin', component: ScheduleComponent, canActivate: [AuthGuard], 
     data: { role: RoleUtilisateur.MEDECIN } 
   },

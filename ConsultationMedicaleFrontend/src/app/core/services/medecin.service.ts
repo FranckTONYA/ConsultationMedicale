@@ -37,16 +37,4 @@ export class MedecinService {
     return this.http.delete(`${this.apiUrl}/delete-by-id/${id}`);
   }
 
-  assignPatientToMedecin(medecinId: number, patientId: number) {
-    return this.http.post(`${this.apiUrl}/assign-patient`,{medecinId, patientId});
-  }
-  
-  removePatientFromMedecin(medecinId: number, patientId: number) {
-    return this.http.delete(`${this.apiUrl}/remove-patient/${medecinId}/${patientId}`);
-  }
-
-  getPatientsOfMedecin(medecinId: number) {
-    return this.http.get<Patient[]>(`${this.apiUrl}/get-patients-of-medecin/${medecinId}`);
-  }
-
 }

@@ -1,0 +1,88 @@
+.page-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.assign-card,
+.table-card {
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+h2 {
+  color: #1976d2;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.patient-info {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e3e7ff;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.patient-info:hover {
+  background: #d6dcff;
+}
+
+.user-link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.user-link:hover {
+  text-decoration: none;
+}
+
+.filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-field {
+  width: 40%;
+}
+
+.status-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.accepted {
+  color: green;
+  font-weight: bold;
+}
+
+.refused {
+  color: red;
+  font-weight: bold;
+}
+
+.pending {
+  color: orange;
+  font-weight: bold;
+}
+
+@media (max-width: 900px) {
+  .filter-row {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+}

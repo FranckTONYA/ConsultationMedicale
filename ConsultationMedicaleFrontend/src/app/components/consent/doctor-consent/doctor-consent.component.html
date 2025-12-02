@@ -1,0 +1,113 @@
+<div class="page-container">
+  <h2>Mes demandes de consentement pour accès aux dossiers patients</h2>
+
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+  <!-- Recherche -->
+  <mat-card class="assign-card">
+    <h3>Faire une nouvelle demande</h3>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>NISS du patient</mat-label>
+      <input matInput [formControl]="searchNiss" placeholder="Ex : 12345678901" />
+    </mat-form-field>
+
+    <div *ngIf="foundPatient" class="patient-info" (click)="clickSuggestion()">
+      <span>{{ foundPatient.prenom }} {{ foundPatient.nom }}</span>
+
+    <button 
+        mat-raised-button 
+        color="primary"
+        [disabled]="hasActiveRequest(foundPatient?.id)">
+        Faire la demande
+    </button>
+
+    </div>
+  </mat-card>
+
+  <mat-card class="table-card">
+
+    <div class="filter-row">
+
+      <!-- Filtre texte -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher...</mat-label>
+        <input matInput [formControl]="textFilter" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- Toggle statut -->
+      <mat-button-toggle-group
+        name="status"
+        [value]="statusFilter"
+        (change)="setStatusFilter($event.value)"
+        class="status-toggle">
+
+        <mat-button-toggle value="ALL">Tous</mat-button-toggle>
+        <mat-button-toggle value="EN_ATTENTE">En attente</mat-button-toggle>
+        <mat-button-toggle value="ACCEPTER">Acceptées</mat-button-toggle>
+        <mat-button-toggle value="REFUSER">Refusées</mat-button-toggle>
+      </mat-button-toggle-group>
+
+    </div>
+
+    <!-- TABLEAU -->
+    <table mat-table [dataSource]="demandes" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let a; let i = index">
+            {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
+        </td>
+    </ng-container>
+
+      <ng-container matColumnDef="patient">
+        <th mat-header-cell *matHeaderCellDef>Patient</th>
+        <td mat-cell *matCellDef="let d">
+            <a class="user-link"
+                (click)="goToUser(d.patient.id, RoleUtilisateur.PATIENT)">
+                {{ d.patient.prenom }} {{d.patient.nom }}
+            </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="niss">
+        <th mat-header-cell *matHeaderCellDef>NISS</th>
+        <td mat-cell *matCellDef="let d">{{ d.patient.niss }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let d">{{ d.date | date:'dd/MM/yyyy' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="statut">
+        <th mat-header-cell *matHeaderCellDef>Statut</th>
+        <td mat-cell *matCellDef="let d">
+            <span [ngClass]="{
+            'accepted': d.statut === 'ACCEPTER',
+            'refused': d.statut === 'REFUSER',
+            'pending': d.statut === 'EN_ATTENTE'
+            }">
+            {{ getLabel(d.statut) }}
+            </span>
+        </td>
+    </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let d">
+          <button mat-icon-button color="warn" (click)="cancelRequest(d.id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+
+  </mat-card>
+</div>

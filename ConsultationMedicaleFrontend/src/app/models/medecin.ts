@@ -1,3 +1,4 @@
+import { Consentement } from "./consentement";
 import { Consultation } from "./consultation";
 import { Patient } from "./patient";
 import { PlanningMedecin } from "./planning-medecin";
@@ -7,16 +8,16 @@ export class Medecin extends Utilisateur{
     public specialite: string;
     public numINAMI: string;
     public consultations: Consultation[];
-    public patients: Patient[];
     public plannings: PlanningMedecin[];
+    public consentements: Consentement[];
     
     constructor(){
         super();
         this.specialite = "";
         this.numINAMI = "";
         this.consultations = [];
-        this.patients = [];
         this.plannings = [];
+        this.consentements = [];
     }
 
 }

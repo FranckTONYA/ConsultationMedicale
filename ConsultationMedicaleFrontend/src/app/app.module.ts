@@ -58,7 +58,6 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { MedicalFileComponent } from './components/medical-file/medical-file.component';
 import { MedicalFileDetailsComponent } from './components/medical-file-details/medical-file-details.component';
 import { MedicalFileEditComponent } from './components/medical-file-edit/medical-file-edit.component';
-import { ConsentManagementComponent } from './components/consent-management/consent-management.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { ScheduleConsultComponent } from './components/schedule-consult/schedule-consult.component';
 import { DoctorsListComponent } from './components/doctors-list/doctors-list.component';
@@ -73,6 +72,8 @@ import { MessagingComponent } from './components/messaging/messaging.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { ConditionsUtilisationComponent } from './components/legal/conditions-utilisation/conditions-utilisation.component';
 import { PolitiqueConfidentialiteComponent } from './components/legal/politique-confidentialite/politique-confidentialite.component';
+import { DoctorConsentComponent } from './components/consent/doctor-consent/doctor-consent.component';
+import { PatientConsentComponent } from './components/consent/patient-consent/patient-consent.component';
 
 
 @NgModule({
@@ -96,7 +97,6 @@ import { PolitiqueConfidentialiteComponent } from './components/legal/politique-
     MedicalFileComponent,
     MedicalFileDetailsComponent,
     MedicalFileEditComponent,
-    ConsentManagementComponent,
     ScheduleComponent,
     ScheduleConsultComponent,
     DoctorsListComponent,
@@ -111,6 +111,8 @@ import { PolitiqueConfidentialiteComponent } from './components/legal/politique-
     ConversationComponent,
     ConditionsUtilisationComponent,
     PolitiqueConfidentialiteComponent,
+    DoctorConsentComponent,
+    PatientConsentComponent,
   ],
   imports: [
     BrowserModule,
