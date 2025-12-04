@@ -103,7 +103,7 @@
   color: white;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 0.5rem;
+  /* padding: 0.5rem 0.5rem; */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -157,12 +157,12 @@
   .nav-links a,
   .nav-links a {
     font-size: 18px;
-    padding: 0.4rem 0.5rem;
+    /* padding: 0.4rem 0.5rem; */
   }
 }
 
-/* ----- Responsive 1310px----- */
-@media (max-width: 1310px) {
+/* ----- Responsive 1380px----- */
+@media (max-width: 1380px) {
   /* Taille texte réduite pour petits écrans */
   .nav-links a,
   .nav-links a {
@@ -176,8 +176,8 @@
   }
 }
 
-/* ----- Responsive 1227px----- */
-@media (max-width: 1227px) {
+/* ----- Responsive 1285px----- */
+@media (max-width: 1285px) {
   /* Taille texte réduite pour petits écrans */
   .nav-links a,
   .nav-links a {
@@ -192,8 +192,9 @@
 }
 
 
-/* ----- Responsive ----- */
-@media (max-width: 900px) {
+/* ----- Responsive - Menu Burger----- */
+/* @media (max-width: 900px) { */
+@media (max-width: 1160px) {
   .menu-button {
     display: block;
   }

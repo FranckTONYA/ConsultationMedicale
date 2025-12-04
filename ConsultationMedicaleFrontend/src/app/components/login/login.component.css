@@ -44,7 +44,7 @@
   margin-top: 1rem;
 }
 
-/* ✅ Responsive */
+/* Responsive */
 @media (max-width: 768px) {
   .login-card {
     width: 90%;
@@ -58,8 +58,8 @@
 
 @media (max-width: 480px) {
   .login-card {
-    width: 100%;
-    border-radius: 0;
+    width: 95%;
+    /* border-radius: 0; */
     padding: 1rem;
   }
 }

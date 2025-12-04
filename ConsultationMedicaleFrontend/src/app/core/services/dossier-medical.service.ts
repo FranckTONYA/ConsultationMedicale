@@ -28,8 +28,11 @@ private apiUrl = environment.apiUrl + '/dossier';
     return this.http.get<DossierMedical[]>(`${this.apiUrl}/find-by-medecin/${idMedecin}`);
   }
 
-  update(id: number, data: any) {
-    return this.http.put<DossierMedical>(`${this.apiUrl}/update/${id}`, data);
+  updateWithFiles(id: number, dossierMedical: DossierMedical, files: File[]) {
+    const formData = new FormData();
+    formData.append("dossierMedical", new Blob([JSON.stringify(dossierMedical)], { type: "application/json" }));
+    if(files) files.forEach(f => formData.append("files", f));
+    return this.http.put(`${this.apiUrl}/update-with-files/${id}`, formData);
   }
 
   delete(id: number) {

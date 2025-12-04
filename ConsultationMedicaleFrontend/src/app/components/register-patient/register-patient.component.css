@@ -62,7 +62,7 @@
   border-radius: 12px;
 }
 
-/* ✅ Responsive */
+/* Responsive */
 @media (max-width: 768px) {
   .register-card {
     width: 90%;
@@ -80,9 +80,9 @@
 
 @media (max-width: 480px) {
   .register-card {
-    width: 100%;
+    width: 95%;
     padding: 1rem;
-    border-radius: 0;
+    /* border-radius: 0; */
   }
 
   .btn-register {

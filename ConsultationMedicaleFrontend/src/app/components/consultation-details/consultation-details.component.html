@@ -11,20 +11,10 @@
 
   <!-- Informations de base -->
   <div class="info-grid">
-<!-- 
-    <div class="field-row" *ngIf="currentUser.role === 'MEDECIN'">
-      <span class="field-label">NISS :</span>
-      <span class="field-value">{{ consultation.patient.niss }}</span>
-    </div>
-
-    <div class="field-row" *ngIf="currentUser.role === 'PATIENT'">
-      <span class="field-label">INAMI :</span>
-      <span class="field-value">{{ consultation.medecin.numINAMI }}</span>
-    </div> -->
 
     <div class="field-row">
       <span class="field-label">Statut :</span>
-      <span class="field-value">{{ consultation.statut }}</span>
+      <span class="field-value">{{ getLabelStatut(consultation.statut!) }}</span>
     </div>
 
     <div class="field-row">
@@ -42,7 +32,7 @@
       <span class="field-value">{{ consultation.medecin.specialite }}</span>
     </div>
 
-    <div class="field-row" *ngIf="consultation.statut === 'CONFIRMER'">
+    <div class="field-row" *ngIf="consultation.statut === StatutRDV.CONFIRMER">
       <span class="field-label">Lien réunion :</span>
       <span class="field-value">
         <a *ngIf="consultation.lienReunion"

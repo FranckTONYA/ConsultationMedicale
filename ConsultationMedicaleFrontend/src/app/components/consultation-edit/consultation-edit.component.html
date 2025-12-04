@@ -13,7 +13,7 @@
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Statut</mat-label>
         <mat-select formControlName="statut">
-          <mat-option *ngFor="let s of statuses" [value]="s">{{ s }}</mat-option>
+          <mat-option *ngFor="let s of statuses" [value]="s">{{ getLabelStatut(s) }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -44,16 +44,16 @@
 
       <hr>
 
-  <!-- Documents existants -->
-  <div class="existing-docs mt-2">
-    <div *ngFor="let doc of existingDocs" class="doc-item flex justify-between items-center mb-1">
-      <!-- lien pour ouvrir le document dans une nouvelle fenêtre -->
-      <a href="javascript:void(0)" (click)="viewDocument(doc)" class="doc-link">{{ doc.nom }}</a>
-      <button mat-icon-button color="warn" (click)="deleteDoc(doc.id)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-</div>
+      <!-- Documents existants -->
+      <div class="existing-docs mt-2">
+        <div *ngFor="let doc of existingDocs" class="doc-item flex justify-between items-center mb-1">
+          <!-- lien pour ouvrir le document dans une nouvelle fenêtre -->
+          <a href="javascript:void(0)" (click)="viewDocument(doc)" class="doc-link">{{ doc.nom }}</a>
+          <button mat-icon-button color="warn" (click)="deleteDoc(doc.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+       </div>
 
     </div>
     <!-- ---------------- FIN DOCUMENTS ---------------- -->

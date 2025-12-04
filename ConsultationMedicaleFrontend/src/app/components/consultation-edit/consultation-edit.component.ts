@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ConsultationService } from '../../core/services/consultation.service';
 import { DocumentService } from '../../core/services/document.service';
-import { Consultation, StatutRDV } from '../../models/consultation';
+import { Consultation, getLabelStatut, StatutRDV } from '../../models/consultation';
 
 @Component({
   selector: 'app-consultation-edit',
@@ -18,6 +18,7 @@ export class ConsultationEditComponent implements OnInit {
   consultation!: Consultation;
   isLoading = true;
   statuses = Object.values(StatutRDV);
+  getLabelStatut = getLabelStatut;
 
   selectedFiles: File[] = [];
   delectedFiles: File[] = [];

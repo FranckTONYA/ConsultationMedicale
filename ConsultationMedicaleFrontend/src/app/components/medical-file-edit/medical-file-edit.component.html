@@ -104,6 +104,38 @@
       </div>
     </div>
 
+    
+    <!-- ---------------- DOCUMENTS ---------------- -->
+    <div class="section documents-section">
+      <h3>Documents</h3>
+
+      <!-- Upload -->
+      <input type="file" (change)="onFileSelected($event)" multiple class="w-full mb-2">
+      <div class="preview-container mb-2" *ngIf="selectedFiles.length">
+        <div *ngFor="let f of selectedFiles; let i=index" class="preview-item">
+          <span>{{ f.name }}</span>
+          <button type="button" (click)="removeSelectedFile(i)" mat-icon-button color="warn">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Documents existants -->
+      <div class="existing-docs mt-2">
+        <div *ngFor="let doc of existingDocs" class="doc-item flex justify-between items-center mb-1">
+          <!-- lien pour ouvrir le document dans une nouvelle fenêtre -->
+          <a href="javascript:void(0)" (click)="viewDocument(doc)" class="doc-link">{{ doc.nom }}</a>
+          <button mat-icon-button color="warn" (click)="deleteDoc(doc.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+       </div>
+
+    </div>
+    <!-- ---------------- FIN DOCUMENTS ---------------- -->
+
     <div class="action-buttons">
       <button mat-stroked-button color="primary" (click)="cancel()" style="color: white;  background-color: #ea3535;">Annuler</button>
       <button mat-raised-button color="accent" (click)="save()" style="color: white;  background-color: green;">Sauvegarder</button>

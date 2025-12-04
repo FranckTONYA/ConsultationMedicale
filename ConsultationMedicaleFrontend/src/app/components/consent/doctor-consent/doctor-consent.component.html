@@ -52,60 +52,62 @@
     </div>
 
     <!-- TABLEAU -->
-    <table mat-table [dataSource]="demandes" class="mat-elevation-z8">
+    <div class="table-container">
+      <table mat-table [dataSource]="demandes" class="mat-elevation-z8">
 
-    <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>#</th>
-        <td mat-cell *matCellDef="let a; let i = index">
-            {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
-        </td>
-    </ng-container>
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let a; let i = index">
+                {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
+            </td>
+        </ng-container>
 
-      <ng-container matColumnDef="patient">
-        <th mat-header-cell *matHeaderCellDef>Patient</th>
-        <td mat-cell *matCellDef="let d">
-            <a class="user-link"
-                (click)="goToUser(d.patient.id, RoleUtilisateur.PATIENT)">
-                {{ d.patient.prenom }} {{d.patient.nom }}
-            </a>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="patient">
+            <th mat-header-cell *matHeaderCellDef>Patient</th>
+            <td mat-cell *matCellDef="let d">
+                <a class="user-link"
+                    (click)="goToUser(d.patient.id, RoleUtilisateur.PATIENT)">
+                    {{ d.patient.prenom }} {{d.patient.nom }}
+                </a>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="niss">
-        <th mat-header-cell *matHeaderCellDef>NISS</th>
-        <td mat-cell *matCellDef="let d">{{ d.patient.niss }}</td>
-      </ng-container>
+          <ng-container matColumnDef="niss">
+            <th mat-header-cell *matHeaderCellDef>NISS</th>
+            <td mat-cell *matCellDef="let d">{{ d.patient.niss }}</td>
+          </ng-container>
 
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef>Date</th>
-        <td mat-cell *matCellDef="let d">{{ d.date | date:'dd/MM/yyyy' }}</td>
-      </ng-container>
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let d">{{ d.date | date:'dd/MM/yyyy' }}</td>
+          </ng-container>
 
-      <ng-container matColumnDef="statut">
-        <th mat-header-cell *matHeaderCellDef>Statut</th>
-        <td mat-cell *matCellDef="let d">
-            <span [ngClass]="{
-            'accepted': d.statut === 'ACCEPTER',
-            'refused': d.statut === 'REFUSER',
-            'pending': d.statut === 'EN_ATTENTE'
-            }">
-            {{ getLabel(d.statut) }}
-            </span>
-        </td>
-    </ng-container>
+          <ng-container matColumnDef="statut">
+            <th mat-header-cell *matHeaderCellDef>Statut</th>
+            <td mat-cell *matCellDef="let d">
+                <span [ngClass]="{
+                'accepted': d.statut === 'ACCEPTER',
+                'refused': d.statut === 'REFUSER',
+                'pending': d.statut === 'EN_ATTENTE'
+                }">
+                {{ getLabel(d.statut) }}
+                </span>
+            </td>
+        </ng-container>
 
-      <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let d">
-          <button mat-icon-button color="warn" (click)="cancelRequest(d.id!)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let d">
+            <button mat-icon-button color="warn" (click)="cancelRequest(d.id!)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
 
     <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
 

@@ -39,6 +39,14 @@
         <td mat-cell *matCellDef="let d"> {{ d.patient.niss }} </td>
       </ng-container>
 
+      <!-- Date Modification -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date modification</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.date | date:'short':'':'fr-FR' }}
+        </td>
+      </ng-container>
+
       <!-- Groupe sanguin -->
       <ng-container matColumnDef="groupeSanguin">
         <th mat-header-cell *matHeaderCellDef> Groupe sanguin </th>

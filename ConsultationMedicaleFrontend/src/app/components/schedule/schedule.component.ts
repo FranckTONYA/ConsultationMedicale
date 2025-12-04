@@ -7,7 +7,7 @@ import tippy from 'tippy.js';
 import { PlanningMedecinService } from '../../core/services/planning-medecin.service';
 import { ConsultationService } from '../../core/services/consultation.service';
 import { PlanningMedecin, StatutPlanning } from '../../models/planning-medecin';
-import { Consultation, StatutRDV } from '../../models/consultation';
+import { Consultation, getLabelRDV, getLabelStatut, StatutRDV } from '../../models/consultation';
 
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -76,12 +76,15 @@ export class ScheduleComponent implements OnInit {
       selectable: true,
       editable: false,
       height: 'auto',
+      contentHeight: 'auto',
+      aspectRatio: window.innerWidth > 768 ? 1.8 : 1.2, // ratio large pour desktop, plus compact pour mobile
       select: (info: any) => this.askSlotType(info.startStr, info.endStr),
       eventClick: (info: any) => this.handleEventClick(info.event),
       eventDidMount: (info: any) => {
         if (info.event.extendedProps.patientName) {
+          const labelStatut = getLabelRDV(info.event.extendedProps.statut as StatutRDV);
           tippy(info.el, {
-            content: `${info.event.extendedProps.patientName} (${info.event.extendedProps.statut})`,
+            content: `${info.event.extendedProps.patientName} (${labelStatut})`,
             placement: 'top',
             arrow: true,
             theme: 'light',
@@ -214,7 +217,7 @@ export class ScheduleComponent implements OnInit {
           cancelButtonText: 'Retour'
         }).then(result => {
           if (result.isConfirmed) this.updateConsultationStatus(consultId, StatutRDV.CONFIRMER);
-          else if (result.isDenied) this.updateConsultationStatus(consultId, StatutRDV.ANNULER);
+          else if (result.isDenied) this.updateConsultationStatus(consultId, StatutRDV.REFUSER);
         });
       } else if (consultation.statut === StatutRDV.CONFIRMER) {
         Swal.fire({
@@ -242,22 +245,33 @@ export class ScheduleComponent implements OnInit {
     const consultation = this.consultations.find(c => c.id === id);
     if (!consultation) return;
 
-    consultation.statut = statut;
-    this.consultationService.update(id, consultation).subscribe({
+    let obs$;
+
+    if (statut === StatutRDV.ANNULER) {
+      obs$ = this.consultationService.cancelConsultation(id);
+    } else if (statut === StatutRDV.REFUSER) {
+      obs$ = this.consultationService.refuseConsultation(id);
+    } else {
+      consultation.statut = statut;
+      obs$ = this.consultationService.update(id, consultation);
+    }
+
+    obs$.subscribe({
       next: () => {
-        Swal.fire('OK', `Consultation ${statut.toLowerCase()}`, 'success');
+        Swal.fire('OK', `Consultation ${getLabelStatut(statut)}`, 'success');
         this.initCalendar();
         this.loadPlannings();
         this.loadConsultations();
         this.isLoading = false;
       },
-      error: () => {
-        Swal.fire('Erreur', "Impossible de mettre à jour la consultation", 'error');
+      error: (err) => {
+        Swal.fire('Erreur', err.error?.error ?? "Impossible de mettre à jour la consultation", 'error');
         this.loadConsultations();
         this.isLoading = false;
       }
     });
   }
+
 
   confirmDelete(eventId: any) {
     Swal.fire({

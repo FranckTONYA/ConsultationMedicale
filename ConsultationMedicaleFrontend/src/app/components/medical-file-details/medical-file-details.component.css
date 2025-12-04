@@ -69,6 +69,18 @@
   border: 1px solid #bbdefb;
 }
 
+.docs-section {
+  margin-top: 20px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
 .action-buttons {
   display: flex;
   justify-content: space-between;

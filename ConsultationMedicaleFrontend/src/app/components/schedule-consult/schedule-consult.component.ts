@@ -52,6 +52,7 @@ export class ScheduleConsultComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.medecinId) {
+      this.isLoading = true;
       this.medecinService.getById(this.medecinId).subscribe({
         next: (response: Medecin) => {
           this.medecin = response;
@@ -64,6 +65,7 @@ export class ScheduleConsultComponent implements OnInit {
       });
     }
 
+    this.isLoading = true;
     this.authService.userInfo$.subscribe({
       next: (info) => {
         if (info) {
@@ -103,6 +105,8 @@ export class ScheduleConsultComponent implements OnInit {
       selectable: false,
       editable: false,
       height: 'auto',
+      contentHeight: 'auto',
+      aspectRatio: window.innerWidth > 768 ? 1.8 : 1.2, // ratio large pour desktop, plus compact pour mobile
       eventClick: (info: any) => this.bookSlot(info.event),
       events: []
     };
@@ -110,9 +114,9 @@ export class ScheduleConsultComponent implements OnInit {
   }
 
   loadEvents() {
-    this.isLoading = true;
     if (!this.medecinId) return;
 
+    this.isLoading = true;
     this.planningService.getByMedecin(this.medecinId).subscribe({
       next: (plannings) => {
         this.plannings = plannings;
@@ -228,6 +232,7 @@ export class ScheduleConsultComponent implements OnInit {
               consultation.patient = { id: patient.id } as any;
               consultation.medecin = { id: this.currentUser.id } as any;
 
+              this.isLoading = true;
               this.consultationService.add(consultation).subscribe({
                 next: () => {
                   Swal.fire('Consultation créée', 'La consultation a été confirmée.', 'success');

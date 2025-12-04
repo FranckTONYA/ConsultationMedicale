@@ -14,6 +14,7 @@ h2 {
   width: 100%;
   margin-bottom: 15px;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .search {
@@ -76,8 +77,45 @@ button[mat-icon-button] {
   color: #2e7d32;
 }
 
+.table-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
 
-/* ✅ Responsive */
+table {
+  width: 100%;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+th {
+  background-color: #469ef7 !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+td {
+  vertical-align: middle;
+}
+
+button[mat-icon-button] {
+  margin: 0 4px;
+}
+
+.user-link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.user-link:hover {
+  text-decoration: none;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .page-container {
     padding: 1rem;
@@ -85,14 +123,38 @@ button[mat-icon-button] {
 
   .toolbar {
     flex-direction: column;
-    align-items: stretch;
+    gap: 10px;
   }
 
-  .search-field {
+  .search {
+    width: 100% !important; 
+  }
+
+  .filters {
     width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .status-toggle {
+    flex-wrap: wrap;       /* passage sur la ligne suivante si nécessaire */
+    width: 100%;
+    justify-content: center;
+  }
+
+  .status-toggle .mat-button-toggle {
+    flex: 1 1 45%;         /* 2 boutons par ligne */
+    min-width: 140px;
   }
 
   h2 {
     text-align: center;
+  }
+}
+
+/* --- TRES PETIT ÉCRAN (<480px) --- */
+@media (max-width: 480px) {
+  .status-toggle .mat-button-toggle {
+    flex: 1 1 100%;        /* empile en colonne */
   }
 }

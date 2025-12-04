@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DossierMedicalService } from '../../core/services/dossier-medical.service';
 import Swal from 'sweetalert2';
 import { PatientService } from '../../core/services/patient.service';
+import { DocumentService } from '../../core/services/document.service';
 
 @Component({
   selector: 'app-medical-file-edit',
@@ -17,6 +18,9 @@ export class MedicalFileEditComponent implements OnInit {
   form!: FormGroup;
   dossier!: DossierMedical;
   isLoading = true;
+  selectedFiles: File[] = [];
+  delectedFiles: File[] = [];
+  existingDocs: any[] = [];
 
   groupesSanguins = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
@@ -26,6 +30,7 @@ export class MedicalFileEditComponent implements OnInit {
     private router: Router,
     private dossierService: DossierMedicalService,
     private patientService: PatientService,
+    private documentService: DocumentService,
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +46,7 @@ export class MedicalFileEditComponent implements OnInit {
             next: (patient) => {
               this.dossier.patient = patient;
               this.buildForm();
+              this.loadDocuments();
               this.isLoading = false;
             },
             error: () => {
@@ -50,6 +56,7 @@ export class MedicalFileEditComponent implements OnInit {
           });
         } else {
           this.buildForm();
+          this.loadDocuments();
           this.isLoading = false;
         }
       },
@@ -84,6 +91,69 @@ export class MedicalFileEditComponent implements OnInit {
     formArray.removeAt(index);
   }
 
+  // ---------------- DOCUMENTS ----------------
+  
+  loadDocuments() {
+    this.isLoading = true;
+    this.documentService.getByDossierMedical(this.dossier.id!).subscribe({
+      next: docs => {
+        this.existingDocs = docs;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire('Erreur', 'Impossible de charger les documents', 'error');
+      }
+    });
+  }
+
+  onFileSelected(event: any) {
+    const files = event.target.files;
+    for (let f of files) this.selectedFiles.push(f);
+  }
+
+  removeSelectedFile(index: number) {
+    this.selectedFiles.splice(index, 1);
+  }
+
+  deleteDoc(id: number) {
+    this.isLoading = true;
+    Swal.fire({
+      title: 'Supprimer ce document ?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui',
+      cancelButtonText: 'Non'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.documentService.deleteDossierMedicalFile(id).subscribe({
+          next: () => {
+            Swal.fire('Succès', 'Document supprimé avec succès', 'success');
+            this.loadDocuments();
+            this.isLoading = false;
+          },
+          error: (err) =>{
+            Swal.fire('Erreur', err.error?.error ?? 'Échec lors de la suppréssion.', 'error');
+            this.isLoading = false;
+
+          } 
+        });
+      }
+    });
+  }
+
+  viewDocument(doc: any) {
+    this.documentService.getDossierMedicalFileUrl(doc.urlStockage).then(url => {
+      window.open(url, '_blank');
+    }).catch(() => {
+      Swal.fire('Erreur', 'Impossible de charger le document', 'error');
+    });
+  }
+  
+  // ---------------- FIN DOCUMENTS ----------------
+
+
+
   save() {
     this.isLoading = true;
     if (this.form.invalid) {
@@ -92,14 +162,14 @@ export class MedicalFileEditComponent implements OnInit {
       return;
     }
 
-    this.dossierService.update(this.dossier.id!, this.form.value).subscribe({
+    this.dossierService.updateWithFiles(this.dossier.id!, this.form.value, this.selectedFiles).subscribe({
       next: () => {
         Swal.fire('Succès', 'Le dossier a bien été mis à jour.', 'success');
         this.isLoading = false;
         this.router.navigate(['/dossiers-medicaux']);
       },
       error: (err) =>{
-        Swal.fire('Erreur', "Impossible de sauvegarder le dossier", 'error')
+        Swal.fire('Erreur', err.error?.error ?? "Impossible de sauvegarder le dossier", 'error')
         this.isLoading = false;
       } 
     });

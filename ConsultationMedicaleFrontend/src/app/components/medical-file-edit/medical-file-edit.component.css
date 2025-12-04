@@ -59,6 +59,42 @@
   color: #222;
 }
 
+.preview-container {
+  margin-top: 10px;
+}
+
+.preview-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.thumb {
+  height: 60px;
+  border-radius: 4px;
+}
+
+.doc-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px;
+  border-bottom: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+.doc-item a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fa-file-pdf {
+  font-size: 30px;
+  color: red;
+}
+
 /* Ajouter un élément */
 .add-row-btn {
   margin-top: 6px;

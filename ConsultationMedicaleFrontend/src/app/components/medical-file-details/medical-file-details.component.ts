@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DossierMedicalService } from '../../core/services/dossier-medical.service';
 import Swal from 'sweetalert2';
 import { PatientService } from '../../core/services/patient.service';
+import { DocumentService } from '../../core/services/document.service';
 
 @Component({
   selector: 'app-medical-file-details',
@@ -20,6 +21,7 @@ export class MedicalFileDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private dossierService: DossierMedicalService,
     private patientService: PatientService,
+    private documentService: DocumentService
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +52,18 @@ export class MedicalFileDetailsComponent implements OnInit {
         Swal.fire('Erreur', "Erreur rencontrée lors de l'opération", 'error')
         this.isLoading = false;
       } 
+    });
+  }
+
+
+  viewDocument(doc: any) {
+    this.isLoading = true;
+    this.documentService.getDossierMedicalFileUrl(doc.urlStockage).then(url => {
+      window.open(url, '_blank');
+      this.isLoading = false;
+    }).catch((err) => {
+      Swal.fire('Erreur', err.error?.error ||'Impossible de charger le document', 'error');
+      this.isLoading = false;
     });
   }
 }

@@ -1,8 +1,7 @@
 import { Consultation } from "./consultation";
-import { Medecin } from "./medecin";
+import { DossierMedical } from "./dossier-medical";
 import { Message } from "./message";
 import { Ordonnance } from "./ordonnance";
-import { Patient } from "./patient";
 
 export class Document {
     public id?: number;
@@ -12,6 +11,7 @@ export class Document {
     public consultation?: Consultation;
     public ordonnance?: Ordonnance;
     public message?: Message;
+    public dossierMedical?: DossierMedical;
     
     constructor(){
         this.nom = "";
@@ -19,6 +19,7 @@ export class Document {
         this.consultation = new Consultation();
         this.ordonnance = new Ordonnance();
         this.message = new Message();
+        this.dossierMedical = new DossierMedical();
     }
 }
 

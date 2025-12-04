@@ -21,6 +21,16 @@ export class ConsultationService {
     return this.http.post(`${this.apiUrl}/creer-consultation`, data);
   }
 
+  // Annuler une consultation
+  cancelConsultation(id: number) {
+    return this.http.put(`${this.apiUrl}/cancel/${id}`, {});
+  }
+
+  // Refuser une consultation
+  refuseConsultation(id: number) {
+    return this.http.put(`${this.apiUrl}/refuse/${id}`, {});
+  }
+
   getById(id: number) {
     return this.http.get<Consultation>(`${this.apiUrl}/${id}`);
   }

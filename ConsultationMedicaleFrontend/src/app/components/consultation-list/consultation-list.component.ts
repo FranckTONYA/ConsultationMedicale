@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../core/services/auth.service';
 import { ConsultationService } from '../../core/services/consultation.service';
-import { Consultation, StatutRDV } from '../../models/consultation';
+import { Consultation, getLabelStatut, StatutRDV } from '../../models/consultation';
 import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 
 @Component({
@@ -26,6 +26,16 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
   isMedecin = false;
   isLoading = true;
   RoleUtilisateur = RoleUtilisateur;
+  StatutRDV = StatutRDV;
+  getLabelStatut = getLabelStatut;
+
+  statusLabels: Record<StatutRDV, string> = {
+    [StatutRDV.EN_ATTENTE]: "En attente",
+    [StatutRDV.CONFIRMER]: "Confirmée",
+    [StatutRDV.REFUSER]: "Refusée",
+    [StatutRDV.ANNULER]: "Annulée",
+    [StatutRDV.TERMINER]: "Terminée"
+  };
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -152,6 +162,40 @@ export class ConsultationListComponent implements OnInit, AfterViewInit {
       ['/user-details', userId],
       { state: { role } }
     );
+  }
+
+  ouvrirVisio(url: string) {
+    window.open(url, '_blank');
+  }
+
+  getStatusLabel(status: string): string {
+    return this.statusLabels[status as StatutRDV] ?? status;
+  }
+
+  annulerConsultation(c: Consultation) {
+    Swal.fire({
+      title: 'Confirmer l’annulation de cette demande de consultation ?',
+      text: `Médecin : ${c.medecin?.prenom} ${c.medecin?.nom}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, annuler',
+      cancelButtonText: 'Retour'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.isLoading = true;
+        this.consultationService.cancelConsultation(c.id!).subscribe({
+          next: () => {
+            Swal.fire('Annulé', 'Votre demande de consultation a bien été annulé', 'success');
+            this.loadConsultationsPatient(this.currentUser.id!);
+            this.isLoading = false;
+          },
+          error: (err) => {
+            this.isLoading = false;
+            Swal.fire('Erreur',  err.error?.error ?? 'Impossible d’annuler cette demande de consultation ', 'error');
+          }
+        });
+      }
+    });
   }
 
 }

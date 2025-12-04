@@ -18,6 +18,10 @@ export class DocumentService {
     return this.http.get<any[]>(`${this.apiUrl}/find-by-ordonnance/${id}`);
   }
 
+  getByDossierMedical(id: number) {
+    return this.http.get<any[]>(`${this.apiUrl}/find-by-dossierMedical/${id}`);
+  }
+
   deleteConsultationFile(id: number) {
     return this.http.delete(`${this.apiUrl}/delete-consultation-file/${id}`);
   }
@@ -26,7 +30,11 @@ export class DocumentService {
     return this.http.delete(`${this.apiUrl}/delete-ordonnance-file/${id}`);
   }
 
-  getConsultationFileBlob(fileName: string) {
+  deleteDossierMedicalFile(id: number) {
+    return this.http.delete(`${this.apiUrl}/delete-dossierMedical-file/${id}`);
+  }
+
+  private getConsultationFileBlob(fileName: string) {
     // Retourne le fichier en Blob pour affichage ou téléchargement
     return this.http.get(`${this.apiUrl}/get-consultation-file/${fileName}`, { responseType: 'blob' });
   }
@@ -36,7 +44,7 @@ export class DocumentService {
     return URL.createObjectURL(blob!);
   }
 
-  getOrdonnanceFileBlob(fileName: string) {
+  private getOrdonnanceFileBlob(fileName: string) {
     // Retourne le fichier en Blob pour affichage ou téléchargement
     return this.http.get(`${this.apiUrl}/get-ordonnance-file/${fileName}`, { responseType: 'blob' });
   }
@@ -46,7 +54,7 @@ export class DocumentService {
     return URL.createObjectURL(blob!);
   }
 
-  getMessageFileBlob(fileName: string) {
+  private getMessageFileBlob(fileName: string) {
     // Retourne le fichier en Blob pour affichage ou téléchargement
     return this.http.get(`${this.apiUrl}/get-message-file/${fileName}`, { responseType: 'blob' });
   }
@@ -56,4 +64,13 @@ export class DocumentService {
     return URL.createObjectURL(blob!);
   }
 
+  private getDossierMedicalFileBlob(fileName: string) {
+    // Retourne le fichier en Blob pour affichage ou téléchargement
+    return this.http.get(`${this.apiUrl}/get-dossierMedical-file/${fileName}`, { responseType: 'blob' });
+  }
+
+  async getDossierMedicalFileUrl(fileName: string): Promise<string> {
+    const blob = await this.getDossierMedicalFileBlob(fileName).toPromise();
+    return URL.createObjectURL(blob!);
+  }
 }

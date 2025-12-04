@@ -8,7 +8,7 @@
         <mat-form-field appearance="fill" class="search-field">
         <mat-label>Rechercher un médecin</mat-label>
         <input matInput [(ngModel)]="searchKey" (keyup)="applyFilter()" placeholder="Nom, prénom, spécialité">
-        <button mat-button *ngIf="searchKey" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
+        <button *ngIf="searchKey" matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
             <mat-icon>close</mat-icon>
         </button>
         </mat-form-field>
@@ -21,7 +21,7 @@
             <mat-card-title> {{ doctor.prenom }} {{ doctor.nom }}</mat-card-title>
             <mat-card-subtitle>{{ doctor.specialite }}</mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content>
+        <mat-card-content style="margin-bottom: 10px;">
             <p>Adresse : {{ doctor.adresse }}</p>
             <p>Téléphone : {{ doctor.telephone }}</p>
             <p>Email : {{ doctor.email }}</p>

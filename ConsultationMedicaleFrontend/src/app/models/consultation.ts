@@ -29,3 +29,26 @@ export enum StatutRDV {
     ANNULER = "ANNULER",
     TERMINER = "TERMINER"
 }
+
+export function getLabelStatut(statut: StatutRDV): string {
+  switch (statut) {
+    case StatutRDV.EN_ATTENTE: return "En attente";
+    case StatutRDV.CONFIRMER: return "Confirmée";
+    case StatutRDV.REFUSER: return "Refusée";
+    case StatutRDV.ANNULER: return "Annulée";
+    case StatutRDV.TERMINER: return "Terminée";
+    default: return statut;
+  }
+}
+
+export function getLabelRDV(statut: StatutRDV): string {
+  switch (statut) {
+    case StatutRDV.EN_ATTENTE: return "En attente";
+    case StatutRDV.CONFIRMER: return "Confirmé";
+    case StatutRDV.REFUSER: return "Refusé";
+    case StatutRDV.ANNULER: return "Annulé";
+    case StatutRDV.TERMINER: return "Terminé";
+    default: return statut;
+  }
+}
+

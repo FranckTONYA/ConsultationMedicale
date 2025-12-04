@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../core/services/auth.service';
 import { ConsultationService } from '../../core/services/consultation.service';
-import { Consultation } from '../../models/consultation';
+import { Consultation, getLabelStatut, StatutRDV } from '../../models/consultation';
 import { RoleUtilisateur, Utilisateur } from '../../models/utilisateur';
 import { DocumentService } from '../../core/services/document.service';
 
@@ -18,6 +18,8 @@ export class ConsultationDetailsComponent implements OnInit {
   consultation!: Consultation;
   isLoading = true;
   currentUser!: Utilisateur;
+  StatutRDV = StatutRDV;
+  getLabelStatut = getLabelStatut;
 
   constructor(
     private route: ActivatedRoute,

@@ -2,57 +2,154 @@
   padding: 20px;
   max-width: 1200px;
   margin: auto;
+  box-sizing: border-box;
 } */
 
 .page-title {
   font-size: 28px;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
+  word-break: break-word;
 }
 
 .page-instruction {
   font-style: italic;
   margin-bottom: 20px;
   text-align: center;
+  word-break: break-word;
+  font-size: 18px;
 }
-
 
 .calendar-card {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  overflow-x: auto;
 }
 
 .full-calendar {
   width: 100%;
+  min-width: 300px;
 }
 
+/* Légende responsive */
 .calendar-legend {
-  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center; /* aligne couleur et texte sur la même ligne */
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.calendar-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* espace entre la couleur et le texte */
+  flex-wrap: nowrap;
 }
 
 .legend-item {
-  display: inline-block;
   width: 15px;
   height: 15px;
-  margin-right: 5px;
-  margin-left: 10px;
+  border-radius: 3px;
+  flex-shrink: 0; /* éviter que la couleur se rétrécisse */
 }
 
-/* Responsive pour tablettes et mobiles */
+.legend-text {
+  font-size: 14px;
+  white-space: nowrap; /* éviter le retour à la ligne */
+}
+
+
+
+/* Responsive pour tablettes */
+@media screen and (max-width: 1024px) {
+  .page-title { font-size: 24px; }
+  /* .page-instruction { font-size: 15px; } */
+  .calendar-card { padding: 12px; }
+  .legend-text { font-size: 13px; }
+}
+
+/* Responsive pour mobiles */
 @media screen and (max-width: 768px) {
-  .page-title {
-    font-size: 22px;
-  }
+  .page-title { font-size: 22px; }
+  /* .page-instruction { font-size: 14px; } */
+  .calendar-card { padding: 10px; }
+  .legend-text { font-size: 12px; }
+  .legend-item { width: 12px; height: 12px; }
 
-  .calendar-card {
-    padding: 10px;
+  :host ::ng-deep .fc-toolbar-title {
+    font-size: 20px !important;
+  }
+  :host ::ng-deep .fc-timegrid-axis-cushion {
+    font-size: 11px !important;
   }
 }
 
+/* Responsive pour très petits écrans */
 @media screen and (max-width: 480px) {
-  .page-title {
-    font-size: 18px;
+  .page-title { font-size: 18px; }
+  .page-instruction { font-size: 15px; }
+  .calendar-card { padding: 8px; }
+  .legend-text { font-size: 11px; }
+  .legend-item { width: 10px; height: 10px; }
+
+  :host ::ng-deep .fc-toolbar-title {
+    font-size: 16px !important;
+  }
+  :host ::ng-deep .fc-col-header-cell-cushion {
+    /* font-size: 11px !important; */
+    padding: 0 1px !important;
+  }
+  :host ::ng-deep .fc-timegrid-axis-cushion {
+    font-size: 8px !important;
+  }
+
+  :host ::ng-deep .fc-button {
+    font-size: 15px !important;
+    padding: 1px 4px !important;
+  }
+}
+
+/* Responsive pour très petits écrans */
+@media screen and (max-width: 430px) {
+   :host ::ng-deep .fc-toolbar-title {
+    font-size: 15px !important;
+  }
+  :host ::ng-deep .fc-col-header-cell-cushion {
+    font-size: 14px !important;
+    padding: 0 1px !important;
+  }
+  :host ::ng-deep .fc-timegrid-axis-cushion {
+    font-size: 8px !important;
+  }
+}
+
+/* Responsive pour très petits écrans */
+@media screen and (max-width: 400px) {
+  :host ::ng-deep .fc-toolbar-title {
+    font-size: 14px !important;
+  }
+  :host ::ng-deep .fc-col-header-cell-cushion {
+    /* font-size: 11px !important; */
+    padding: 0 1px !important;
+  }
+  :host ::ng-deep .fc-timegrid-axis-cushion {
+    font-size: 8px !important;
+  }
+
+  :host ::ng-deep .fc-button {
+    font-size: 13px !important;
+    padding: 1px 4px !important;
+  }
+}
+
+/* Responsive pour très petits écrans */
+@media screen and (max-width: 370px) {
+  :host ::ng-deep .fc-col-header-cell-cushion {
+    font-size: 11px !important;
+    padding: 0 1px !important;
   }
 }

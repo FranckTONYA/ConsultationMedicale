@@ -47,8 +47,10 @@ h2 {
 
 .filter-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .search-field {
@@ -58,6 +60,12 @@ h2 {
 .status-toggle {
   display: flex;
   gap: 10px;
+}
+
+/* Pour que les boutons prennent la même taille */
+.status-toggle .mat-button-toggle {
+  flex: 1;
+  text-align: center;
 }
 
 .accepted {
@@ -75,7 +83,36 @@ h2 {
   font-weight: bold;
 }
 
+.table-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+th {
+  background-color: #469ef7 !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+td {
+  vertical-align: middle;
+}
+
+
 @media (max-width: 900px) {
+  .toolbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .filter-row {
     flex-direction: column;
     gap: 10px;
@@ -84,5 +121,23 @@ h2 {
 
   .search-field {
     width: 100%;
+  }
+
+  .status-toggle {
+    flex-wrap: wrap;       /* permet le passage en ligne suivante */
+    width: 100%;
+    justify-content: center;
+  }
+
+  .status-toggle .mat-button-toggle {
+    flex: 1 1 45%;         /* 2 boutons par ligne */
+    min-width: 140px;      /* empêche les boutons trop petits */
+  }
+}
+
+/* --- TRES PETIT ÉCRAN (<480px) --- */
+@media (max-width: 480px) {
+  .status-toggle .mat-button-toggle {
+    flex: 1 1 100%;        /* empile en colonne */
   }
 }

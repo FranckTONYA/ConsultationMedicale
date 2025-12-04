@@ -21,6 +21,7 @@ export class MedicalFileComponent implements OnInit, AfterViewInit {
     'id',
     'patient',
     'niss',
+    'date',
     'groupeSanguin',
     'allergies',
     'actions'

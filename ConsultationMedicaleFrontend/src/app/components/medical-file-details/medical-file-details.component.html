@@ -13,6 +13,13 @@
       <span class="field-value">{{ dossier.patient.niss }}</span>
     </div>
 
+    <div class="info-grid">
+      <div class="field-row">
+        <span class="field-label">Date dernière modification :</span>
+        <span class="field-value">{{ dossier.date | date:'short' }}</span>
+      </div>
+    </div>
+
     <div class="field-row">
       <span class="field-label">Groupe sanguin :</span>
       <span class="field-value">{{ dossier.groupeSanguin }}</span>
@@ -52,6 +59,13 @@
     <div class="info-box list-tags">
       <span *ngIf="!dossier.remarques.length">Aucune</span>
       <span *ngFor="let r of dossier.remarques" class="tag">{{ r }}</span>
+    </div>
+  </div>
+
+  <div class="docs-section" *ngIf="dossier.documents.length">
+    <h3>Documents joints</h3>
+    <div *ngFor="let doc of dossier.documents" class="doc-item">
+      <a href="javascript:void(0)" (click)="viewDocument(doc)">{{ doc.nom }}</a>
     </div>
   </div>
 

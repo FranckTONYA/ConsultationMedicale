@@ -17,7 +17,23 @@ h2 {
 }
 
 .search {
-  width: 60%;
+  width: 50%;
+}
+
+.status-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+/* Pour que les boutons prennent la même taille */
+.status-toggle .mat-button-toggle {
+  flex: 1;
+  text-align: center;
+}
+
+.table-container {
+  margin-top: 1rem;
+  overflow-x: auto;
 }
 
 table {
@@ -60,10 +76,34 @@ th {
   font-weight: bold;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .page-container { padding: 1rem; }
-  .toolbar { flex-direction: column; align-items: stretch; }
-  .search { width: 100%; }
-  h2 { text-align: center; }
+/* --- ÉCRANS MOYENS / TABLETTES (<900px) --- */
+@media (max-width: 900px) {
+.toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .status-toggle {
+    flex-wrap: wrap;       /* passage sur la ligne suivante si nécessaire */
+    width: 100%;
+    justify-content: center;
+  }
+
+  .status-toggle .mat-button-toggle {
+    flex: 1 1 45%;         /* 2 boutons par ligne */
+    min-width: 140px;
+  }
 }
+
+/* --- TRES PETIT ÉCRAN (<480px) --- */
+@media (max-width: 480px) {
+  .status-toggle .mat-button-toggle {
+    flex: 1 1 100%;        /* empile en colonne */
+  }
+}
+

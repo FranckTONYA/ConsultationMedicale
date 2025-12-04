@@ -103,6 +103,16 @@ export class OrdonnanceEditComponent implements OnInit {
     });
   }
 
+  selectPatient(patient: Patient) {
+    this.filteredPatient = null;   // Masque la suggestion
+     // Stocke le patient sélectionné
+    this.ordonnance.patient = { id: patient.id } as any;
+    this.patient = patient;
+
+    // Remet juste le NISS dans le champ
+    this.form.patchValue({ patientNiss: patient.niss });
+  }
+
   loadDocuments() {
     this.isLoading = true;
     if (!this.ordonnance.id) return;
@@ -117,17 +127,6 @@ export class OrdonnanceEditComponent implements OnInit {
       }
     });
   }
-
-  selectPatient(patient: Patient) {
-    this.filteredPatient = null;   // Masque la suggestion
-     // Stocke le patient sélectionné
-    this.ordonnance.patient = { id: patient.id } as any;
-    this.patient = patient;
-
-    // Remet juste le NISS dans le champ
-    this.form.patchValue({ patientNiss: patient.niss });
-  }
-
 
   onFileSelected(event: any) {
     const files = event.target.files;
@@ -174,64 +173,64 @@ export class OrdonnanceEditComponent implements OnInit {
   }
 
 
-save() {
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    Swal.fire('Attention', 'Veuillez remplir tous les champs obligatoires', 'warning');
-    return;
+  save() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      Swal.fire('Attention', 'Veuillez remplir tous les champs obligatoires', 'warning');
+      return;
+    }
+
+    // Vérification stricte : en création, patient OBLIGATOIREMENT sélectionné
+    if (!this.isEdit && !this.ordonnance.patient.id) {
+      Swal.fire(
+        'Attention',
+        'Veuillez sélectionner un patient existant en cliquant sur le résultat de recherche',
+        'warning'
+      );
+      return;
+    }
+
+    this.isLoading = true;
+
+    if (!this.isEdit) {
+      this.ordonnance.medecin = { id: this.medecin.id } as Medecin;
+      const data: Ordonnance = { ...this.ordonnance, ...this.form.value };
+      this.ordonnanceService.createWithFile(data, this.selectedFiles).subscribe({
+        next: () => {
+          Swal.fire('Succès', 'Ordonnance créée', 'success');
+          this.isLoading = false;
+          this.router.navigate(['/ordonnance/list']);
+        },
+        error: err => {
+          if (err.status === 413) {
+              Swal.fire("Fichier trop volumineux", "Votre document dépasse la taille maximale autorisée de 5MB", "error");
+            } else {
+              Swal.fire('Erreur', err.error?.error || "Erreur lors de l'enregistrement de l'ordonnance", 'error');
+            }
+        
+          this.isLoading = false;
+        }
+      });
+
+    } else {
+      const data: Ordonnance = { ...this.ordonnance, ...this.form.value };
+      this.ordonnanceService.updateWithFiles(this.ordonnance.id!, data, this.selectedFiles).subscribe({
+        next: () => {
+          Swal.fire('Succès', 'Ordonnance mise à jour', 'success');
+          this.isLoading = false;
+          this.router.navigate(['/ordonnance/list']);
+        },
+        error: err => {
+          if (err.status === 413) {
+              Swal.fire("Fichier trop volumineux", "Votre document dépasse la taille maximale autorisée de 5MB", "error");
+            } else {
+              Swal.fire('Erreur', err.error?.error || 'Erreur serveur', 'error');
+            }
+          this.isLoading = false;
+        }
+      });
+    }
   }
-
-  // Vérification stricte : en création, patient OBLIGATOIREMENT sélectionné
-  if (!this.isEdit && !this.ordonnance.patient.id) {
-    Swal.fire(
-      'Attention',
-      'Veuillez sélectionner un patient existant en cliquant sur le résultat de recherche',
-      'warning'
-    );
-    return;
-  }
-
-  this.isLoading = true;
-
-  if (!this.isEdit) {
-    this.ordonnance.medecin = { id: this.medecin.id } as Medecin;
-    const data: Ordonnance = { ...this.ordonnance, ...this.form.value };
-    this.ordonnanceService.createWithFile(data, this.selectedFiles).subscribe({
-      next: () => {
-        Swal.fire('Succès', 'Ordonnance créée', 'success');
-        this.isLoading = false;
-        this.router.navigate(['/ordonnance/list']);
-      },
-      error: err => {
-         if (err.status === 413) {
-            Swal.fire("Fichier trop volumineux", "Votre document dépasse la taille maximale autorisée de 5MB", "error");
-          } else {
-             Swal.fire('Erreur', err.error?.error || "Erreur lors de l'enregistrement de l'ordonnance", 'error');
-          }
-       
-        this.isLoading = false;
-      }
-    });
-
-  } else {
-    const data: Ordonnance = { ...this.ordonnance, ...this.form.value };
-    this.ordonnanceService.updateWithFiles(this.ordonnance.id!, data, this.selectedFiles).subscribe({
-      next: () => {
-        Swal.fire('Succès', 'Ordonnance mise à jour', 'success');
-        this.isLoading = false;
-        this.router.navigate(['/ordonnance/list']);
-      },
-      error: err => {
-         if (err.status === 413) {
-            Swal.fire("Fichier trop volumineux", "Votre document dépasse la taille maximale autorisée de 5MB", "error");
-          } else {
-             Swal.fire('Erreur', err.error?.error || 'Erreur serveur', 'error');
-          }
-        this.isLoading = false;
-      }
-    });
-  }
-}
 
 
   cancel() {
@@ -244,5 +243,5 @@ save() {
       }).then(result => {
         if (result.isConfirmed) this.router.navigate(['/ordonnance/list']);
       });
-    }
+  }
 }

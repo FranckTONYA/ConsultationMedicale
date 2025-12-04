@@ -16,13 +16,13 @@
       <!-- À droite -->
       <div class="filters">
           <mat-form-field appearance="outline" class="status-select">
-          <mat-label>Statut</mat-label>
-          <mat-select [(value)]="selectedStatus" (selectionChange)="onStatusChange()">
-              <mat-option value="">Tous</mat-option>
-              <mat-option *ngFor="let s of statuses" [value]="s">
-              {{ s }}
-              </mat-option>
-          </mat-select>
+            <mat-label>Statut</mat-label>
+            <mat-select [(value)]="selectedStatus" (selectionChange)="onStatusChange()">
+                <mat-option value="">Tous</mat-option>
+                <mat-option *ngFor="let s of statuses" [value]="s">
+                   {{ getStatusLabel(s) }}
+                </mat-option>
+            </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="search-field">
@@ -96,7 +96,7 @@
 
       <ng-container matColumnDef="statut">
         <th mat-header-cell *matHeaderCellDef> Statut </th>
-        <td mat-cell *matCellDef="let c"> {{c.statut}} </td>
+        <td mat-cell *matCellDef="let c"> {{ getLabelStatut(c.statut) }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -107,6 +107,19 @@
           </button>
           <button *ngIf="isMedecin" mat-icon-button color="accent" (click)="editConsultation(c)">
             <mat-icon>edit</mat-icon>
+          </button>
+          <!-- Icône VISIO visible UNIQUEMENT si statut == CONFIRME et lien présent -->
+          <button mat-icon-button color="primary"
+                  *ngIf="c.statut === StatutRDV.CONFIRMER && c.lienReunion"
+                  (click)="ouvrirVisio(c.lienReunion)">
+              <mat-icon>videocam</mat-icon>
+          </button>
+
+          <!-- Nouveau bouton ANNULER pour patient et statut EN_ATTENTE -->
+          <button *ngIf="isPatient && c.statut === StatutRDV.EN_ATTENTE" 
+                  mat-button color="warn"
+                  (click)="annulerConsultation(c)">
+              Annuler
           </button>
         </td>
       </ng-container>
